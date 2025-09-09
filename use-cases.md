@@ -84,4 +84,5 @@
 
 ## Use-case UML диаграммы
 
-![UML диаграммы](Рис. 1 – UML диаграммы действий happy path и Alternative Flows)
+![UML диаграммы](uml_diagram.png)
+<center>Рис. 1 – UML диаграммы действий happy path и Alternative Flows</center>
