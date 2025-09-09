@@ -60,9 +60,4 @@
 3. Обращение к ментору курса
 
 
-**Согласен с распределением ролей:**
 
-- [ ] @SA_PO [asadykov1210](https://github.com/asadykov1210)
-- [ ] @AI_Eng [AlievaNata](https://github.com/AlievaNata)
-- [ ] @MLOps [XrestW](https://github.com/XrestW)
-- [x] @Fullstack [KaDyK736](https://github.com/KaDyK736)
