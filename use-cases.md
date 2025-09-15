@@ -10,7 +10,8 @@
 ---
 
 ## 1. Use-case UML Диаграмма (Диаграмма вариантов использования)
-![USE-CASE_DIAGRAM](uml_diagram.png)
+![USE-CASE_DIAGRAM](use_case.png)
+
 **Рис. 1 - Диаграмма прецедентов (use case diagram)**
 
 
