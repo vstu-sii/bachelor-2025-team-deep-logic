@@ -1,26 +1,25 @@
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-title Context Diagram
-
+title Context Diagram — AI Personal Chef
 
 ' --- Пользователи ---
-Person(user, "Пользователь")
-Person(admin, "Администратор")
+Person(user, "Пользователь", "Фотографирует продукты и получает рецепты")
+Person(admin, "Администратор", "Управляет базой рецептов и контентом")
 
 ' --- Центральная система ---
-System(aiChef, "AI Personal Chef")
+System(aiChef, "AI Personal Chef", "Определяет продукты на фото и подбирает рецепты")
 
 ' --- Внешние системы ---
-System_Ext(extRecipes, "Справочник рецептов")
-System_Ext(extStorage, "Облачное хранилище")
-System_Ext(extNotify, "Сервис уведомлений")
+System_Ext(cvModule, "Модуль компьютерного зрения", "Распознаёт продукты на фото")
+System_Ext(llm, "LLM API", "Подбирает рецепты по распознанным продуктам")
+System_Ext(notify, "Сервис уведомлений", "Отправляет push/email пользователям")
 
 ' --- Связи ---
 Rel(user, aiChef, "Загружает фото, получает рецепты", "HTTPS")
-Rel(admin, aiChef, "Управляет базой рецептов", "HTTPS")
-Rel(aiChef, extRecipes, "Синхронизация", "HTTPS")
-Rel(aiChef, extStorage, "Хранение фото", "HTTPS")
-Rel(aiChef, extNotify, "Уведомления", "HTTPS")
+Rel(admin, aiChef, "Администрирует рецепты", "HTTPS")
+Rel(aiChef, cvModule, "Передаёт фото для распознавания", "gRPC/HTTP")
+Rel(aiChef, llm, "Запрос рецептов по списку продуктов", "HTTPS")
+Rel(aiChef, notify, "Отправляет уведомления", "HTTPS")
 
 @enduml
