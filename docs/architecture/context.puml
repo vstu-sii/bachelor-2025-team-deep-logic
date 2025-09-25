@@ -1,15 +1,26 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-LAYOUT_WITH_LEGEND()
-SHOW_LEGEND()
+title Context Diagram
 
-Person(user, "Пользователь", "Снимает фото или выбирает из галереи")
-System(system, "Deep Logic", "Система подбора рецептов по фото")
 
-System_Ext(ext, "Внешний справочник рецептов (опционально)", "Импорт/сверка данных")
+' --- Пользователи ---
+Person(user, "Пользователь")
+Person(admin, "Администратор")
 
-Rel(user, system, "Загрузка фото, просмотр рецептов", "HTTPS")
-Rel(system, ext, "Синхронизация справочника", "HTTPS")
+' --- Центральная система ---
+System(aiChef, "AI Personal Chef")
+
+' --- Внешние системы ---
+System_Ext(extRecipes, "Справочник рецептов")
+System_Ext(extStorage, "Облачное хранилище")
+System_Ext(extNotify, "Сервис уведомлений")
+
+' --- Связи ---
+Rel(user, aiChef, "Загружает фото, получает рецепты", "HTTPS")
+Rel(admin, aiChef, "Управляет базой рецептов", "HTTPS")
+Rel(aiChef, extRecipes, "Синхронизация", "HTTPS")
+Rel(aiChef, extStorage, "Хранение фото", "HTTPS")
+Rel(aiChef, extNotify, "Уведомления", "HTTPS")
 
 @enduml
