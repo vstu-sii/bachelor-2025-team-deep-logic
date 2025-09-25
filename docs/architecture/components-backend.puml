@@ -1,2 +1,20 @@
 @startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+SHOW_LEGEND()
+
+Container(be, "Backend API", "FastAPI", "REST API и бизнес-логика")
+
+Component(api, "API Controller", "FastAPI Router", "Эндпоинты: загрузка фото, список рецептов")
+Component(rec, "RecognitionFacade", "Python", "Фасад к GPT4All: передача фото/прома, парсинг ответа")
+Component(search, "RecipeSearchService", "Python", "Поиск по ингредиентам, фильтры")
+Component(repo, "RecipeRepository", "SQLAlchemy", "Доступ к БД рецептов")
+Component(auth, "Auth/RateLimit", "Middleware", "Авторизация и лимиты")
+
+Rel(api, rec, "Распознавание ингредиентов")
+Rel(api, search, "Поиск рецептов")
+Rel(search, repo, "SQL запросы")
+Rel(api, auth, "Проверки", "Middleware")
+
 @enduml
