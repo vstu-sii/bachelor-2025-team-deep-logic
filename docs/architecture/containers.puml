@@ -1,24 +1,32 @@
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-LAYOUT_WITH_LEGEND()
-SHOW_LEGEND()
+title Container Diagram — AI Personal Chef
 
-Person(user, "Пользователь", "Работает через веб/мобильный интерфейс")
+LAYOUT_LEFT_RIGHT()
 
-System_Boundary(sys, "Deep Logic") {
-  Container(fe, "Frontend", "Web/Mobile UI", "Загрузка фото, отображение рецептов")
-  Container(be, "Backend API", "FastAPI/Flask", "REST API, бизнес-логика")
-  ContainerDb(db, "Recipes DB", "PostgreSQL/SQLite", "Хранение рецептов и ингредиентов")
-  Container(llm, "LLM Service", "GPT4All", "Распознавание ингредиентов")
-  Container(search, "Search Engine", "Service/Library", "Подбор рецептов по ингредиентам")
+Person(user, "Пользователь")
+Person(admin, "Администратор")
+
+System_Boundary(aiChef, "AI Personal Chef") {
+    Container(app, "Мобильное/Веб-приложение", "Flutter", "Интерфейс для пользователей")
+    Container(api, "Backend API", "Python/FastAPI", "Обработка фото, логика подбора рецептов")
+    Container(db, "База данных", "PostgreSQL", "Хранение пользователей, истории и рецептов")
 }
 
-Rel(user, fe, "Загрузка фото, просмотр рецептов", "HTTPS")
-Rel(fe, be, "Запросы API", "HTTP/JSON")
-Rel(be, llm, "Распознавание ингредиентов", "IPC/HTTP")
-Rel(be, search, "Поиск рецептов", "Вызовы")
-Rel(search, db, "SQL запросы", "SQL")
-Rel(be, fe, "Список рецептов", "HTTP/JSON")
+' --- Внешние системы ---
+System_Ext(cvModule, "Модуль компьютерного зрения", "Распознаёт продукты на фото")
+System_Ext(llm, "LLM API", "Подбирает рецепты по списку продуктов")
+System_Ext(notify, "Сервис уведомлений", "Отправляет push/email")
+
+' --- Связи ---
+Rel(user, app, "Загружает фото, получает рецепты", "HTTPS")
+Rel(admin, api, "Администрирует рецепты", "HTTPS")
+
+Rel(app, api, "Запросы/ответы", "HTTPS")
+Rel(api, db, "Чтение/запись данных", "SQL")
+Rel(api, cvModule, "Передаёт фото для распознавания", "gRPC/HTTP")
+Rel(api, llm, "Запрос рецептов по продуктам", "HTTPS")
+Rel(api, notify, "Отправляет уведомления", "HTTPS")
 
 @enduml
