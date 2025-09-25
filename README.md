@@ -21,7 +21,7 @@
 - **Backend:** Python/FastAPI  
 - **Database:** PostgreSQL  
 - **Интеграции:**  
-  - Модуль компьютерного зрения (распознавание продуктов)  
+  - VLM (Vision-Language Model) для распознавания продуктов  
   - LLM API (подбор рецептов)  
   - Сервис уведомлений (push/email)  
 
