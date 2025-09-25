@@ -12,13 +12,13 @@ Container_Boundary(api, "Backend API") {
     }
 
     package "Business Logic" {
-        Component(photoHandler, "Photo Service", "Python", "Обрабатывает фото и передаёт в CV-модуль")
-        Component(recipeOrchestrator, "Recipe Service", "Python", "Оркестрирует вызовы CV и LLM, формирует рецепт")
+        Component(photoHandler, "Photo Service", "Python", "Обрабатывает фото и передаёт в VLM-сервис")
+        Component(recipeOrchestrator, "Recipe Service", "Python", "Оркестрирует вызовы VLM и LLM, формирует рецепт")
         Component(notificationMgr, "Notification Service", "Python", "Отправляет уведомления пользователям")
     }
 
     package "Integration" {
-        Component(cvIntegration, "CV Connector", "gRPC/HTTP", "Взаимодействует с модулем компьютерного зрения")
+        Component(vlmIntegration, "VLM Connector", "gRPC/HTTP", "Взаимодействует с VLM (Vision-Language Model)")
         Component(llmIntegration, "LLM Connector", "HTTPS", "Запросы к LLM API")
     }
 
@@ -28,7 +28,7 @@ Container_Boundary(api, "Backend API") {
 }
 
 ' --- Внешние системы ---
-System_Ext(cvModule, "Computer Vision Module", "Распознаёт продукты на фото")
+System_Ext(vlm, "VLM (Vision-Language Model)", "Распознаёт продукты на фото и формирует список ингредиентов")
 System_Ext(llm, "LLM API", "Подбирает рецепты по списку продуктов")
 System_Ext(notify, "Notification System", "Отправляет push/email")
 Container_Ext(db, "Database", "PostgreSQL", "Хранение пользователей, истории и рецептов")
@@ -36,8 +36,8 @@ Container_Ext(db, "Database", "PostgreSQL", "Хранение пользоват
 ' --- Связи ---
 Rel(apiGateway, auth, "Проверка доступа")
 Rel(apiGateway, photoHandler, "Загрузка фото")
-Rel(photoHandler, cvIntegration, "Отправка фото")
-Rel(cvIntegration, cvModule, "Распознавание продуктов")
+Rel(photoHandler, vlmIntegration, "Отправка фото")
+Rel(vlmIntegration, vlm, "Распознавание продуктов")
 Rel(recipeOrchestrator, llmIntegration, "Запрос рецептов")
 Rel(llmIntegration, llm, "Вызов LLM API")
 Rel(apiGateway, recipeOrchestrator, "Запрос рецепта")
