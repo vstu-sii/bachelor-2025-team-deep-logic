@@ -15,7 +15,7 @@ System_Boundary(aiChef, "AI Personal Chef") {
 }
 
 ' --- Внешние системы ---
-System_Ext(cvModule, "Модуль компьютерного зрения", "Распознаёт продукты на фото")
+System_Ext(vlm, "VLM (Vision-Language Model)", "Распознаёт продукты на фото и формирует список ингредиентов")
 System_Ext(llm, "LLM API", "Подбирает рецепты по списку продуктов")
 System_Ext(notify, "Сервис уведомлений", "Отправляет push/email")
 
@@ -25,7 +25,7 @@ Rel(admin, api, "Администрирует рецепты", "HTTPS")
 
 Rel(app, api, "Запросы/ответы", "HTTPS")
 Rel(api, db, "Чтение/запись данных", "SQL")
-Rel(api, cvModule, "Передаёт фото для распознавания", "gRPC/HTTP")
+Rel(api, vlm, "Передаёт фото для распознавания", "gRPC/HTTP")
 Rel(api, llm, "Запрос рецептов по продуктам", "HTTPS")
 Rel(api, notify, "Отправляет уведомления", "HTTPS")
 
