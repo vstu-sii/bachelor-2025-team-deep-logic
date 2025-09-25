@@ -1,20 +1,48 @@
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-LAYOUT_WITH_LEGEND()
-SHOW_LEGEND()
+title Component Diagram — Backend API (AI Personal Chef)
 
-Container(be, "Backend API", "FastAPI", "REST API и бизнес-логика")
+LAYOUT_LEFT_RIGHT()
 
-Component(api, "API Controller", "FastAPI Router", "Эндпоинты: загрузка фото, список рецептов")
-Component(rec, "RecognitionFacade", "Python", "Фасад к GPT4All: передача фото/прома, парсинг ответа")
-Component(search, "RecipeSearchService", "Python", "Поиск по ингредиентам, фильтры")
-Component(repo, "RecipeRepository", "SQLAlchemy", "Доступ к БД рецептов")
-Component(auth, "Auth/RateLimit", "Middleware", "Авторизация и лимиты")
+Container_Boundary(api, "Backend API") {
+    package "API Layer" {
+        Component(apiGateway, "API Gateway", "FastAPI", "Принимает запросы от приложений и администратора")
+        Component(auth, "User Management", "JWT", "Регистрация и авторизация пользователей")
+    }
 
-Rel(api, rec, "Распознавание ингредиентов")
-Rel(api, search, "Поиск рецептов")
-Rel(search, repo, "SQL запросы")
-Rel(api, auth, "Проверки", "Middleware")
+    package "Business Logic" {
+        Component(photoHandler, "Photo Service", "Python", "Обрабатывает фото и передаёт в CV-модуль")
+        Component(recipeOrchestrator, "Recipe Service", "Python", "Оркестрирует вызовы CV и LLM, формирует рецепт")
+        Component(notificationMgr, "Notification Service", "Python", "Отправляет уведомления пользователям")
+    }
+
+    package "Integration" {
+        Component(cvIntegration, "CV Connector", "gRPC/HTTP", "Взаимодействует с модулем компьютерного зрения")
+        Component(llmIntegration, "LLM Connector", "HTTPS", "Запросы к LLM API")
+    }
+
+    package "Data Layer" {
+        Component(dataAccess, "Data Access", "SQLAlchemy", "Работает с базой данных")
+    }
+}
+
+' --- Внешние системы ---
+System_Ext(cvModule, "Computer Vision Module", "Распознаёт продукты на фото")
+System_Ext(llm, "LLM API", "Подбирает рецепты по списку продуктов")
+System_Ext(notify, "Notification System", "Отправляет push/email")
+Container_Ext(db, "Database", "PostgreSQL", "Хранение пользователей, истории и рецептов")
+
+' --- Связи ---
+Rel(apiGateway, auth, "Проверка доступа")
+Rel(apiGateway, photoHandler, "Загрузка фото")
+Rel(photoHandler, cvIntegration, "Отправка фото")
+Rel(cvIntegration, cvModule, "Распознавание продуктов")
+Rel(recipeOrchestrator, llmIntegration, "Запрос рецептов")
+Rel(llmIntegration, llm, "Вызов LLM API")
+Rel(apiGateway, recipeOrchestrator, "Запрос рецепта")
+Rel(recipeOrchestrator, dataAccess, "Чтение/запись данных")
+Rel(dataAccess, db, "SQL")
+Rel(notificationMgr, notify, "Отправка уведомлений")
 
 @enduml
