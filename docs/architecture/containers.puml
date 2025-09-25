@@ -1,2 +1,24 @@
 @startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+SHOW_LEGEND()
+
+Person(user, "Пользователь", "Работает через веб/мобильный интерфейс")
+
+System_Boundary(sys, "Deep Logic") {
+  Container(fe, "Frontend", "Web/Mobile UI", "Загрузка фото, отображение рецептов")
+  Container(be, "Backend API", "FastAPI/Flask", "REST API, бизнес-логика")
+  ContainerDb(db, "Recipes DB", "PostgreSQL/SQLite", "Хранение рецептов и ингредиентов")
+  Container(llm, "LLM Service", "GPT4All", "Распознавание ингредиентов")
+  Container(search, "Search Engine", "Service/Library", "Подбор рецептов по ингредиентам")
+}
+
+Rel(user, fe, "Загрузка фото, просмотр рецептов", "HTTPS")
+Rel(fe, be, "Запросы API", "HTTP/JSON")
+Rel(be, llm, "Распознавание ингредиентов", "IPC/HTTP")
+Rel(be, search, "Поиск рецептов", "Вызовы")
+Rel(search, db, "SQL запросы", "SQL")
+Rel(be, fe, "Список рецептов", "HTTP/JSON")
+
 @enduml
