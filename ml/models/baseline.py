@@ -80,7 +80,7 @@ class Gemma3Text:
                 ["ollama", "run", "gemma3:4b"],
                 input=prompt.encode("utf-8"),
                 capture_output=True,
-                timeout=120
+                timeout=300
             )
 
             if result.returncode != 0:
