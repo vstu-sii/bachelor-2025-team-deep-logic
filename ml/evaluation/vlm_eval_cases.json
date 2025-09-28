@@ -1,0 +1,42 @@
+[
+  {
+    "image_path": "data/processed_images/1.jpg",
+    "reference_ingredients": ["Cheese", "Chicken Breast", "Broccoli", "Water", "Pepper"]
+  },
+  {
+    "image_path": "data/processed_images/2.jpg",
+    "reference_ingredients": ["Сheese", "Sour Cream", "Butter", "Cottage Cheese", "Milk", "Eggs"]
+  },
+  {
+    "image_path": "data/processed_images/3.jpg",
+    "reference_ingredients": ["Yogurt", "Milk", "Juice", "Cheese", "Sardines", "Wieners", "Meat", "Water", "Сake"]
+  },
+  {
+    "image_path": "data/processed_images/4.jpg",
+    "reference_ingredients": ["Garlic", "Rice", "Cheese", "Buckwheat", "Pasta", "Broccoli", "Peppers", "Eggs", "Meat", "Tomatoes", "Cucumbers", "Salad greens"]
+  },
+  {
+    "image_path": "data/processed_images/5.jpg",
+    "reference_ingredients": ["Walnuts", "Eggs", "Salmon", "Avocados", "Mushrooms", "Greens", "Kiwis", "Apples", "Oranges"]
+  },
+  {
+    "image_path": "data/processed_images/6.jpg",
+    "reference_ingredients": ["Cabbage", "Lettuce", "Tomatoes", "Peppers", "Radishes", "Cucumbers", "Milk", "Cottage Cheese", "Cheese", "Eggs", "Onions", "Broccoli", "Tomatoes", "Cauliflower"]
+  },
+  {
+    "image_path": "data/processed_images/7.jpg",
+    "reference_ingredients": ["Canned Mushrooms", "Apples", "Cheese", "Milk", "Yogurt", "Eggs", "Water", "Lettuce Leaves", "Plums", "Grapes", "Tomatoes", "Cucumbers", "Onions", "Oranges"]
+  },
+  {
+    "image_path": "data/processed_images/8.jpg",
+    "reference_ingredients": ["Apples", "Cheese", "Milk", "Eggs", "Lettuce", "Tomatoes", "Cucumbers", "Lemons", "Oranges", "Kumquats", "Jar of jam", "Red sauce", "Orange juice"]
+  },
+  {
+    "image_path": "data/processed_images/9.jpg",
+    "reference_ingredients": ["Boiled beets", "Boiled potatoes", "Boiled carrots", "Garlic", "Onions", "Chicken", "Sausage", "Fish", "Bread loafs", "Mayonnaise", "Canned goods", "Melted cheese", "Canned cucumbers", "Oranges", "Ground beef", "Tomatoes", "Herbs", "Eggs"]
+  },
+  {
+    "image_path": "data/processed_images/10.jpg",
+    "reference_ingredients": ["Avocado", "Lemons", "Bananas", "Juice", "Boiled pasta", "Apples", "Eggs", "Cottage cheese", "Yogurt", "Sour cream", "Milk", "Tomatoes", "Canned cucumbers", "Cucumbers", "Peppers", "Zucchini", "Lettuce leaves", "Steak", "Mussels", "Turkey", "Pears"]
+  }
+]
