@@ -1,10 +1,10 @@
 # C4 Architecture
 
 ## Context
-![Context](../generated/context.svg)
+![Context](../generated/context.png)
 
 ## Containers
-![Containers](../generated/containers.svg)
+![Containers](../generated/containers.png)
 
 ## Backend Components
-![Backend Components](../generated/components-backend.svg)
+![Backend Components](../generated/components-backend.png)
