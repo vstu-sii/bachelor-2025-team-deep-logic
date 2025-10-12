@@ -1,8 +1,7 @@
 [
   {
     "image_path": "data/processed_images/1.jpg",
-    "reference_ingredients": ["Сыр", "Курица", "Брокколи", "Вода", "Перец", "Яйца"],
-    "feedback_keywords": "нет"
+    "reference_ingredients": ["Сыр", "Курица", "Брокколи", "Вода", "Перец", "Яйца"]
   },
   {
     "image_path": "data/processed_images/2.jpg",
