@@ -1,42 +1,63 @@
 [
   {
     "image_path": "data/processed_images/1.jpg",
-    "reference_ingredients": ["Cheese", "Chicken Breast", "Broccoli", "Water", "Pepper"]
+    "reference_ingredients": ["Сыр", "Курица", "Брокколи", "Вода", "Перец", "Яйца"],
+    "feedback_keywords": "нет"
   },
   {
     "image_path": "data/processed_images/2.jpg",
-    "reference_ingredients": ["Сheese", "Sour Cream", "Butter", "Cottage Cheese", "Milk", "Eggs"]
+    "reference_ingredients": ["Сыр", "Сметана", "Сливочное масло", "Творог", "Молоко", "Яйца"]
   },
   {
     "image_path": "data/processed_images/3.jpg",
-    "reference_ingredients": ["Yogurt", "Milk", "Juice", "Cheese", "Sardines", "Wieners", "Meat", "Water", "Сake"]
+    "reference_ingredients": ["Йогурт", "Молоко", "Сок", "Сыр", "Сардельки", "Сосиски", "Мясо", "Вода", "Пирожное"]
   },
   {
     "image_path": "data/processed_images/4.jpg",
-    "reference_ingredients": ["Garlic", "Rice", "Cheese", "Buckwheat", "Pasta", "Broccoli", "Peppers", "Eggs", "Meat", "Tomatoes", "Cucumbers", "Salad greens"]
+    "reference_ingredients": ["Чеснок", "Рис", "Сыр", "Гречка", "Макароны", "Брокколи", "Перец", "Яйца", "Мясо", "Помидоры", "Огурцы", "Латук"]
   },
   {
     "image_path": "data/processed_images/5.jpg",
-    "reference_ingredients": ["Walnuts", "Eggs", "Salmon", "Avocados", "Mushrooms", "Greens", "Kiwis", "Apples", "Oranges"]
+    "reference_ingredients": ["Грецкие орехи", "Яйца", "Лосось", "Авокадо", "Грибы", "Латук", "Киви", "Яблоки", "Апельсины"]
   },
   {
     "image_path": "data/processed_images/6.jpg",
-    "reference_ingredients": ["Cabbage", "Lettuce", "Tomatoes", "Peppers", "Radishes", "Cucumbers", "Milk", "Cottage Cheese", "Cheese", "Eggs", "Onions", "Broccoli", "Tomatoes", "Cauliflower"]
+    "reference_ingredients": ["Капуста", "Латук", "Помидоры", "Перец", "Редис", "Огурцы", "Молоко", "Творог", "Сыр", "Яйца", "Лук", "Брокколи", "Помидоры", "Цветная капуста"]
   },
   {
     "image_path": "data/processed_images/7.jpg",
-    "reference_ingredients": ["Canned Mushrooms", "Apples", "Cheese", "Milk", "Yogurt", "Eggs", "Water", "Lettuce Leaves", "Plums", "Grapes", "Tomatoes", "Cucumbers", "Onions", "Oranges"]
+    "reference_ingredients": ["Консервированные грибы", "Яблоки", "Сыр", "Молоко", "Йогурт", "Яйца", "Вода", "Латук", "Сливы", "Виноград", "Помидоры", "Огурцы", "Лук", "Апельсины"]
   },
   {
     "image_path": "data/processed_images/8.jpg",
-    "reference_ingredients": ["Apples", "Cheese", "Milk", "Eggs", "Lettuce", "Tomatoes", "Cucumbers", "Lemons", "Oranges", "Kumquats", "Jar of jam", "Red sauce", "Orange juice"]
+    "reference_ingredients": ["Яблоки", "Сыр", "Молоко", "Яйца", "Латук", "Помидоры", "Огурцы", "Лимоны", "Апельсины", "Кумкваты", "Банка джема", "Красный соус", "Апельсиновый сок"]
   },
   {
     "image_path": "data/processed_images/9.jpg",
-    "reference_ingredients": ["Boiled beets", "Boiled potatoes", "Boiled carrots", "Garlic", "Onions", "Chicken", "Sausage", "Fish", "Bread loafs", "Mayonnaise", "Canned goods", "Melted cheese", "Canned cucumbers", "Oranges", "Ground beef", "Tomatoes", "Herbs", "Eggs"]
+    "reference_ingredients": ["Вареная свекла", "Вареный картофель", "Вареная морковь", "Чеснок", "Лук", "Курица", "Колбаса", "Рыба", "Хлебные батоны", "Майонез", "Консервы", "Плавленый сыр", "Консервированные огурцы", "Апельсины", "Говяжий фарш", "Помидоры", "Латук", "Яйца"]
   },
   {
     "image_path": "data/processed_images/10.jpg",
-    "reference_ingredients": ["Avocado", "Lemons", "Bananas", "Juice", "Boiled pasta", "Apples", "Eggs", "Cottage cheese", "Yogurt", "Sour cream", "Milk", "Tomatoes", "Canned cucumbers", "Cucumbers", "Peppers", "Zucchini", "Lettuce leaves", "Steak", "Mussels", "Turkey", "Pears"]
+    "reference_ingredients": ["Авокадо", "Лимоны", "Бананы", "Сок", "Отварные макароны", "Яблоки", "Яйца", "Творог", "Йогурт", "Сметана", "Молоко", "Помидоры", "Консервированные огурцы", "Огурец", "Перец", "Кабачки", "Латук", "Стейк", "Мидии", "Индейка", "Груши"]
+  },
+  {
+    "image_path": "data/processed_images/11.jpg",
+    "reference_ingredients": ["Яйца", "Морковь", "Латук", "Виноград", "Яблоки", "Апельсины"]
+  },
+  {
+    "image_path": "data/processed_images/12.jpg",
+    "reference_ingredients": ["Бананы", "Морковь", "Яблоки", "Капуста", "Мясо", "Авокадо", "Перец", "Огурцы", "Помидоры", "Тортилья"]
+  },
+  {
+    "image_path": "data/processed_images/13.jpg",
+    "reference_ingredients": ["Картофель", "Яблоки", "Кефир", "Йогурт", "Макароны", "Курица", "Хлеб", "Сосиськи", "Шоколадки", "Булочки", "Сыр", "Яйца", "Морковь"]
+  },
+  {
+    "image_path": "data/processed_images/14.jpg",
+    "reference_ingredients": ["Капуста", "Цветная капуста", "Брокколи", "Сельдерей", "Лук", "Помидоры", "Редис", "Перец", "Баклажаны", "Огурец", "Морковь", "Чеснок", "Оливки", "Масло", "Яйца", "Сыр", "Молоко", "Сметана", "Творог", "Авокадо", "Лимон", "Клубника", "Сливочное масло", "Сыр творожный", "Авокадо", "Филе курицы", "Ветчина", "Колбаса", "Бекон", "Мясо", "Креветки", "Рыба", "Лосось"]
+  },
+  {
+    "image_path": "data/processed_images/15.jpg",
+    "reference_ingredients": ["Помидоры", "Брокколи", "Баклажан", "Морковь", "Яблоко", "Апельсины", "Петрушка", "Черешня", "Перец", "Капуста", "Виноград", "Молоко", "Яйца", "Сыр с плесенью", "Фарш", "Колбаса", "Пирожное", "Мясо", "Сметана"]
   }
 ]
