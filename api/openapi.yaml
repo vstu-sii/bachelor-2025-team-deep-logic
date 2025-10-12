@@ -1,0 +1,785 @@
+openapi: 3.0.0
+info:
+  title: AI Personal Chef API
+  version: 1.0.0
+  description: |
+    API для приложения шеф-повара с искусственным интеллектом.
+    Позволяет анализировать изображения продуктов, генерировать рецепты и управлять профилем пользователя.
+  contact:
+    name: API Support
+    email: support@aichef.com
+
+servers:
+  - url: https://api.aichef.com/v1
+    description: Production server
+  - url: https://staging-api.aichef.com/v1
+    description: Staging server
+
+paths:
+  /auth/register:
+    post:
+      summary: Регистрация нового пользователя (UC1)
+      description: Создание новой учетной записи пользователя
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+            example:
+              email: "user@example.com"
+              password: "SecurePass123"
+              name: "Иван Иванов"
+      responses:
+        '201':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                user:
+                  id: "user_123"
+                  email: "user@example.com"
+                  name: "Иван Иванов"
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "VALIDATION_ERROR"
+                message: "Неверный формат email"
+                details:
+                  field: "email"
+        '409':
+          description: Пользователь с таким email уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "USER_EXISTS"
+                message: "Пользователь с таким email уже зарегистрирован"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      summary: Вход в систему (UC2)
+      description: Аутентификация пользователя
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+            example:
+              email: "user@example.com"
+              password: "SecurePass123"
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Неверные учетные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "INVALID_CREDENTIALS"
+                message: "Неверный email или пароль"
+        '500':
+          description: Сервис аутентификации недоступен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /recipes/analyze-image:
+    post:
+      summary: Анализ изображения с ингредиентами (UC5)
+      description: Распознавание ингредиентов на изображении с помощью ML
+      tags:
+        - Recipes
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Изображение для анализа (JPEG, PNG)
+                max_ingredients:
+                  type: integer
+                  minimum: 1
+                  maximum: 20
+                  default: 10
+                  description: Максимальное количество ингредиентов для распознавания
+      responses:
+        '200':
+          description: Успешное распознавание ингредиентов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageAnalysisResponse'
+              example:
+                request_id: "req_12345"
+                ingredients:
+                  - name: "помидор"
+                    confidence: 0.95
+                    bounding_box: [0.1, 0.2, 0.3, 0.4]
+                  - name: "лук"
+                    confidence: 0.87
+                    bounding_box: [0.5, 0.6, 0.7, 0.8]
+                total_confidence: 0.91
+        '400':
+          description: Неверный формат изображения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Слишком большой размер изображения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Превышен лимит запросов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Ошибка ML-модели распознавания
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-rate-limit:
+        requests: 10
+        window: 3600
+        description: "10 запросов в час из-за высокой стоимости ML-обработки"
+
+  /recipes/generate:
+    post:
+      summary: Генерация рецептов по ингредиентам (UC5, UC6)
+      description: Создание рецептов на основе списка ингредиентов с помощью LLM
+      tags:
+        - Recipes
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeGenerationRequest'
+            example:
+              ingredients: ["помидор", "лук", "чеснок", "базилик"]
+              excluded_ingredients: ["лук"]
+              cuisine: "italian"
+              difficulty: "easy"
+              cooking_time: 30
+              servings: 2
+      responses:
+        '200':
+          description: Успешная генерация рецептов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGenerationResponse'
+              example:
+                recipes:
+                  - id: "recipe_123"
+                    title: "Томатный суп с базиликом"
+                    description: "Ароматный итальянский суп"
+                    ingredients:
+                      - name: "помидор"
+                        amount: "500г"
+                      - name: "чеснок"
+                        amount: "2 зубчика"
+                    instructions: ["Шаг 1...", "Шаг 2..."]
+                    cooking_time: 25
+                    difficulty: "easy"
+                    nutrition:
+                      calories: 150
+                      protein: 5
+                      carbs: 20
+                      fat: 6
+                generated_at: "2024-01-15T10:30:00Z"
+        '400':
+          description: Недостаточно ингредиентов для генерации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "INSUFFICIENT_INGREDIENTS"
+                message: "По оставшимся ингредиентам не найдено подходящих рецептов"
+        '429':
+          description: Превышен лимит запросов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-rate-limit:
+        requests: 50
+        window: 3600
+        description: "50 запросов в час для генерации рецептов"
+
+  /user/profile:
+    get:
+      summary: Получение профиля пользователя (UC4)
+      description: Получение информации о профиле пользователя
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Успешное получение профиля
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Обновление профиля пользователя (UC4)
+      description: Обновление данных пользователя и предпочтений
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
+            example:
+              name: "Иван Петров"
+              dietary_preferences: ["vegetarian"]
+              allergies: ["nuts", "seafood"]
+              cooking_experience: "intermediate"
+      responses:
+        '200':
+          description: Профиль успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+              example:
+                message: "Данные успешно обновлены"
+                profile:
+                  id: "user_123"
+                  name: "Иван Петров"
+                  dietary_preferences: ["vegetarian"]
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/history:
+    get:
+      summary: Получение истории рецептов (UC3)
+      description: Получение списка ранее просмотренных и приготовленных рецептов
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [viewed, cooked, all]
+            default: all
+          description: Тип истории для фильтрации
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Количество записей
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Смещение для пагинации
+      responses:
+        '200':
+          description: Успешное получение истории
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserHistoryResponse'
+        '404':
+          description: История пуста
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "HISTORY_EMPTY"
+                message: "История рецептов пуста"
+
+  /recipes/{recipe_id}:
+    get:
+      summary: Получение детальной информации о рецепте (UC7)
+      description: Получение полной информации о рецепте с пошаговыми инструкциями
+      tags:
+        - Recipes
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID рецепта
+      responses:
+        '200':
+          description: Успешное получение рецепта
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDetail'
+        '404':
+          description: Рецепт не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "RECIPE_NOT_FOUND"
+                message: "Рецепт временно недоступен"
+
+  /recipes/{recipe_id}/review:
+    post:
+      summary: Добавление отзыва к рецепту (UC8)
+      description: Сохранение отзыва и оценки для приготовленного рецепта
+      tags:
+        - Recipes
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID рецепта
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeReview'
+            example:
+              rating: 5
+              comment: "Очень вкусно! Обязательно приготовлю еще раз"
+              cooked: true
+              modifications: "Добавил больше чеснока"
+      responses:
+        '201':
+          description: Отзыв успешно сохранен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  review_id:
+                    type: string
+              example:
+                message: "Спасибо за отзыв!"
+                review_id: "review_123"
+        '400':
+          description: Ошибка валидации отзыва
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Ошибка при сохранении отзыва
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "REVIEW_SAVE_ERROR"
+                message: "Не удалось отправить отзыв. Попробуйте позже"
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      required:
+        - email
+        - password
+        - name
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          example: "user@example.com"
+        password:
+          type: string
+          minLength: 8
+          maxLength: 100
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$"
+          description: "Пароль должен содержать минимум 8 символов, включая заглавные, строчные буквы и цифры"
+          example: "SecurePass123"
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "Иван Иванов"
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT токен для аутентификации
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            name:
+              type: string
+
+    ImageAnalysisResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: ID запроса для отслеживания
+        ingredients:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Название ингредиента
+              confidence:
+                type: number
+                format: float
+                minimum: 0
+                maximum: 1
+                description: Уверенность распознавания
+              bounding_box:
+                type: array
+                items:
+                  type: number
+                description: Координаты bounding box [x1, y1, x2, y2]
+        total_confidence:
+          type: number
+          format: float
+          description: Общая уверенность распознавания
+
+    RecipeGenerationRequest:
+      type: object
+      required:
+        - ingredients
+      properties:
+        ingredients:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 20
+          description: Список ингредиентов для генерации рецептов
+        excluded_ingredients:
+          type: array
+          items:
+            type: string
+          description: Исключаемые ингредиенты (UC6)
+        cuisine:
+          type: string
+          enum: [italian, asian, mexican, mediterranean, american, any]
+          default: any
+        difficulty:
+          type: string
+          enum: [easy, medium, hard, any]
+          default: any
+        cooking_time:
+          type: integer
+          minimum: 5
+          maximum: 240
+          description: Максимальное время приготовления в минутах
+        servings:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 2
+
+    RecipeGenerationResponse:
+      type: object
+      properties:
+        recipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipe'
+        generated_at:
+          type: string
+          format: date-time
+
+    Recipe:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        ingredients:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              amount:
+                type: string
+        instructions:
+          type: array
+          items:
+            type: string
+        cooking_time:
+          type: integer
+        difficulty:
+          type: string
+        nutrition:
+          type: object
+          properties:
+            calories:
+              type: integer
+            protein:
+              type: integer
+            carbs:
+              type: integer
+            fat:
+              type: integer
+
+    RecipeDetail:
+      allOf:
+        - $ref: '#/components/schemas/Recipe'
+        - type: object
+          properties:
+            steps:
+              type: array
+              items:
+                type: object
+                properties:
+                  step_number:
+                    type: integer
+                  instruction:
+                    type: string
+                  duration:
+                    type: integer
+            tips:
+              type: array
+              items:
+                type: string
+            user_rating:
+              type: number
+              format: float
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        dietary_preferences:
+          type: array
+          items:
+            type: string
+            enum: [vegetarian, vegan, gluten-free, dairy-free, keto, paleo]
+        allergies:
+          type: array
+          items:
+            type: string
+        cooking_experience:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        created_at:
+          type: string
+          format: date-time
+
+    UserProfileUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        dietary_preferences:
+          type: array
+          items:
+            type: string
+        allergies:
+          type: array
+          items:
+            type: string
+        cooking_experience:
+          type: string
+          enum: [beginner, intermediate, advanced]
+
+    UserHistoryResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              recipe_id:
+                type: string
+              recipe_title:
+                type: string
+              type:
+                type: string
+                enum: [viewed, cooked]
+              timestamp:
+                type: string
+                format: date-time
+              rating:
+                type: number
+                format: float
+        total:
+          type: integer
+        has_more:
+          type: boolean
+
+    RecipeReview:
+      type: object
+      required:
+        - rating
+        - cooked
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Оценка рецепта от 1 до 5 звезд
+        comment:
+          type: string
+          maxLength: 1000
+          description: Текстовый отзыв
+        cooked:
+          type: boolean
+          description: Флаг, указывающий был ли рецепт приготовлен
+        modifications:
+          type: string
+          maxLength: 500
+          description: Внесенные изменения в рецепт
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Код ошибки
+        message:
+          type: string
+          description: Человекочитаемое сообщение об ошибке
+        details:
+          type: object
+          description: Дополнительная информация об ошибке
+        request_id:
+          type: string
+          description: ID запроса для отладки
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT токен, полученный при аутентификации"
+
+  responses:
+    RateLimitExceeded:
+      description: Превышен лимит запросов
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "RATE_LIMIT_EXCEEDED"
+            message: "Превышен лимит запросов. Попробуйте позже."
+            retry_after: 3600
+
+  parameters:
+    AuthorizationHeader:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+x-rate-limit-global:
+  requests: 1000
+  window: 3600
+  description: "Глобальный лимит 1000 запросов в час на пользователя"
