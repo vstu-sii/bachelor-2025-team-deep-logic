@@ -16,13 +16,6 @@ def compute_precision_recall_f1(predicted, reference):
 
     return precision, recall, f1
 
-def compute_coverage(predicted, reference):
-    reference_set = set([r.lower() for r in reference])
-    predicted_set = set([p.lower() for p in predicted])
-    covered = reference_set & predicted_set
-    coverage = len(covered) / len(reference_set) if reference_set else 0.0
-    return coverage
-
 def compute_excess(predicted, reference):
     reference_set = set([r.lower() for r in reference])
     predicted_set = set([p.lower() for p in predicted])
@@ -47,7 +40,7 @@ def evaluate_vlm(eval_file="C:/Users/Наталья/Desktop/lab2-AI Engineer-del
 
     results = []
     precision_scores, recall_scores, f1_scores = [], [], []
-    coverage_scores, excess_scores = [], []
+    excess_scores = []
 
     for case in eval_cases:
         image_path = case["image_path"]
@@ -73,13 +66,11 @@ def evaluate_vlm(eval_file="C:/Users/Наталья/Desktop/lab2-AI Engineer-del
 
         # Метрики по ингредиентам
         precision, recall, f1 = compute_precision_recall_f1(predicted, reference)
-        coverage = compute_coverage(predicted, reference)
         excess = compute_excess(predicted, reference)
 
         precision_scores.append(precision)
         recall_scores.append(recall)
         f1_scores.append(f1)
-        coverage_scores.append(coverage)
         excess_scores.append(excess)
 
         results.append({
@@ -89,7 +80,6 @@ def evaluate_vlm(eval_file="C:/Users/Наталья/Desktop/lab2-AI Engineer-del
             "Precision": round(precision, 3),
             "Recall": round(recall, 3),
             "F1": round(f1, 3),
-            "Coverage": round(coverage, 3),
             "Excess": round(excess, 3),
             "Diversity": diversity
         })
@@ -97,7 +87,6 @@ def evaluate_vlm(eval_file="C:/Users/Наталья/Desktop/lab2-AI Engineer-del
     avg_precision = sum(precision_scores) / len(precision_scores)
     avg_recall = sum(recall_scores) / len(recall_scores)
     avg_f1 = sum(f1_scores) / len(f1_scores)
-    avg_coverage = sum(coverage_scores) / len(coverage_scores)
     avg_excess = sum(excess_scores) / len(excess_scores)
 
     return {
@@ -105,7 +94,6 @@ def evaluate_vlm(eval_file="C:/Users/Наталья/Desktop/lab2-AI Engineer-del
         "avg_precision": round(avg_precision, 3),
         "avg_recall": round(avg_recall, 3),
         "avg_f1": round(avg_f1, 3),
-        "avg_coverage": round(avg_coverage, 3),
         "avg_excess": round(avg_excess, 3)
     }
 
