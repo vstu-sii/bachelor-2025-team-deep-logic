@@ -6,8 +6,8 @@
 ## Containers
 ![Containers](../generated/C4_container.png)
 
-## Backend Components
-![Backend Components](../generated/C4_component.png)
+## Model Manager
+![Model Manager](../generated/C4_component.png)
 
 Интерфейсы компонентов Backend API
 
