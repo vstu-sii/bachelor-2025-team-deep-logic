@@ -9,8 +9,6 @@
 ## Model Manager
 ![Model Manager](../generated/C4_component.png)
 
-## Backend API Components
-
 ## Model Manager Components
 
 | Компонент          | Назначение                                   | Входные данные           | Выходные данные         |
