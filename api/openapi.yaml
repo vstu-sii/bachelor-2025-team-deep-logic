@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: AI Personal Chef API
+  description: API для приложения кулинарного помощника с AI
   version: 1.0.0
-  description: |
-    API для приложения шеф-повара с искусственным интеллектом.
-    Позволяет анализировать изображения продуктов, генерировать рецепты и управлять профилем пользователя.
   contact:
     name: API Support
     email: support@aichef.com
@@ -15,11 +13,365 @@ servers:
   - url: https://staging-api.aichef.com/v1
     description: Staging server
 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - login
+      properties:
+        id_user:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        login:
+          type: string
+          example: "chef_lover"
+        password_hash:
+          type: string
+          readOnly: true
+          example: "$2b$10$hashedpasswordstring"
+        preferences_time:
+          type: integer
+          example: 1
+        preferences_difficulty:
+          type: integer
+          example: 2
+        preferences_calorie:
+          type: integer
+          example: 3
+        created_at:
+          type: string
+          format: date-time
+
+    UserRegistration:
+      type: object
+      required:
+        - email
+        - login
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        login:
+          type: string
+          example: "chef_lover"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 128
+          example: "SecurePass123!"
+        preferences_time:
+          type: integer
+          example: 1
+        preferences_difficulty:
+          type: integer
+          example: 2
+        preferences_calorie:
+          type: integer
+          example: 3
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          example: "SecurePass123!"
+
+    UserProfile:
+      type: object
+      properties:
+        login:
+          type: string
+        preferences_time:
+          type: integer
+        preferences_difficulty:
+          type: integer
+        preferences_calorie:
+          type: integer
+
+    PasswordChange:
+      type: object
+      required:
+        - current_password
+        - new_password
+      properties:
+        current_password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 128
+        new_password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 128
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        user:
+          $ref: '#/components/schemas/User'
+
+    CookingTime:
+      type: object
+      properties:
+        id_cooking_time:
+          type: integer
+        title:
+          type: string
+          example: "быстро"
+
+    Difficulty:
+      type: object
+      properties:
+        id_difficulty:
+          type: integer
+        title:
+          type: string
+          example: "Легко"
+
+    CalorieContent:
+      type: object
+      properties:
+        id_calorie_content:
+          type: integer
+        title:
+          type: string
+          example: "Низкокалорийное"
+
+    Product:
+      type: object
+      properties:
+        id_product:
+          type: integer
+        title:
+          type: string
+          example: "Помидор"
+
+    Recipe:
+      type: object
+      properties:
+        id_recipes:
+          type: integer
+        title:
+          type: string
+          example: "Спагетти Карбонара"
+        description:
+          type: string
+        id_cooking_time:
+          type: integer
+        id_difficulty:
+          type: integer
+        id_calorie_content:
+          type: integer
+        cooking_time:
+          $ref: '#/components/schemas/CookingTime'
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
+        calorie_content:
+          $ref: '#/components/schemas/CalorieContent'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInRecipe'
+        created_at:
+          type: string
+          format: date-time
+
+    ProductInRecipe:
+      type: object
+      properties:
+        id_product:
+          type: integer
+        title:
+          type: string
+        
+
+    ProductsInProhibited:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_product:
+          type: integer
+        id_user:
+          type: integer
+        product:
+          $ref: '#/components/schemas/Product'
+
+    History:
+      type: object
+      properties:
+        id_history:
+          type: integer
+        id_user:
+          type: integer
+        id_recipes:
+          type: integer
+        favorite:
+          type: boolean
+        done:
+          type: boolean
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        time:
+          type: string
+          format: date-time
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+
+    Comment:
+      type: object
+      properties:
+        id_comment:
+          type: integer
+        id_user:
+          type: integer
+        id_recipes:
+          type: integer
+        comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        user_login:
+          type: string
+
+    ImageRecognitionRequest:
+      type: object
+      required:
+        - image_base64
+      properties:
+        image_base64:
+          type: string
+          description: "Base64 encoded image"
+        image_type:
+          type: string
+          enum: [jpeg, png, webp]
+          default: "jpeg"
+
+    ImageRecognitionResponse:
+      type: object
+      properties:
+        recognized_products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        session_id:
+          type: string
+          description: "ID сессии для последующих запросов с этим набором продуктов"
+
+    RecipeGenerationRequest:
+      type: object
+      required:
+        - product_ids
+      properties:
+        product_ids:
+          type: array
+          items:
+            type: integer
+          description: "IDs продуктов для генерации рецептов"
+        excluded_product_ids:
+          type: array
+          items:
+            type: integer
+          description: "IDs продуктов для исключения"
+        preferences_time:
+          type: integer
+        preferences_difficulty:
+          type: integer
+        preferences_calorie:
+          type: integer
+
+    LLMInteraction:
+      type: object
+      properties:
+        id_interaction:
+          type: integer
+        id_user:
+          type: integer
+        prompt_text:
+          type: string
+        response_text:
+          type: string
+        model_used:
+          type: string
+        tokens_used:
+          type: integer
+        interaction_type:
+          type: string
+          enum: [recipe_generation, recipe_modification, nutrition_advice, other]
+        created_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: integer
+        details:
+          type: object
+          description: "Дополнительная информация об ошибке"
+
+    PasswordStrengthError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "WEAK_PASSWORD"
+        message:
+          type: string
+          example: "Пароль не соответствует требованиям безопасности"
+        requirements:
+          type: array
+          items:
+            type: string
+          example: ["Минимум 8 символов", "Как минимум одна цифра", "Как минимум одна заглавная буква"]
+
 paths:
+  # UC1 - Регистрация
   /auth/register:
     post:
-      summary: Регистрация нового пользователя (UC1)
-      description: Создание новой учетной записи пользователя
+      summary: Регистрация нового пользователя
+      description: |
+        UC1 - Создание нового аккаунта пользователя.
+        
+        **Безопасность паролей:**
+        - Пароль хешируется с использованием bcrypt перед сохранением
+        - Минимальная длина пароля: 8 символов
+        - Рекомендуется использовать цифры, заглавные и строчные буквы
       tags:
         - Authentication
       requestBody:
@@ -28,43 +380,37 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserRegistration'
-            example:
-              email: "user@example.com"
-              password: "SecurePass123"
-              name: "Иван Иванов"
+            examples:
+              validRegistration:
+                summary: Валидная регистрация
+                value:
+                  email: "user@example.com"
+                  login: "chef_lover"
+                  password: "SecurePass123!"
+                  preferences_time: 1
+                  preferences_difficulty: 2
+                  preferences_calorie: 3
       responses:
         '201':
-          description: Пользователь успешно зарегистрирован
+          description: Пользователь успешно зарегистрирован и авторизован
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
-              example:
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                user:
-                  id: "user_123"
-                  email: "user@example.com"
-                  name: "Иван Иванов"
         '400':
-          description: Ошибка валидации данных
+          description: Некорректные данные или слабый пароль
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "VALIDATION_ERROR"
-                message: "Неверный формат email"
-                details:
-                  field: "email"
+                oneOf:
+                  - $ref: '#/components/schemas/Error'
+                  - $ref: '#/components/schemas/PasswordStrengthError'
         '409':
           description: Пользователь с таким email уже существует
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              example:
-                error: "USER_EXISTS"
-                message: "Пользователь с таким email уже зарегистрирован"
         '500':
           description: Внутренняя ошибка сервера
           content:
@@ -72,10 +418,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  # UC2 - Вход в систему
   /auth/login:
     post:
-      summary: Вход в систему (UC2)
-      description: Аутентификация пользователя
+      summary: Вход в систему
+      description: |
+        UC2 - Аутентификация пользователя.
+        
+        **Процесс аутентификации:**
+        1. Поиск пользователя по email
+        2. Сравнение хеша введенного пароля с хешем в базе данных
+        3. Генерация JWT токена при успешной проверке
       tags:
         - Authentication
       requestBody:
@@ -84,9 +437,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserLogin'
-            example:
-              email: "user@example.com"
-              password: "SecurePass123"
+            examples:
+              validLogin:
+                summary: Валидные учетные данные
+                value:
+                  email: "user@example.com"
+                  password: "SecurePass123!"
       responses:
         '200':
           description: Успешный вход
@@ -100,9 +456,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              example:
-                error: "INVALID_CREDENTIALS"
-                message: "Неверный email или пароль"
         '500':
           description: Сервис аутентификации недоступен
           content:
@@ -110,159 +463,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /recipes/analyze-image:
-    post:
-      summary: Анализ изображения с ингредиентами (UC5)
-      description: Распознавание ингредиентов на изображении с помощью ML
-      tags:
-        - Recipes
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: binary
-                  description: Изображение для анализа (JPEG, PNG)
-                max_ingredients:
-                  type: integer
-                  minimum: 1
-                  maximum: 20
-                  default: 10
-                  description: Максимальное количество ингредиентов для распознавания
-      responses:
-        '200':
-          description: Успешное распознавание ингредиентов
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImageAnalysisResponse'
-              example:
-                request_id: "req_12345"
-                ingredients:
-                  - name: "помидор"
-                    confidence: 0.95
-                    bounding_box: [0.1, 0.2, 0.3, 0.4]
-                  - name: "лук"
-                    confidence: 0.87
-                    bounding_box: [0.5, 0.6, 0.7, 0.8]
-                total_confidence: 0.91
-        '400':
-          description: Неверный формат изображения
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '413':
-          description: Слишком большой размер изображения
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '429':
-          description: Превышен лимит запросов
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Ошибка ML-модели распознавания
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      x-rate-limit:
-        requests: 10
-        window: 3600
-        description: "10 запросов в час из-за высокой стоимости ML-обработки"
-
-  /recipes/generate:
-    post:
-      summary: Генерация рецептов по ингредиентам (UC5, UC6)
-      description: Создание рецептов на основе списка ингредиентов с помощью LLM
-      tags:
-        - Recipes
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RecipeGenerationRequest'
-            example:
-              ingredients: ["помидор", "лук", "чеснок", "базилик"]
-              excluded_ingredients: ["лук"]
-              cuisine: "italian"
-              difficulty: "easy"
-              cooking_time: 30
-              servings: 2
-      responses:
-        '200':
-          description: Успешная генерация рецептов
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RecipeGenerationResponse'
-              example:
-                recipes:
-                  - id: "recipe_123"
-                    title: "Томатный суп с базиликом"
-                    description: "Ароматный итальянский суп"
-                    ingredients:
-                      - name: "помидор"
-                        amount: "500г"
-                      - name: "чеснок"
-                        amount: "2 зубчика"
-                    instructions: ["Шаг 1...", "Шаг 2..."]
-                    cooking_time: 25
-                    difficulty: "easy"
-                    nutrition:
-                      calories: 150
-                      protein: 5
-                      carbs: 20
-                      fat: 6
-                generated_at: "2024-01-15T10:30:00Z"
-        '400':
-          description: Недостаточно ингредиентов для генерации
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "INSUFFICIENT_INGREDIENTS"
-                message: "По оставшимся ингредиентам не найдено подходящих рецептов"
-        '429':
-          description: Превышен лимит запросов
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      x-rate-limit:
-        requests: 50
-        window: 3600
-        description: "50 запросов в час для генерации рецептов"
-
+  # UC4 - Управление профилем
   /user/profile:
     get:
-      summary: Получение профиля пользователя (UC4)
-      description: Получение информации о профиле пользователя
+      summary: Получение профиля пользователя
+      description: UC4 - Получение данных профиля
       tags:
         - User
       security:
-        - BearerAuth: []
+        - bearerAuth: []
       responses:
         '200':
-          description: Успешное получение профиля
+          description: Данные профиля
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
+                $ref: '#/components/schemas/User'
         '401':
           description: Не авторизован
           content:
@@ -271,152 +487,62 @@ paths:
                 $ref: '#/components/schemas/Error'
 
     put:
-      summary: Обновление профиля пользователя (UC4)
-      description: Обновление данных пользователя и предпочтений
+      summary: Обновление профиля пользователя
+      description: UC4 - Изменение данных профиля
       tags:
         - User
       security:
-        - BearerAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserProfileUpdate'
-            example:
-              name: "Иван Петров"
-              dietary_preferences: ["vegetarian"]
-              allergies: ["nuts", "seafood"]
-              cooking_experience: "intermediate"
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
-          description: Профиль успешно обновлен
+          description: Данные успешно обновлены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
-              example:
-                message: "Данные успешно обновлены"
-                profile:
-                  id: "user_123"
-                  name: "Иван Петров"
-                  dietary_preferences: ["vegetarian"]
+                $ref: '#/components/schemas/User'
         '400':
-          description: Ошибка валидации данных
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Не авторизован
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /user/history:
-    get:
-      summary: Получение истории рецептов (UC3)
-      description: Получение списка ранее просмотренных и приготовленных рецептов
+  # Смена пароля
+  /user/change-password:
+    post:
+      summary: Смена пароля пользователя
+      description: |
+        Изменение пароля пользователя.
+        
+        **Процесс смены пароля:**
+        1. Проверка текущего пароля
+        2. Хеширование нового пароля
+        3. Обновление хеша в базе данных
       tags:
         - User
       security:
-        - BearerAuth: []
-      parameters:
-        - name: type
-          in: query
-          schema:
-            type: string
-            enum: [viewed, cooked, all]
-            default: all
-          description: Тип истории для фильтрации
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 20
-          description: Количество записей
-        - name: offset
-          in: query
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          description: Смещение для пагинации
-      responses:
-        '200':
-          description: Успешное получение истории
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserHistoryResponse'
-        '404':
-          description: История пуста
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "HISTORY_EMPTY"
-                message: "История рецептов пуста"
-
-  /recipes/{recipe_id}:
-    get:
-      summary: Получение детальной информации о рецепте (UC7)
-      description: Получение полной информации о рецепте с пошаговыми инструкциями
-      tags:
-        - Recipes
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: recipe_id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: ID рецепта
-      responses:
-        '200':
-          description: Успешное получение рецепта
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RecipeDetail'
-        '404':
-          description: Рецепт не найден
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "RECIPE_NOT_FOUND"
-                message: "Рецепт временно недоступен"
-
-  /recipes/{recipe_id}/review:
-    post:
-      summary: Добавление отзыва к рецепту (UC8)
-      description: Сохранение отзыва и оценки для приготовленного рецепта
-      tags:
-        - Recipes
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: recipe_id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: ID рецепта
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecipeReview'
-            example:
-              rating: 5
-              comment: "Очень вкусно! Обязательно приготовлю еще раз"
-              cooked: true
-              modifications: "Добавил больше чеснока"
+              $ref: '#/components/schemas/PasswordChange'
       responses:
-        '201':
-          description: Отзыв успешно сохранен
+        '200':
+          description: Пароль успешно изменен
           content:
             application/json:
               schema:
@@ -424,362 +550,414 @@ paths:
                 properties:
                   message:
                     type: string
-                  review_id:
-                    type: string
-              example:
-                message: "Спасибо за отзыв!"
-                review_id: "review_123"
+                    example: "Пароль успешно изменен"
         '400':
-          description: Ошибка валидации отзыва
+          description: Новый пароль не соответствует требованиям безопасности
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordStrengthError'
+        '401':
+          description: Неверный текущий пароль
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         '500':
-          description: Ошибка при сохранении отзыва
+          description: Ошибка при обновлении пароля
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              example:
-                error: "REVIEW_SAVE_ERROR"
-                message: "Не удалось отправить отзыв. Попробуйте позже"
 
-components:
-  schemas:
-    UserRegistration:
-      type: object
-      required:
-        - email
-        - password
-        - name
-      properties:
-        email:
-          type: string
-          format: email
-          maxLength: 255
-          example: "user@example.com"
-        password:
-          type: string
-          minLength: 8
-          maxLength: 100
-          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$"
-          description: "Пароль должен содержать минимум 8 символов, включая заглавные, строчные буквы и цифры"
-          example: "SecurePass123"
-        name:
-          type: string
-          minLength: 2
-          maxLength: 100
-          example: "Иван Иванов"
-
-    UserLogin:
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-
-    AuthResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: JWT токен для аутентификации
-        user:
-          type: object
-          properties:
-            id:
-              type: string
-            email:
-              type: string
-            name:
-              type: string
-
-    ImageAnalysisResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: ID запроса для отслеживания
-        ingredients:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Название ингредиента
-              confidence:
-                type: number
-                format: float
-                minimum: 0
-                maximum: 1
-                description: Уверенность распознавания
-              bounding_box:
-                type: array
-                items:
-                  type: number
-                description: Координаты bounding box [x1, y1, x2, y2]
-        total_confidence:
-          type: number
-          format: float
-          description: Общая уверенность распознавания
-
-    RecipeGenerationRequest:
-      type: object
-      required:
-        - ingredients
-      properties:
-        ingredients:
-          type: array
-          items:
+  # UC3 и UC9 - История и избранное
+  /user/history:
+    get:
+      summary: Получение истории рецептов
+      description: UC3 - Просмотр истории действий
+      tags:
+        - History
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          schema:
             type: string
-          minItems: 1
-          maxItems: 20
-          description: Список ингредиентов для генерации рецептов
-        excluded_ingredients:
-          type: array
-          items:
-            type: string
-          description: Исключаемые ингредиенты (UC6)
-        cuisine:
-          type: string
-          enum: [italian, asian, mexican, mediterranean, american, any]
-          default: any
-        difficulty:
-          type: string
-          enum: [easy, medium, hard, any]
-          default: any
-        cooking_time:
-          type: integer
-          minimum: 5
-          maximum: 240
-          description: Максимальное время приготовления в минутах
-        servings:
-          type: integer
-          minimum: 1
-          maximum: 10
-          default: 2
-
-    RecipeGenerationResponse:
-      type: object
-      properties:
-        recipes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Recipe'
-        generated_at:
-          type: string
-          format: date-time
-
-    Recipe:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        ingredients:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              amount:
-                type: string
-        instructions:
-          type: array
-          items:
-            type: string
-        cooking_time:
-          type: integer
-        difficulty:
-          type: string
-        nutrition:
-          type: object
-          properties:
-            calories:
-              type: integer
-            protein:
-              type: integer
-            carbs:
-              type: integer
-            fat:
-              type: integer
-
-    RecipeDetail:
-      allOf:
-        - $ref: '#/components/schemas/Recipe'
-        - type: object
-          properties:
-            steps:
-              type: array
-              items:
+            enum: [all, cooked, viewed]
+          description: Тип истории для фильтрации
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Список истории
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  step_number:
+                  history:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/History'
+                  total:
                     type: integer
-                  instruction:
-                    type: string
-                  duration:
-                    type: integer
-            tips:
-              type: array
-              items:
-                type: string
-            user_rating:
-              type: number
-              format: float
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-    UserProfile:
-      type: object
-      properties:
-        id:
-          type: string
-        email:
-          type: string
-        name:
-          type: string
-        dietary_preferences:
-          type: array
-          items:
-            type: string
-            enum: [vegetarian, vegan, gluten-free, dairy-free, keto, paleo]
-        allergies:
-          type: array
-          items:
-            type: string
-        cooking_experience:
-          type: string
-          enum: [beginner, intermediate, advanced]
-        created_at:
-          type: string
-          format: date-time
-
-    UserProfileUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 2
-          maxLength: 100
-        dietary_preferences:
-          type: array
-          items:
-            type: string
-        allergies:
-          type: array
-          items:
-            type: string
-        cooking_experience:
-          type: string
-          enum: [beginner, intermediate, advanced]
-
-    UserHistoryResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            properties:
-              recipe_id:
-                type: string
-              recipe_title:
-                type: string
-              type:
-                type: string
-                enum: [viewed, cooked]
-              timestamp:
-                type: string
-                format: date-time
-              rating:
-                type: number
-                format: float
-        total:
-          type: integer
-        has_more:
-          type: boolean
-
-    RecipeReview:
-      type: object
-      required:
-        - rating
-        - cooked
-      properties:
-        rating:
-          type: integer
-          minimum: 1
-          maximum: 5
-          description: Оценка рецепта от 1 до 5 звезд
-        comment:
-          type: string
-          maxLength: 1000
-          description: Текстовый отзыв
-        cooked:
-          type: boolean
-          description: Флаг, указывающий был ли рецепт приготовлен
-        modifications:
-          type: string
-          maxLength: 500
-          description: Внесенные изменения в рецепт
-
-    Error:
-      type: object
-      required:
-        - error
-        - message
-      properties:
-        error:
-          type: string
-          description: Код ошибки
-        message:
-          type: string
-          description: Человекочитаемое сообщение об ошибке
-        details:
-          type: object
-          description: Дополнительная информация об ошибке
-        request_id:
-          type: string
-          description: ID запроса для отладки
-
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: "JWT токен, полученный при аутентификации"
-
-  responses:
-    RateLimitExceeded:
-      description: Превышен лимит запросов
-      content:
-        application/json:
+  /user/favorites:
+    get:
+      summary: Получение избранных рецептов
+      description: UC9 - Просмотр избранных рецептов
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: "RATE_LIMIT_EXCEEDED"
-            message: "Превышен лимит запросов. Попробуйте позже."
-            retry_after: 3600
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Список избранных рецептов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorites:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/History'
+                  total:
+                    type: integer
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  parameters:
-    AuthorizationHeader:
-      name: Authorization
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  # UC10 - Добавление в избранное
+  /recipes/{recipe_id}/favorite:
+    post:
+      summary: Добавление рецепта в избранное
+      description: UC10 - Добавление в избранное
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Рецепт добавлен в избранное
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Рецепт не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-x-rate-limit-global:
-  requests: 1000
-  window: 3600
-  description: "Глобальный лимит 1000 запросов в час на пользователя"
+    delete:
+      summary: Удаление рецепта из избранного
+      description: Удаление из избранного
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Рецепт удален из избранного
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # UC5 - Распознавание ингредиентов по фото
+  /ai/recognize-ingredients:
+    post:
+      summary: Распознавание ингредиентов на изображении
+      description: UC5 - Запрос списка рецептов по соответствующим ингредиентам
+      tags:
+        - AI
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageRecognitionRequest'
+      responses:
+        '200':
+          description: Ингредиенты успешно распознаны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageRecognitionResponse'
+        '400':
+          description: Неверный формат изображения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '408':
+          description: Таймаут распознавания
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Ошибка ML-модели
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # UC6 - Генерация рецептов
+  /ai/generate-recipes:
+    post:
+      summary: Генерация рецептов по ингредиентам
+      description: UC6 - Исключение ингредиентов и генерация рецептов
+      tags:
+        - AI
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeGenerationRequest'
+      responses:
+        '200':
+          description: Рецепты успешно сгенерированы
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recipes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Recipe'
+        '400':
+          description: Недостаточно ингредиентов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Не найдено подходящих рецептов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # UC7 - Получение деталей рецепта
+  /recipes/{recipe_id}:
+    get:
+      summary: Получение детальной информации о рецепте
+      description: UC7 - Выбор рецепта
+      tags:
+        - Recipes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Детали рецепта
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '404':
+          description: Рецепт не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # UC8 - Оставление отзыва
+  /recipes/{recipe_id}/comments:
+    post:
+      summary: Добавление комментария к рецепту
+      description: UC8 - Оставление отзыва
+      tags:
+        - Comments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - comment
+                - rating
+              properties:
+                comment:
+                  type: string
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+      responses:
+        '201':
+          description: Комментарий успешно добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Неверные данные комментария
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Дополнительные endpoints для управления запрещенными продуктами
+  /user/prohibited-products:
+    get:
+      summary: Получение списка запрещенных продуктов
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Список запрещенных продуктов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductsInProhibited'
+        '401':
+          description: Не авторизован
+
+    post:
+      summary: Добавление запрещенного продукта
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - product_id
+              properties:
+                product_id:
+                  type: integer
+      responses:
+        '201':
+          description: Продукт добавлен в запрещенные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductsInProhibited'
+        '401':
+          description: Не авторизован
+
+  /user/prohibited-products/{product_id}:
+    delete:
+      summary: Удаление продукта из запрещенных
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Продукт удален из запрещенных
+        '401':
+          description: Не авторизован
+        '404':
+          description: Продукт не найден в запрещенных
+
+  # Отметка рецепта как приготовленного
+  /recipes/{recipe_id}/mark-cooked:
+    post:
+      summary: Отметка рецепта как приготовленного
+      tags:
+        - History
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Рецепт отмечен как приготовленный
+        '401':
+          description: Не авторизован
+        '404':
+          description: Рецепт не найден
