@@ -27,12 +27,6 @@ UC_VLM_PROMPT = ChatPromptTemplate.from_messages([
     ("human", "{input}")
 ])
 
-
-
-
-
-
-
 UC_LLM_PROMPT = ChatPromptTemplate.from_messages([
     ("system", """Ты — кулинарный помощник.
 Твоя задача: составить рецепты на основе списка продуктов и ограничений.
