@@ -1,6 +1,7 @@
 import json
 import os
-from ml.models.baseline import Gemma3Text, LLaVAVision
+import time
+from ml.models.baseline import LLaVAVision
 
 def compute_precision_recall_f1(predicted, reference):
     predicted_set = set([p.lower() for p in predicted])
@@ -14,7 +15,7 @@ def compute_precision_recall_f1(predicted, reference):
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
     f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
 
-    return precision, recall, f1
+    return f1
 
 def compute_excess(predicted, reference):
     reference_set = set([r.lower() for r in reference])
@@ -23,80 +24,80 @@ def compute_excess(predicted, reference):
     excess_ratio = len(excess) / len(predicted_set) if predicted_set else 0.0
     return excess_ratio
 
-def extract_diversity_levels(recipes):
-    difficulties = set()
-    for recipe in recipes:
-        difficulties.add(recipe.get("difficulty"))
-    return {
-        "difficulty_levels": list(difficulties),
-    }
-
-def evaluate_vlm(eval_file="C:/Users/Наталья/Desktop/lab2-AI Engineer-deliverables/ml/evaluation/vlm_eval_cases.json"):
+def evaluate_vlm(eval_file="ml/evaluation/vlm_eval_cases.json", report_file="report.txt"):
     with open(eval_file, "r", encoding="utf-8") as f:
         eval_cases = json.load(f)
 
     vlm = LLaVAVision()
-    llm = Gemma3Text()
 
     results = []
-    precision_scores, recall_scores, f1_scores = [], [], []
-    excess_scores = []
+    f1_scores, excess_scores = [], []
 
-    for case in eval_cases:
+    for idx, case in enumerate(eval_cases, start=1):
         image_path = case["image_path"]
         reference = case["reference_ingredients"]
 
-        print(f"\n📷 Обработка изображения: {image_path}")
-        print(f"🎯 Эталонные ингредиенты: {reference}")
+        # Вывод прогресса на экран
+        print(f"\n▶️ Тест #{idx}: {os.path.basename(image_path)}")
+        print(f"   Эталонные ингредиенты: {reference}")
 
-        # Шаг 1: распознавание ингредиентов
+        start = time.time()
         pred = vlm.infer(image_path)
+        latency = time.time() - start
+
         predicted = [ing["name"] if isinstance(ing, dict) else ing
                      for ing in pred.get("ingredients", [])]
 
-        # Шаг 2: генерация рецептов
-        llm_result = llm.generate_recipe(
-            ingredients=pred.get("ingredients", []),
-            dietary=None,
-            feedback=None
-        )
+        print(f"   Распознанные ингредиенты: {predicted}")
 
-        recipes = llm_result
-        diversity = extract_diversity_levels(recipes)
-
-        # Метрики по ингредиентам
-        precision, recall, f1 = compute_precision_recall_f1(predicted, reference)
+        f1 = compute_precision_recall_f1(predicted, reference)
         excess = compute_excess(predicted, reference)
 
-        precision_scores.append(precision)
-        recall_scores.append(recall)
+        print(f"   F1: {f1:.3f}, Excess: {excess:.3f}, Latency: {latency:.2f} сек")
+
         f1_scores.append(f1)
         excess_scores.append(excess)
 
         results.append({
+            "id": idx,
             "image": os.path.basename(image_path),
             "reference": reference,
             "predicted": predicted,
-            "Precision": round(precision, 3),
-            "Recall": round(recall, 3),
             "F1": round(f1, 3),
-            "Excess": round(excess, 3),
-            "Diversity": diversity
+            "Excess": round(excess, 3)
         })
 
-    avg_precision = sum(precision_scores) / len(precision_scores)
-    avg_recall = sum(recall_scores) / len(recall_scores)
-    avg_f1 = sum(f1_scores) / len(f1_scores)
-    avg_excess = sum(excess_scores) / len(excess_scores)
+    avg_f1 = round(sum(f1_scores) / len(f1_scores), 3)
+    avg_excess = round(sum(excess_scores) / len(excess_scores), 3)
+
+    # Формируем текстовый отчёт
+    lines = []
+    for r in results:
+        lines.append(f"Тест #{r['id']} ({r['image']})")
+        lines.append("  Эталонные ингредиенты:")
+        for item in r["reference"]:
+            lines.append(f"    - {item}")
+        lines.append("  Распознанные ингредиенты:")
+        for item in r["predicted"]:
+            lines.append(f"    - {item}")
+        lines.append(f"  F1: {r['F1']}")
+        lines.append(f"  Excess: {r['Excess']}")
+        lines.append("")
+
+    lines.append("📊 Сводка по всем тестам")
+    lines.append(f"  Средний F1: {avg_f1}")
+    lines.append(f"  Средний Excess: {avg_excess}")
+
+    # Сохраняем в файл
+    with open(report_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
 
     return {
         "results": results,
-        "avg_precision": round(avg_precision, 3),
-        "avg_recall": round(avg_recall, 3),
-        "avg_f1": round(avg_f1, 3),
-        "avg_excess": round(avg_excess, 3)
+        "avg_f1": avg_f1,
+        "avg_excess": avg_excess
     }
 
 if __name__ == "__main__":
     report = evaluate_vlm()
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    print("\n✅ Отчёт сохранён в report.txt")
