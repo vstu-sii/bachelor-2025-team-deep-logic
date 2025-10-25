@@ -1,58 +1,97 @@
+# app.py
 from fastapi import FastAPI, UploadFile, Form
-from ml.models.baseline import Gemma3Text, LLaVAVision
+from ml.models.baseline import MistralText, LLaVAVision
+from pathlib import Path
+import uuid
+import pika
+import json
+import subprocess
 
 app = FastAPI()
 
-vlm = LLaVAVision()
-pipeline = Gemma3Text()
+pipeline = MistralText()
 
+# Запуск воркера при старте сервера
+@app.on_event("startup")
+def launch_worker():
+    subprocess.Popen(["python", "-m", "ml.api.worker"])
 
 @app.post("/test-vlm")
 async def test_vlm(file: UploadFile):
-    """Проверка только VLM: извлекаем ингредиенты с фото (на русском)."""
-    path = f"C:/Users/Наталья/Desktop/lab2-AI Engineer-deliverables/data/processed_images/{file.filename}"
-    with open(path, "wb") as f:
+    task_id = str(uuid.uuid4())
+    save_path = Path(f"./data/processed_images/{task_id}_{file.filename}")
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(save_path, "wb") as f:
         f.write(await file.read())
 
-    vlm_result = vlm.infer(path)
-    if "error" in vlm_result:
-        return vlm_result
+    connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
+    channel = connection.channel()
+    channel.queue_declare(queue="ingredient_queue")
 
-    # В baseline.py теперь ingredients уже на русском
-    ingredients = vlm_result.get("ingredients", [])
-
-    return {
-        "ingredients": ingredients
+    message = {
+        "task_id": task_id,
+        "image_path": str(save_path)
     }
+    channel.basic_publish(exchange="", routing_key="ingredient_queue", body=json.dumps(message))
+    connection.close()
 
+    return {"task_id": task_id, "status": "queued"}
 
-@app.post("/cook-from-image")
-async def generate_recipe(
-    file: UploadFile,
-    dietary: str = Form("нет"),
-    user_feedback: str = Form("нет")
-):
-    """Полный пайплайн: сначала VLM (ингредиенты на русском), потом LLM (рецепты с учётом фидбека)."""
-    path = f"C:/Users/Наталья/Desktop/lab2-AI Engineer-deliverables/data/processed_images/{file.filename}"
-    with open(path, "wb") as f:
-        f.write(await file.read())
+@app.get("/task-result/{task_id}")
+def get_result(task_id: str):
+    result_path = Path(f"./results/{task_id}.json")
+    if not result_path.exists():
+        return {"status": "processing"}
 
-    vlm_result = vlm.infer(path)
-    if "error" in vlm_result:
-        return vlm_result
+    with open(result_path, "r", encoding="utf-8") as f:
+        result = json.load(f)
 
-    # Берём уже переведённый список (на русском)
+    return {"status": "done", "ingredients": result.get("ingredients", [])}
+
+@app.post("/cook-from-image/{task_id}")
+async def generate_recipe(task_id: str, dietary: str = Form("нет"), user_feedback: str = Form("нет")):
+    # путь для сохранённых ингредиентов
+    result_path = Path(f"C:/Users/Наталья/Desktop/lab2-AI Engineer-deliverables/results/{task_id}.json")
+
+    if not result_path.exists():
+        return {
+            "error": f"Ингредиенты для файла {task_id} ещё не распознаны. "
+                     f"Сначала нужно прогнать изображение через /test-vlm."
+        }
+
+    with open(result_path, "r", encoding="utf-8") as f:
+        vlm_result = json.load(f)
+
     ingredients = vlm_result.get("ingredients", [])
 
+    if not ingredients:
+        return {"error": "Нет ингредиентов для генерации рецепта"}
     recipes = pipeline.generate_recipe(
         ingredients,
         dietary=dietary,
         feedback=user_feedback
     )
 
+    # сохраняем рецепты в отдельный файл
+    recipes_path = Path(f"C:/Users/Наталья/Desktop/lab2-AI Engineer-deliverables/recipes/{task_id}_recipes.json")
+    recipes_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(recipes_path, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "ingredients": ingredients,
+                "recipes": recipes,
+                "feedback_used": user_feedback
+            },
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
     return {
         "ingredients": ingredients,
         "recipes": recipes,
-        "feedback_used": user_feedback
+        "feedback_used": user_feedback,
+        "saved_to": str(recipes_path)
     }
 
