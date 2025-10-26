@@ -1,0 +1,22 @@
+[
+  {
+    "image_path": "data/processed_images/1.jpg",
+    "reference_ingredients": ["Сыр", "Курица", "Брокколи", "Вода", "Перец", "Яйца"]
+  },
+  {
+    "image_path": "data/processed_images/2.jpg",
+    "reference_ingredients": ["Сыр", "Сметана", "Сливочное масло", "Творог", "Молоко", "Яйца"]
+  },
+  {
+    "image_path": "data/processed_images/3.jpg",
+    "reference_ingredients": ["Грецкие орехи", "Яйца", "Лосось", "Авокадо", "Грибы", "Латук", "Киви", "Яблоки", "Апельсины"]
+  },
+  {
+    "image_path": "data/processed_images/4.jpg",
+    "reference_ingredients": ["Яблоки", "Абрикосы", "Морковь", "Картофель", "Мята"]
+  },
+  {
+    "image_path": "data/processed_images/5.jpg",
+    "reference_ingredients": ["Яблоко"]
+  }
+]
