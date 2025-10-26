@@ -1,5 +1,5 @@
 from ml.models.baseline import LLaVAVision, MistralText
-from ml.tracing.langfuse_config import cook_from_image  # импортируй функцию, которую ты написала
+from ml.api.cook_langfuse import cook_from_image  # импортируй функцию, которую ты написала
 
 vlm = LLaVAVision()
 llm = MistralText()
@@ -13,3 +13,4 @@ result = cook_from_image(
 )
 
 print(result)
+
