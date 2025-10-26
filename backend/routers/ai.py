@@ -1,4 +1,3 @@
-# app.py
 from fastapi import FastAPI, UploadFile, Form, HTTPException
 from ml.models.baseline import MistralText
 from pathlib import Path
@@ -6,6 +5,9 @@ import uuid
 import pika
 import json
 import subprocess
+import logging
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI(
     title="Baseline API",
@@ -14,15 +16,15 @@ app = FastAPI(
 )
 
 pipeline = MistralText()
+logging.basicConfig(level=logging.INFO)
 
 # Запуск воркера при старте сервера
 @app.on_event("startup")
 def launch_worker():
-    subprocess.Popen(["python", "-m", "ml.api.worker"])
+    subprocess.Popen(["python", "-m", "backend.routers.worker"])
 
 @app.post("/test-vlm", tags=["AI"], summary="Распознать ингредиенты на фото")
 async def test_vlm(file: UploadFile):
-    # Валидация файла
     if not file.filename.lower().endswith((".jpg", ".jpeg", ".png")):
         raise HTTPException(status_code=400, detail="Файл должен быть изображением (jpg/png)")
 
@@ -33,7 +35,6 @@ async def test_vlm(file: UploadFile):
     with open(save_path, "wb") as f:
         f.write(await file.read())
 
-    # Отправляем задачу в очередь
     try:
         connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
         channel = connection.channel()
@@ -42,6 +43,7 @@ async def test_vlm(file: UploadFile):
         channel.basic_publish(exchange="", routing_key="ingredient_queue", body=json.dumps(message))
         connection.close()
     except Exception as e:
+        logging.error(f"Ошибка очереди: {e}")
         raise HTTPException(status_code=500, detail=f"Ошибка очереди: {e}")
 
     return {"task_id": task_id, "status": "queued"}
@@ -55,6 +57,10 @@ async def get_result(task_id: str):
     with open(result_path, "r", encoding="utf-8") as f:
         result = json.load(f)
 
+    # если воркер сохранил ошибку
+    if result.get("status") == "error":
+        return {"status": "error", "error": result.get("error", "Неизвестная ошибка")}
+
     return {"status": "done", "ingredients": result.get("ingredients", [])}
 
 @app.post("/cook-from-image/{task_id}", tags=["AI"], summary="Сгенерировать рецепт по ингредиентам")
@@ -66,11 +72,18 @@ async def generate_recipe(task_id: str, dietary: str = Form("нет"), user_feed
     with open(result_path, "r", encoding="utf-8") as f:
         vlm_result = json.load(f)
 
+    if vlm_result.get("status") == "error":
+        raise HTTPException(status_code=500, detail=f"Ошибка VLM: {vlm_result.get('error')}")
+
     ingredients = vlm_result.get("ingredients", [])
     if not ingredients:
         raise HTTPException(status_code=400, detail="Нет ингредиентов для генерации рецепта")
 
     recipes = pipeline.generate_recipe(ingredients, dietary=dietary, feedback=user_feedback)
+
+    if isinstance(recipes, dict) and "error" in recipes:
+        logging.error(f"Ошибка генерации рецепта: {recipes}")
+        raise HTTPException(status_code=500, detail=f"Ошибка генерации рецепта: {recipes['error']}")
 
     recipes_path = Path(f"./recipes/{task_id}_recipes.json")
     recipes_path.parent.mkdir(parents=True, exist_ok=True)
