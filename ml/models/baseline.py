@@ -27,6 +27,13 @@ def _sanitize_json_string(s: str) -> str:
 
 
 class LLaVAVision:
+    def build_prompt(self, image_path: str) -> str:
+        """Возвращает текст промпта, который реально отправляется в VLM"""
+        prompt_text = UC_VLM_PROMPT.format_messages(
+            input="Определи продукты на фото"
+        )
+        return "\n".join([m.content for m in prompt_text])
+    
     def infer(self, image_path: str) -> dict:
         if not os.path.exists(image_path):
             return {"error": f"File not found: {image_path}"}
@@ -119,6 +126,17 @@ class LLaVAVision:
 class MistralText:
     def __init__(self):
         self.vlm = LLaVAVision()
+
+    def build_prompt(self, ingredients, dietary=None, existing=None, feedback=None) -> str:
+        """Формирует текст промпта для LLM"""
+        ingredients_str = ", ".join([i["name"] for i in ingredients if "name" in i])
+        prompt = UC_LLM_PROMPT.format_messages(
+            ingredients_list=ingredients_str,
+            dietary_restrictions=dietary or "нет",
+            existing_recipes=existing or "нет",
+            user_feedback=feedback or "нет"
+        )
+        return "\n".join([m.content for m in prompt])
 
     def _filter_ingredients(self, ingredients, dietary: str):
         if not dietary or dietary.strip().lower() == "нет":
