@@ -54,7 +54,7 @@ class LLaVAVision:
                 "temperature": 0.3,
                 "top_p": 0.9,
                 "top_k": 50,
-                "num_predict": 1200
+                "num_predict": 512
             }
         }
 
