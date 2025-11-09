@@ -19,7 +19,7 @@
 ## 🛠️ Технологический стек
 - **Frontend:** Flutter  
 - **Backend:** Python/FastAPI  
-- **Database:** PostgreSQL  
+- **Database:** SQLite  
 - **Интеграции:**  
   - VLM (Vision-Language Model) для распознавания продуктов  
   - LLM API (подбор рецептов)  
