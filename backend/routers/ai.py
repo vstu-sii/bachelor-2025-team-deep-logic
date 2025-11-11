@@ -64,7 +64,16 @@ async def get_result(task_id: str):
     return {"status": "done", "ingredients": result.get("ingredients", [])}
 
 @app.post("/cook-from-image/{task_id}", tags=["AI"], summary="Сгенерировать рецепт по ингредиентам")
-async def generate_recipe(task_id: str, dietary: str = Form("нет"), user_feedback: str = Form("нет")):
+async def generate_recipe(
+    task_id: str,
+    dietary: str = Form("нет"),
+    user_feedback: str = Form("нет"),
+    preferred_calorie_level: str = Form("нет"),
+    preferred_cooking_time: str = Form("нет"),
+    preferred_difficulty: str = Form("нет"),
+    existing_recipes: str = Form("нет")
+):
+    # проверка результата VLM
     result_path = Path(f"./results/{task_id}.json")
     if not result_path.exists():
         raise HTTPException(status_code=404, detail="Ингредиенты ещё не распознаны. Сначала вызовите /test-vlm.")
@@ -79,17 +88,44 @@ async def generate_recipe(task_id: str, dietary: str = Form("нет"), user_feed
     if not ingredients:
         raise HTTPException(status_code=400, detail="Нет ингредиентов для генерации рецепта")
 
-    recipes = pipeline.generate_recipe(ingredients, dietary=dietary, feedback=user_feedback)
+    # нормализация и валидация preferred_difficulty
+    allowed_difficulties = {"легко", "средне", "сложно", "нет", ""}
+    pref_diff = (preferred_difficulty or "нет").strip().lower()
+    if pref_diff not in allowed_difficulties:
+        raise HTTPException(status_code=400, detail=f"Неверное значение preferred_difficulty: {preferred_difficulty}. Допустимо: легко, средне, сложно, нет")
+
+    # приводим 'нет' / пустую строку к None для передачи в pipeline
+    preferred_difficulty_param = None if pref_diff in ("нет", "") else pref_diff
+
+    # вызов pipeline (предполагается async)
+    recipes = await pipeline.generate_recipe(
+        ingredients,
+        dietary=dietary,
+        existing=existing_recipes,
+        feedback=user_feedback,
+        preferred_calorie_level=preferred_calorie_level,
+        preferred_cooking_time=preferred_cooking_time,
+        preferred_difficulty=preferred_difficulty_param
+    )
 
     if isinstance(recipes, dict) and "error" in recipes:
         logging.error(f"Ошибка генерации рецепта: {recipes}")
         raise HTTPException(status_code=500, detail=f"Ошибка генерации рецепта: {recipes['error']}")
 
+    # сохранение результата
     recipes_path = Path(f"./recipes/{task_id}_recipes.json")
     recipes_path.parent.mkdir(parents=True, exist_ok=True)
     with open(recipes_path, "w", encoding="utf-8") as f:
         json.dump(
-            {"ingredients": ingredients, "recipes": recipes, "feedback_used": user_feedback},
+            {
+                "ingredients": ingredients,
+                "recipes": recipes,
+                "feedback_used": user_feedback,
+                "preferred_calorie_level": preferred_calorie_level,
+                "preferred_cooking_time": preferred_cooking_time,
+                "preferred_difficulty": preferred_difficulty_param,
+                "excluded_recipes": existing_recipes
+            },
             f,
             ensure_ascii=False,
             indent=2
@@ -99,5 +135,9 @@ async def generate_recipe(task_id: str, dietary: str = Form("нет"), user_feed
         "ingredients": ingredients,
         "recipes": recipes,
         "feedback_used": user_feedback,
+        "preferred_calorie_level": preferred_calorie_level,
+        "preferred_cooking_time": preferred_cooking_time,
+        "preferred_difficulty": preferred_difficulty_param,
+        "excluded_recipes": existing_recipes,
         "saved_to": str(recipes_path)
     }
