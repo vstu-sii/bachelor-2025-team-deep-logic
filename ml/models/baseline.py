@@ -7,13 +7,15 @@ import requests
 from dotenv import load_dotenv
 from ml.prompt_templates import UC_VLM_PROMPT, UC_LLM_PROMPT
 from deep_translator import GoogleTranslator
+import asyncio
+import httpx
 
 # Загружаем переменные окружения
 load_dotenv()
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
-MISTRAL_MODEL = "mistral-medium"
+MISTRAL_MODEL = "mistral-small"
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 VLM_MODEL = os.getenv("VLM_MODEL", "qwen2.5vl:3b")
@@ -47,12 +49,12 @@ class LLaVAVision:
         prompt_text = "\n".join([m.content for m in prompt_text])
 
         payload = {
-            "model": VLM_MODEL,
+            "model": "qwen2.5vl:3b",
             "prompt": prompt_text,
             "images": [image_b64],
             "options": {
-                "temperature": 0.3,
-                "top_p": 0.9,
+                "temperature": 0.3,   # низкая креативность, больше точности
+                "top_p": 0.9,         # nucleus sampling: ограничивает выбор вероятных токенов
                 "top_k": 50,
                 "num_predict": 512
             }
@@ -127,14 +129,19 @@ class MistralText:
     def __init__(self):
         self.vlm = LLaVAVision()
 
-    def build_prompt(self, ingredients, dietary=None, existing=None, feedback=None) -> str:
+    def build_prompt(self, ingredients, dietary=None, existing=None, feedback=None,
+                     preferred_calorie_level=None, preferred_cooking_time=None,
+                     preferred_difficulty=None) -> str:
         """Формирует текст промпта для LLM"""
         ingredients_str = ", ".join([i["name"] for i in ingredients if "name" in i])
         prompt = UC_LLM_PROMPT.format_messages(
             ingredients_list=ingredients_str,
             dietary_restrictions=dietary or "нет",
             existing_recipes=existing or "нет",
-            user_feedback=feedback or "нет"
+            user_feedback=feedback or "нет",
+            preferred_calorie_level=preferred_calorie_level or "нет",
+            preferred_cooking_time=preferred_cooking_time or "нет",
+            preferred_difficulty=preferred_difficulty or "нет"
         )
         return "\n".join([m.content for m in prompt])
 
@@ -144,43 +151,59 @@ class MistralText:
         restrictions = [x.strip().lower() for x in dietary.split(",")]
         return [i for i in ingredients if i.get("name", "").lower() not in restrictions]
 
-    def generate_recipe(self, ingredients, dietary: str = None, existing=None, feedback: str = None) -> dict:
+    async def generate_recipe(self, ingredients, dietary: str = None, existing=None, feedback: str = None,
+                              preferred_calorie_level: str = None, preferred_cooking_time: str = None,
+                              preferred_difficulty: str = None) -> dict:
+        """
+        Асинхронный вызов Mistral через httpx.
+        Возвращает список рецептов или словарь с ключом "error".
+        """
         filtered_ingredients = self._filter_ingredients(ingredients, dietary)
-        ingredients_str = ", ".join([i["name"] for i in filtered_ingredients if "name" in i])
-
-        prompt = UC_LLM_PROMPT.format_messages(
-            ingredients_list=ingredients_str,
-            dietary_restrictions=dietary or "нет",
-            existing_recipes=existing or "нет",
-            user_feedback=feedback or "нет"
+        prompt_text = self.build_prompt(
+            filtered_ingredients,
+            dietary=dietary,
+            existing=existing,
+            feedback=feedback,
+            preferred_calorie_level=preferred_calorie_level,
+            preferred_cooking_time=preferred_cooking_time,
+            preferred_difficulty=preferred_difficulty
         )
-        prompt_text = "\n".join([m.content for m in prompt])
+
+        headers = {
+            "Authorization": f"Bearer {MISTRAL_API_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "model": MISTRAL_MODEL,
+            "messages": [
+                {"role": "system", "content": "Ты помощник, который составляет рецепты в JSON."},
+                {"role": "user", "content": prompt_text}
+            ],
+            "temperature": 0.4
+        }
 
         for attempt in range(1, MAX_RETRIES + 1):
             try:
-                headers = {
-                    "Authorization": f"Bearer {MISTRAL_API_KEY}",
-                    "Content-Type": "application/json"
-                }
-
-                payload = {
-                    "model": MISTRAL_MODEL,
-                    "messages": [
-                        {"role": "system", "content": "Ты помощник, который составляет рецепты в JSON."},
-                        {"role": "user", "content": prompt_text}
-                    ],
-                    "temperature": 0.4
-                }
-
-                response = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
+                async with httpx.AsyncClient(timeout=60.0) as client:
+                    response = await client.post(MISTRAL_URL, headers=headers, json=payload)
 
                 if response.status_code != 200:
                     if attempt == MAX_RETRIES:
                         return {"error": f"Mistral API error: {response.status_code}", "details": response.text}
-                    time.sleep(RETRY_DELAY)
+                    await asyncio.sleep(RETRY_DELAY)
                     continue
 
-                output = response.json()["choices"][0]["message"]["content"].strip()
+                resp_json = response.json()
+                # безопасный доступ к содержимому ответа
+                choices = resp_json.get("choices") or []
+                if not choices or "message" not in choices[0] or "content" not in choices[0]["message"]:
+                    if attempt == MAX_RETRIES:
+                        return {"error": "Invalid response structure from Mistral", "raw": resp_json}
+                    await asyncio.sleep(RETRY_DELAY)
+                    continue
+
+                output = choices[0]["message"]["content"].strip()
 
                 # Чистим Markdown
                 clean = re.sub(r"^```(?:json)?", "", output.strip(), flags=re.IGNORECASE | re.MULTILINE)
@@ -197,20 +220,20 @@ class MistralText:
                 except Exception as e:
                     if attempt == MAX_RETRIES:
                         return {"error": f"Invalid JSON from Mistral: {e}", "raw_output": output}
-                    time.sleep(RETRY_DELAY)
+                    await asyncio.sleep(RETRY_DELAY)
                     continue
 
-            except requests.Timeout:
+            except httpx.TimeoutException:
                 if attempt == MAX_RETRIES:
                     return {"error": "Mistral API timeout"}
-                time.sleep(RETRY_DELAY)
-            except requests.RequestException as e:
+                await asyncio.sleep(RETRY_DELAY)
+            except httpx.RequestError as e:
                 if attempt == MAX_RETRIES:
                     return {"error": f"Network error: {str(e)}"}
-                time.sleep(RETRY_DELAY)
+                await asyncio.sleep(RETRY_DELAY)
             except Exception as e:
                 if attempt == MAX_RETRIES:
                     return {"error": f"Unexpected error: {str(e)}"}
-                time.sleep(RETRY_DELAY)
+                await asyncio.sleep(RETRY_DELAY)
 
         return {"error": "Failed after retries"}
