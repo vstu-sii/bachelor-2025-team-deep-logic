@@ -67,24 +67,33 @@ class LLMRunnable(Runnable):
     def invoke(self, inputs, config=None):
         start = time.time()
 
+        # формируем полный вход для LLM
         llm_input = {
             "ingredients": inputs["output"]["ingredients"],
             "dietary": inputs.get("dietary"),
             "feedback": inputs.get("feedback"),
-            "prompt": inputs["input"]["prompt"]
+            "prompt": inputs["input"]["prompt"],
+            "preferred_calorie_level": inputs.get("preferred_calorie_level"),
+            "preferred_cooking_time": inputs.get("preferred_cooking_time"),
+            "preferred_difficulty": inputs.get("preferred_difficulty"),
+            "existing_recipes": inputs.get("existing_recipes")
         }
 
+        # вызов LLM с учётом усиленного промпта
         response = self.llm.generate_recipe(
             ingredients=llm_input["ingredients"],
             dietary=llm_input["dietary"],
-            feedback=llm_input["feedback"]
+            feedback=llm_input["feedback"],
+            preferred_calorie_level=llm_input["preferred_calorie_level"],
+            preferred_cooking_time=llm_input["preferred_cooking_time"],
+            preferred_difficulty=llm_input["preferred_difficulty"],
+            existing=llm_input["existing_recipes"]
         )
+
         recipe = response[0] if isinstance(response, list) and response else response
 
         usage, cost = count_tokens_and_cost(llm_input["prompt"], str(recipe))
         duration = round(time.time() - start, 2)
-
-        
 
         return {
             "input": llm_input,
@@ -96,15 +105,34 @@ class LLMRunnable(Runnable):
 
 
 # --- Основная функция ---
-def cook_from_image(image_path, vlm, llm, dietary=None, feedback=None):
+def cook_from_image(
+    image_path,
+    vlm,
+    llm,
+    dietary=None,
+    feedback=None,
+    preferred_calorie_level=None,
+    preferred_cooking_time=None,
+    preferred_difficulty=None,
+    existing_recipes=None
+):
     vlm_runnable = VLMRunnable(vlm).with_config(run_name="vlm_infer")
     llm_runnable = LLMRunnable(llm).with_config(run_name="llm_generate_recipe")
 
     chain = RunnableSequence(first=vlm_runnable, last=llm_runnable).with_config(run_name="cook_from_image")
 
     result = chain.invoke(
-        {"image_path": image_path, "dietary": dietary, "feedback": feedback},
+        {
+            "image_path": image_path,
+            "dietary": dietary,
+            "feedback": feedback,
+            "preferred_calorie_level": preferred_calorie_level,
+            "preferred_cooking_time": preferred_cooking_time,
+            "preferred_difficulty": preferred_difficulty,
+            "existing_recipes": existing_recipes
+        },
         config={"callbacks": [langfuse_handler]}
     )
 
     return result
+
