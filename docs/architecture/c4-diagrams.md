@@ -6,6 +6,5 @@
 ## Containers
 ![Containers](../generated/C4_container.png)
 
-## Model Manager
-![Model Manager](../generated/C4_component.png)
+
 
