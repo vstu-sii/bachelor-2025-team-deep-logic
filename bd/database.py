@@ -47,19 +47,23 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS Product
                 );
             """)
 
-# создаем таблицу Recipes  
-cursor.execute("""CREATE TABLE IF NOT EXISTS Recipes  
-                (id_recipes INTEGER PRIMARY KEY AUTOINCREMENT,  
-                title TEXT,
-                description TEXT,
-                id_cooking_time INTEGER,
-                id_difficulty INTEGER,
-                id_calorie_content INTEGER,
-                FOREIGN KEY (id_cooking_time) REFERENCES CookingTime(id_cooking_time),
-                FOREIGN KEY (id_difficulty) REFERENCES Difficulty(id_difficulty),
-                FOREIGN KEY (id_calorie_content) REFERENCES CalorieContent(id_calorie_content)
-                );
-            """)
+# Добавьте эти поля в таблицу Recipes если их нет
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Recipes  
+    (id_recipes INTEGER PRIMARY KEY AUTOINCREMENT,  
+    title TEXT,
+    description TEXT,
+    cooking_time TEXT,
+    difficulty TEXT,
+    calorie_level TEXT,
+    id_cooking_time INTEGER,
+    id_difficulty INTEGER,
+    id_calorie_content INTEGER,
+    FOREIGN KEY (id_cooking_time) REFERENCES CookingTime(id_cooking_time),
+    FOREIGN KEY (id_difficulty) REFERENCES Difficulty(id_difficulty),
+    FOREIGN KEY (id_calorie_content) REFERENCES CalorieContent(id_calorie_content)
+    );
+""")
 
 # создаем таблицу ProductsInRecipes 
 cursor.execute("""CREATE TABLE IF NOT EXISTS ProductsInRecipes 
@@ -106,16 +110,44 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS Comment
 
 # добавляем строку в таблицу User
 #data = ("qwe", "rty", "123")
-#cursor.execute("INSERT INTO User (email, login, password) VALUES (?, ?, ?)", data)
+
 
 
 
 # добавляем строку в таблицу User
-email = "artem@gmail.com"
-result = cursor.execute("select password from User where email = ?", (email,)).fetchone()
+#email = "artem@gmail.com"
+#result = cursor.execute("select password from User where email = ?", (email,)).fetchone()
+# Вставка значений в таблицу CookingTime
+cooking_times = [
+    ("Быстро",),    # <15 минут
+    ("Средне",),    # 15-30 минут  
+    ("Долго",)      # >30 минут
+]
 
+cursor.executemany("INSERT INTO CookingTime (title) VALUES (?)", cooking_times)
+print(f"✅ Добавлено {len(cooking_times)} записей в CookingTime")
 
-print(f"{email} {result}")
+# Вставка значений в таблицу Difficulty
+difficulties = [
+    ("Легко",),
+    ("Средне",), 
+    ("Сложно",)
+]
+
+cursor.executemany("INSERT INTO Difficulty (title) VALUES (?)", difficulties)
+print(f"✅ Добавлено {len(difficulties)} записей в Difficulty")
+
+# Вставка значений в таблицу CalorieContent
+calorie_contents = [
+    ("Низкокалорийное",),
+    ("Средне",),
+    ("Высококалорийное",)
+]
+
+cursor.executemany("INSERT INTO CalorieContent (title) VALUES (?)", calorie_contents)
+print(f"✅ Добавлено {len(calorie_contents)} записей в CalorieContent")
+
+#print(f"{email} {result}")
 
 
 # Сохраняем изменения и закрываем соединение

@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Загрузка фото</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        #result, #recipes-result { margin: 20px 0; padding: 15px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .processing { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .recipes { background-color: #e8f4fd; color: #0c5460; border: 1px solid #b8daff; }
+        #ingredients-list, #recipes-list { margin-top: 10px; }
+        .ingredient-item, .recipe-item { padding: 5px 0; border-bottom: 1px solid #eee; }
+        .refresh-btn, .generate-btn {
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .refresh-btn { background-color: #28a745; }
+        .refresh-btn:hover { background-color: #218838; }
+        .generate-btn { background-color: #007bff; }
+        .generate-btn:hover { background-color: #0056b3; }
+        .refresh-btn:disabled, .generate-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .task-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .forbidden-info {
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 4px solid #dc3545;
+    margin: 5px 0;
+    color: #721c24;
+}
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .dietary-select, .feedback-input, .param-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .recipe-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        /* Стили для загрузки предпочтений */
+.preferences-loading {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 2px dashed #dee2e6;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.preferences-loading span {
+    color: #6c757d;
+    font-size: 1.1em;
+}
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        /* Стили для бейджа предпочтений пользователя */
+.user-preferences-info {
+    margin-bottom: 20px;
+}
+
+.preferences-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 1px solid #ffc107;
+    border-radius: 20px;
+    padding: 10px 15px;
+    color: #856404;
+    font-size: 0.9em;
+}
+
+.badge-icon {
+    font-size: 1.1em;
+}
+
+.badge-text {
+    font-weight: 500;
+}
+
+/* Улучшенные стили для селекторов с предпочтениями */
+.param-select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+/* Подсветка выбранных пользователем значений */
+.param-select option[selected] {
+    background-color: #fff3cd;
+    font-weight: bold;
+}
+        /* Стили для загрузки файлов */
+        .upload-area {
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            background-color: #e9ecef;
+            border-color: #0056b3;
+        }
+        .upload-area.dragover {
+            background-color: #007bff;
+            border-color: #0056b3;
+            color: white;
+        }
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .file-input {
+            display: none;
+        }
+        .preview-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .preview-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .file-info {
+            margin-top: 10px;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.3s ease;
+        }
+        .param-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        @media (max-width: 600px) {
+            .param-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .auto-refresh-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Стили для структурированных рецептов */
+        .recipe-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .recipe-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .recipe-title {
+            color: #2c5530;
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            font-weight: bold;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .recipe-meta span {
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            border: 1px solid #e9ecef;
+        }
+
+        .recipe-section {
+            margin: 20px 0;
+        }
+
+        .recipe-section h4 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .ingredients-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .ingredient-line {
+            padding: 3px 0;
+            font-size: 0.95em;
+        }
+
+        .steps-list {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .step {
+            padding: 8px 0;
+            border-bottom: 1px solid #ffeaa7;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step strong {
+            color: #856404;
+        }
+        /* Стили для системы отметки шагов */
+.steps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.steps-progress {
+    background: #f8f9fa;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    font-size: 0.9em;
+}
+
+.progress-text {
+    color: #6c757d;
+}
+
+.progress-value {
+    font-weight: bold;
+    color: #dc3545;
+}
+
+.step-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.step-item:last-child {
+    border-bottom: none;
+}
+
+.step-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.step-checkbox:hover {
+    background-color: #f8f9fa;
+}
+
+.step-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    margin-top: 2px;
+}
+
+.step-checkbox input[type="checkbox"]:checked + .checkmark {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.step-checkbox input[type="checkbox"]:checked + .checkmark::after {
+    content: "✓";
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.step-text {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.recipe-completion {
+    margin-top: 15px;
+    padding: 15px;
+    background: #d4edda;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    text-align: center;
+}
+
+.completion-badge {
+    color: #155724;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.form-actions {
+    margin-top: 30px;
+    padding: 20px;
+    background: #e8f5e8;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 5px solid #28a745;
+}
+
+.complete-btn {
+    background-color: #28a745;
+    font-size: 1.1em;
+    padding: 12px 30px;
+}
+
+.complete-btn:hover {
+    background-color: #218838;
+}
+
+.complete-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.saved-recipes-list {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.saved-recipe {
+    padding: 5px 0;
+    color: #155724;
+}
+
+.forbidden-info {
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 4px solid #dc3545;
+    margin: 5px 0;
+    color: #721c24;
+}
+
+        .calorie-info {
+            background: #d1ecf1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .calorie-info div {
+            margin: 5px 0;
+        }
+
+        .recipes-header {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
+        }
+
+        .used-ingredients {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #155724;
+        }
+
+        .additional-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #c3e6cb;
+        }
+
+        .additional-info div {
+            margin: 5px 0;
+            color: #0c5460;
+        }
+
+        .no-recipes {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .time { color: #007bff; }
+        .difficulty { color: #fd7e14; }
+        .calorie-level { color: #e83e8c; }
+        /* Стили для уведомлений */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.notification {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-left: 5px solid #28a745;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.hide {
+    transform: translateX(400px);
+    opacity: 0;
+}
+
+.notification-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #155724;
+}
+
+.notification-message {
+    color: #495057;
+    line-height: 1.4;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #6c757d;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.notification-close:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+/* Типы уведомлений */
+.notification.success {
+    border-left-color: #28a745;
+    background: linear-gradient(135deg, #d4edda, #f8fff9);
+}
+
+.notification.success .notification-title {
+    color: #155724;
+}
+
+.notification.info {
+    border-left-color: #17a2b8;
+    background: linear-gradient(135deg, #d1ecf1, #f8fdff);
+}
+
+.notification.info .notification-title {
+    color: #0c5460;
+}
+
+.notification.warning {
+    border-left-color: #ffc107;
+    background: linear-gradient(135deg, #fff3cd, #fffdf5);
+}
+
+.notification.warning .notification-title {
+    color: #856404;
+}
+
+.notification.error {
+    border-left-color: #dc3545;
+    background: linear-gradient(135deg, #f8d7da, #fff8f9);
+}
+
+.notification.error .notification-title {
+    color: #721c24;
+}
+
+/* Анимация прогресс-бара */
+.notification-progress {
+    height: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.notification-progress-bar {
+    height: 100%;
+    background: currentColor;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+    opacity: 0.7;
+}
+    </style>
+</head>
+<body>
+    <h1>🍳 Загрузите фото для распознавания ингредиентов</h1>
+    
+    <!-- Область загрузки файлов -->
+    <div class="upload-area" id="upload-area">
+        <div class="upload-icon">📁</div>
+        <h3>Перетащите фото сюда или нажмите для выбора</h3>
+        <p>Поддерживаемые форматы: JPG, JPEG, PNG</p>
+        <p>Максимальный размер: 10MB</p>
+        <input type="file" id="file-input" class="file-input" accept="image/jpeg,image/png" />
+    </div>
+
+    <!-- Преview изображения -->
+    <div class="preview-container" id="preview-container" style="display: none;">
+        <img id="preview-image" class="preview-image" />
+        <div class="file-info" id="file-info"></div>
+    </div>
+
+    <!-- Прогресс бар -->
+    <div class="progress-bar" id="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- Форма отправки -->
+    <form id="upload-form" enctype="multipart/form-data" style="display: none;">
+        <button type="submit" id="submit-btn" class="generate-btn">🔍 Начать анализ изображения</button>
+    </form>
+
+    <div id="task-section" style="display: none;">
+        <div class="task-info">
+            <strong>ID задачи:</strong> <span id="current-task-id"></span>
+            <div><strong>Статус:</strong> <span id="current-status">processing</span></div>
+        </div>
+        
+        <div class="controls">
+            <button id="refresh-btn" class="refresh-btn">
+                🔄 Проверить статус
+            </button>
+            <div class="auto-refresh">
+                <input type="checkbox" id="auto-refresh" />
+                <label for="auto-refresh" class="auto-refresh-label">Авто-обновление (каждые 5 сек)</label>
+            </div>
+            <span id="refresh-status"></span>
+        </div>
+    </div>
+
+    <div id="result"></div>
+
+        <div id="recipes-section" style="display: none;">
+    <div class="recipe-section">
+        <h3>🎯 Настройки генерации рецептов</h3>
+        
+        <div class="user-preferences-info" id="user-preferences-info" style="display: none;">
+            <div class="preferences-badge">
+                <span class="badge-icon">⭐</span>
+                <span class="badge-text">Используются ваши сохраненные предпочтения</span>
+            </div>
+        </div>
+        
+        <div class="preferences-loading" id="preferences-loading">
+            <div class="loading-spinner"></div>
+            <span>Загружаем ваши настройки...</span>
+        </div>
+        
+        <div class="param-grid" id="preferences-grid" style="display: none;">
+            <div class="form-group">
+                <label for="dietary-select">Диетические предпочтения:</label>
+                <select id="dietary-select" class="param-select">
+                    <option value="нет">Нет предпочтений</option>
+                    <option value="вегетарианское">Вегетарианское</option>
+                    <option value="веганское">Веганское</option>
+                    <option value="безглютеновое">Безглютеновое</option>
+                    <option value="низкоуглеводное">Низкоуглеводное</option>
+                    <option value="высокобелковое">Высокобелковое</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="difficulty-select">Сложность приготовления:</label>
+                <select id="difficulty-select" class="param-select">
+                    <option value="нет">Любая сложность</option>
+                    <!-- Динамически заполнится из БД -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cooking-time-select">Время приготовления:</label>
+                <select id="cooking-time-select" class="param-select">
+                    <option value="нет">Любое время</option>
+                    <!-- Динамически заполнится из БД -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="calorie-level-select">Уровень калорий:</label>
+                <select id="calorie-level-select" class="param-select">
+                    <option value="нет">Любой уровень</option>
+                    <!-- Динамически заполнится из БД -->
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="feedback-input">Дополнительные пожелания:</label>
+            <textarea 
+                id="feedback-input" 
+                class="feedback-input" 
+                placeholder="Например: быстрое приготовление, азиатская кухня, острые блюда, без молочных продуктов..."
+                rows="3"
+            ></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="existing-recipes-input">Исключить рецепты (через запятую):</label>
+            <input 
+                type="text" 
+                id="existing-recipes-input" 
+                class="feedback-input" 
+                placeholder="Например: омлет, салат, суп"
+            />
+        </div>
+
+        <button id="generate-recipes-btn" class="generate-btn">
+            🍳 Сгенерировать рецепты
+        </button>
+        <span id="generate-status"></span>
+    </div>
+</div>
+
+<!-- Передаем начальные предпочтения через шаблон -->
+<script>
+    // Глобальные переменные для предпочтений
+    window.initialPreferences = {
+        userPreferences: {{ preferences.user_preferences | tojson | safe }},
+        hasUserPreferences: {{ (preferences.user_preferences | default({}) | length > 0) | tojson | safe }}
+    };
+</script>
+
+    <div id="recipes-result"></div>
+    <pre id="response-json"></pre>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImage = document.getElementById('preview-image');
+        const fileInfo = document.getElementById('file-info');
+        const progressBar = document.getElementById('progress-bar');
+        const progressFill = document.getElementById('progress-fill');
+        const resultDiv = document.getElementById('result');
+        const recipesResultDiv = document.getElementById('recipes-result');
+        const responsePre = document.getElementById('response-json');
+        const submitBtn = document.getElementById('submit-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const generateRecipesBtn = document.getElementById('generate-recipes-btn');
+        const taskSection = document.getElementById('task-section');
+        const recipesSection = document.getElementById('recipes-section');
+        const currentTaskIdSpan = document.getElementById('current-task-id');
+        const currentStatusSpan = document.getElementById('current-status');
+        const refreshStatusSpan = document.getElementById('refresh-status');
+        const generateStatusSpan = document.getElementById('generate-status');
+        const dietarySelect = document.getElementById('dietary-select');
+        const feedbackInput = document.getElementById('feedback-input');
+        const difficultySelect = document.getElementById('difficulty-select');
+        const cookingTimeSelect = document.getElementById('cooking-time-select');
+        const calorieLevelSelect = document.getElementById('calorie-level-select');
+        const existingRecipesInput = document.getElementById('existing-recipes-input');
+        const autoRefreshCheckbox = document.getElementById('auto-refresh');
+
+        let currentTaskId = null;
+        let currentIngredients = [];
+        let autoRefreshInterval = null;
+
+        // Обработчики событий для загрузки файлов
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await startProcessing();
+        });
+
+        refreshBtn.addEventListener('click', async () => {
+            await checkStatus();
+        });
+
+        generateRecipesBtn.addEventListener('click', async () => {
+            await generateRecipes();
+        });
+
+        autoRefreshCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                autoRefreshInterval = setInterval(() => {
+                    if (currentTaskId && currentStatusSpan.textContent === 'processing') {
+                        checkStatus();
+                    }
+                }, 5000);
+            } else {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+
+        // Функция обработки выбора файла
+        function handleFileSelect() {
+            const file = fileInput.files[0];
+            if (file) {
+                // Проверка типа файла
+                if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+                    showError('Пожалуйста, выберите файл в формате JPG или PNG');
+                    return;
+                }
+
+                // Проверка размера файла (максимум 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showError('Размер файла не должен превышать 10MB');
+                    return;
+                }
+
+                // Показываем превью
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    fileInfo.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                    form.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Функция начала обработки
+        async function startProcessing() {
+            const file = fileInput.files[0];
+            if (!file) {
+                showError('Пожалуйста, выберите файл');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Блокируем кнопку отправки и показываем прогресс
+            submitBtn.disabled = true;
+            progressBar.style.display = 'block';
+            progressFill.style.width = '30%';
+            showLoading('Отправка изображения на анализ...');
+            hideRecipesSection();
+
+            try {
+                // Первый запрос - начинаем обработку
+                const startResponse = await fetch('/start-processing', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const startData = await startResponse.json();
+                console.log('Start processing response:', startData);
+                
+                if(startResponse.ok) {
+                    progressFill.style.width = '70%';
+                    currentTaskId = startData.task_id;
+                    currentTaskIdSpan.textContent = currentTaskId;
+                    currentStatusSpan.textContent = 'processing';
+                    
+                    // Показываем секцию с task info и кнопкой обновления
+                    taskSection.style.display = 'block';
+                    showLoading('Обработка начата. Нажмите "Проверить статус" для получения результатов.');
+                    
+                    // Запускаем первую проверку статуса через 2 секунды
+                    setTimeout(() => {
+                        checkStatus();
+                    }, 2000);
+                    
+                } else {
+                    throw new Error(startData.detail || 'Ошибка при запуске обработки');
+                }
+                
+            } catch (error) {
+                handleError(error);
+            } finally {
+                progressFill.style.width = '100%';
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 1000);
+            }
+        }
+
+        // Функция проверки статуса
+async function checkStatus() {
+    if (!currentTaskId) {
+        showError('Нет активной задачи');
+        return;
+    }
+
+    refreshBtn.disabled = true;
+    refreshStatusSpan.textContent = 'Проверяем...';
+    refreshStatusSpan.style.color = '#007bff';
+
+    try {
+        // Второй запрос - task_id передается в URL path
+        const resultResponse = await fetch(`/get-result/${currentTaskId}`, {
+            method: 'GET'
+        });
+        
+        const resultData = await resultResponse.json();
+        console.log('Status check response:', resultData);
+        
+        if(resultResponse.ok) {
+            if (resultData.status === 'done') {
+                // Обработка завершена
+                currentStatusSpan.textContent = 'done';
+                refreshStatusSpan.textContent = '✅ Результат получен!';
+                refreshStatusSpan.style.color = '#28a745';
+                refreshBtn.textContent = '🔄 Обновить результат';
+                
+                currentIngredients = resultData.ingredients || [];
+                displayFinalResult(resultData);
+                showRecipesSection();
+                
+                // ПОКАЗЫВАЕМ УВЕДОМЛЕНИЕ ОБ ОБРАБОТКЕ ФОТО
+                showPhotoProcessedNotification(currentTaskId);
+                
+                // Отключаем авто-обновление при завершении
+                autoRefreshCheckbox.checked = false;
+                clearInterval(autoRefreshInterval);
+            } else if (resultData.status === 'processing') {
+                // Все еще обрабатывается
+                currentStatusSpan.textContent = 'processing';
+                refreshStatusSpan.textContent = '⏳ Обработка еще не завершена';
+                refreshStatusSpan.style.color = '#ffc107';
+                refreshBtn.textContent = '🔄 Проверить снова';
+                hideRecipesSection();
+            } else if (resultData.status === 'error') {
+                currentStatusSpan.textContent = 'error';
+                refreshStatusSpan.textContent = '❌ Ошибка обработки';
+                refreshStatusSpan.style.color = '#dc3545';
+                showError(`Ошибка при обработке: ${resultData.error}`);
+                showErrorNotification(`Ошибка обработки фото: ${resultData.error}`);
+            }
+        } else {
+            throw new Error(resultData.detail || 'Ошибка при проверке статуса');
+        }
+        
+    } catch (error) {
+        refreshStatusSpan.textContent = '❌ Ошибка при проверке';
+        refreshStatusSpan.style.color = '#dc3545';
+        console.error('Error checking status:', error);
+        showErrorNotification('Ошибка при проверке статуса обработки');
+    } finally {
+        refreshBtn.disabled = false;
+        
+        // Автоматически очищаем статус через 3 секунды
+        setTimeout(() => {
+            if (refreshStatusSpan.textContent.includes('Ошибка') || 
+                refreshStatusSpan.textContent.includes('Проверяем')) {
+                refreshStatusSpan.textContent = '';
+            }
+        }, 3000);
+    }
+}
+        // Функция генерации рецептов
+// Функция генерации рецептов
+async function generateRecipes() {
+    if (!currentTaskId) {
+        showRecipesError('Нет активной задачи');
+        showErrorNotification('Нет активной задачи для генерации рецептов');
+        return;
+    }
+
+    generateRecipesBtn.disabled = true;
+    generateStatusSpan.textContent = 'Генерируем рецепты...';
+    generateStatusSpan.style.color = '#007bff';
+
+    // Показываем уведомление о начале генерации
+    const processingNotification = showProcessingNotification('Идет генерация рецептов на основе распознанных ингредиентов...', 0);
+
+    try {
+        // Получаем значения из селекторов (используем title из БД)
+        const cookingTime = document.getElementById('cooking-time-select').value;
+        const difficulty = document.getElementById('difficulty-select').value;
+        const calorieLevel = document.getElementById('calorie-level-select').value;
+        
+        console.log('🔧 Используемые настройки:', {
+            cookingTime,
+            difficulty,
+            calorieLevel
+        });
+
+        // Создаем FormData для передачи параметров
+        const formData = new FormData();
+        formData.append('dietary', dietarySelect.value);
+        formData.append('user_feedback', feedbackInput.value.trim() || 'нет');
+        formData.append('preferred_difficulty', difficulty);
+        formData.append('preferred_cooking_time', cookingTime);
+        formData.append('preferred_calorie_level', calorieLevel);
+        formData.append('existing_recipes', existingRecipesInput.value.trim() || 'нет');
+        /*
+        // Выбираем endpoint в зависимости от режима
+        const testMode = document.getElementById('test-mode')?.checked ?? true;
+        const endpoint = testMode ? 'generate-test-recipes' : 'generate-recipes';
+        */
+       // СТАЛО:
+        const endpoint = 'generate-recipes';
+        const response = await fetch(`/${endpoint}/${currentTaskId}`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const resultData = await response.json();
+        console.log('Generate recipes response:', resultData);
+        
+        if(response.ok) {
+            generateStatusSpan.textContent = '✅ Рецепты сгенерированы!';
+            generateStatusSpan.style.color = '#28a745';
+            displayRecipesResult(resultData);
+            
+            // Убираем уведомление о процессе и показываем успешное
+            if (processingNotification) {
+                hideNotification(processingNotification);
+            }
+            
+            // ПОКАЗЫВАЕМ УВЕДОМЛЕНИЕ О ГЕНЕРАЦИИ РЕЦЕПТОВ
+            const recipesCount = resultData.recipes ? resultData.recipes.length : 0;
+            showRecipesGeneratedNotification(recipesCount);
+            
+        } else {
+            throw new Error(resultData.detail || 'Ошибка при генерации рецептов');
+        }
+        
+    } catch (error) {
+        generateStatusSpan.textContent = '❌ ' + error.message;
+        generateStatusSpan.style.color = '#dc3545';
+        console.error('Error generating recipes:', error);
+        
+        // Убираем уведомление о процессе и показываем ошибку
+        if (processingNotification) {
+            hideNotification(processingNotification);
+        }
+        showErrorNotification('Ошибка при генерации рецептов: ' + error.message);
+    } finally {
+        generateRecipesBtn.disabled = false;
+        
+        // Автоматически очищаем статус через 5 секунды
+        setTimeout(() => {
+            generateStatusSpan.textContent = '';
+        }, 5000);
+    }
+}
+
+        // Функция отображения финального результата
+function displayFinalResult(data) {
+    let forbiddenInfo = '';
+    if (data.forbidden_products_removed && data.forbidden_products_removed.length > 0) {
+        forbiddenInfo = `
+            <div style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
+                <strong>🚫 Учтены запрещенные продукты:</strong> ${data.forbidden_products_removed.join(', ')}
+            </div>
+        `;
+    }
+    
+    resultDiv.innerHTML = `
+        <strong>✅ Анализ завершен!</strong>
+        ${forbiddenInfo}
+        <div id="ingredients-list">
+            <strong>Найденные ингредиенты:</strong>
+            ${data.ingredients && data.ingredients.length > 0 
+                ? data.ingredients.map(ingredient => 
+                    `<div class="ingredient-item">• ${ingredient}</div>`
+                  ).join('')
+                : '<div>Ингредиенты не найдены</div>'
+            }
+        </div>
+    `;
+    resultDiv.className = 'success';
+    responsePre.textContent = JSON.stringify(data, null, 2);
+}
+
+// Функция отображения результатов рецептов
+function displayRecipesResult(data) {
+    const recipes = data.recipes || [];
+    
+    let recipesHtml = '';
+    
+    if (recipes.length > 0) {
+        recipes.forEach((recipe, index) => {
+            // Форматируем ингредиенты
+            let ingredientsHtml = '';
+            if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+                ingredientsHtml = recipe.ingredients.map(ing => {
+                    const amount = ing.amount || 'по вкусу';
+                    return `<div class="ingredient-line">• ${ing.name} - ${amount}</div>`;
+                }).join('');
+            }
+            
+            // Форматируем шаги приготовления с чекбоксами
+            let stepsHtml = '';
+            let stepsCount = 0;
+            if (recipe.steps && Array.isArray(recipe.steps)) {
+                stepsCount = recipe.steps.length;
+                stepsHtml = recipe.steps.map((step, stepIndex) => {
+                    return `
+                        <div class="step-item">
+                            <label class="step-checkbox">
+                                <input type="checkbox" 
+                                       name="completed_steps_${index}" 
+                                       value="${stepIndex}"
+                                       onchange="updateProgress(${index}, ${stepsCount})">
+                                <span class="checkmark"></span>
+                                <span class="step-text">
+                                    <strong>Шаг ${step.order || (stepIndex + 1)}:</strong> ${step.instruction}
+                                </span>
+                            </label>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Форматируем информацию о калориях
+            let calorieHtml = '';
+            if (recipe.calorie_content) {
+                const kcal = recipe.calorie_content.kcal || '?';
+                const protein = recipe.calorie_content.protein_g || '?';
+                const fat = recipe.calorie_content.fat_g || '?';
+                const carb = recipe.calorie_content.carb_g || '?';
+                
+                calorieHtml = `
+                    <div class="calorie-info">
+                        <strong>Пищевая ценность (на порцию):</strong>
+                        <div>Калории: ${kcal} ккал</div>
+                        <div>Белки: ${protein}г | Жиры: ${fat}г | Углеводы: ${carb}г</div>
+                    </div>
+                `;
+            }
+            
+            recipesHtml += `
+                <div class="recipe-card" id="recipe-${index}">
+                    <div class="recipe-header">
+                        <h3 class="recipe-title">${recipe.name || `Рецепт ${index + 1}`}</h3>
+                        <div class="recipe-meta">
+                            ${recipe.cooking_time ? `<span class="time">⏱ ${recipe.cooking_time}</span>` : ''}
+                            ${recipe.difficulty ? `<span class="difficulty">⚡ ${recipe.difficulty}</span>` : ''}
+                            ${recipe.calorie_level ? `<span class="calorie-level">🔥 ${recipe.calorie_level}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-section">
+                        <h4>🛒 Ингредиенты:</h4>
+                        <div class="ingredients-list">
+                            ${ingredientsHtml || '<div>Ингредиенты не указаны</div>'}
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-section">
+                        <div class="steps-header">
+                            <h4>👨‍🍳 Приготовление:</h4>
+                            <div class="steps-progress">
+                                <span class="progress-text">Прогресс: </span>
+                                <span class="progress-value" id="progress-${index}">0%</span>
+                            </div>
+                        </div>
+                        <div class="steps-list">
+                            ${stepsHtml || '<div>Шаги приготовления не указаны</div>'}
+                        </div>
+                    </div>
+                    
+                    ${calorieHtml}
+                    
+                    <div class="recipe-completion" id="completion-${index}" style="display: none;">
+                        <div class="completion-badge">✅ Все шаги выполнены!</div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        recipesHtml = '<div class="no-recipes">Рецепты не сгенерированы</div>';
+    }
+    
+    // Дополнительная информация
+    const additionalInfo = [
+        data.feedback_used && data.feedback_used !== 'нет' ? 
+            `<div><strong>Учтенные пожелания:</strong> ${data.feedback_used}</div>` : '',
+        data.preferred_difficulty && data.preferred_difficulty !== 'нет' ? 
+            `<div><strong>Сложность:</strong> ${data.preferred_difficulty}</div>` : '',
+        data.preferred_cooking_time && data.preferred_cooking_time !== 'нет' ? 
+            `<div><strong>Время приготовления:</strong> ${data.preferred_cooking_time}</div>` : '',
+        data.preferred_calorie_level && data.preferred_calorie_level !== 'нет' ? 
+            `<div><strong>Уровень калорий:</strong> ${data.preferred_calorie_level}</div>` : '',
+        data.saved_to ? `<div><strong>Сохранено в:</strong> ${data.saved_to}</div>` : '',
+        data.forbidden_products_considered && data.forbidden_products_considered.length > 0 ? 
+            `<div class="forbidden-info">
+                <strong>🚫 Исключены запрещенные продукты:</strong> ${data.forbidden_products_considered.join(', ')}
+            </div>` : ''
+    ].filter(Boolean).join('');
+    
+    // Добавляем форму для отправки завершенных рецептов
+    recipesResultDiv.innerHTML = `
+        <div class="recipes-header">
+            <h2>🍳 Сгенерированные рецепты</h2>
+            <div class="used-ingredients">
+                <strong>Использованные ингредиенты:</strong> ${data.ingredients.join(', ')}
+            </div>
+            ${additionalInfo ? `<div class="additional-info">${additionalInfo}</div>` : ''}
+        </div>
+        
+        <form id="complete-recipes-form" method="post" action="/complete-recipe/${data.task_id}">
+            <div id="recipes-list">
+                ${recipesHtml}
+            </div>
+            
+            <div class="form-actions" id="form-actions" style="display: none;">
+                <button type="submit" class="generate-btn complete-btn">
+                    <span class="btn-icon">✅</span>
+                    Сохранить завершенные рецепты в историю
+                </button>
+                <span id="save-status"></span>
+            </div>
+        </form>
+    `;
+    recipesResultDiv.className = 'recipes';
+    responsePre.textContent = JSON.stringify(data, null, 2);
+}
+
+// Функция обновления прогресса выполнения шагов
+function updateProgress(recipeIndex, totalSteps) {
+    const checkboxes = document.querySelectorAll(`input[name="completed_steps_${recipeIndex}"]:checked`);
+    const completedSteps = checkboxes.length;
+    const progress = Math.round((completedSteps / totalSteps) * 100);
+    
+    // Обновляем отображение прогресса
+    const progressElement = document.getElementById(`progress-${recipeIndex}`);
+    if (progressElement) {
+        progressElement.textContent = `${progress}%`;
+        
+        // Меняем цвет в зависимости от прогресса
+        if (progress === 100) {
+            progressElement.style.color = '#28a745';
+            progressElement.style.fontWeight = 'bold';
+            
+            // Показываем сообщение о завершении
+            const completionElement = document.getElementById(`completion-${recipeIndex}`);
+            if (completionElement) {
+                completionElement.style.display = 'block';
+            }
+        } else if (progress >= 50) {
+            progressElement.style.color = '#ffc107';
+        } else {
+            progressElement.style.color = '#dc3545';
+        }
+    }
+    
+    // Проверяем, есть ли хотя бы один полностью завершенный рецепт
+    checkCompletionStatus();
+}
+
+// Функция проверки статуса завершения рецептов
+function checkCompletionStatus() {
+    const recipeCards = document.querySelectorAll('.recipe-card');
+    let hasCompletedRecipe = false;
+    
+    recipeCards.forEach((card, index) => {
+        const progressElement = document.getElementById(`progress-${index}`);
+        if (progressElement && progressElement.textContent === '100%') {
+            hasCompletedRecipe = true;
+        }
+    });
+    
+    // Показываем/скрываем кнопку сохранения
+    const formActions = document.getElementById('form-actions');
+    if (formActions) {
+        formActions.style.display = hasCompletedRecipe ? 'block' : 'none';
+    }
+}
+
+// Обработчик отправки формы завершения рецептов
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('complete-recipes-form');
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('.complete-btn');
+            const saveStatus = document.getElementById('save-status');
+            
+            submitBtn.disabled = true;
+            saveStatus.textContent = 'Сохраняем...';
+            saveStatus.style.color = '#007bff';
+            
+            try {
+                const formData = new FormData(this);
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    saveStatus.textContent = '✅ ' + result.message;
+                    saveStatus.style.color = '#28a745';
+                    
+                    // ПОКАЗЫВАЕМ УВЕДОМЛЕНИЕ О СОХРАНЕНИИ
+                    const savedCount = result.saved_recipes ? result.saved_recipes.length : 0;
+                    showRecipesSavedNotification(savedCount);
+                    
+                    // Показываем список сохраненных рецептов
+                    if (result.saved_recipes && result.saved_recipes.length > 0) {
+                        const savedList = result.saved_recipes.map(recipe => 
+                            `<div class="saved-recipe">✅ ${recipe}</div>`
+                        ).join('');
+                        
+                        saveStatus.innerHTML += `<div class="saved-recipes-list">${savedList}</div>`;
+                    }
+                    
+                    // Блокируем форму после успешного сохранения
+                    submitBtn.style.display = 'none';
+                } else {
+                    throw new Error(result.detail || 'Ошибка при сохранении');
+                }
+            } catch (error) {
+                saveStatus.textContent = '❌ ' + error.message;
+                saveStatus.style.color = '#dc3545';
+                submitBtn.disabled = false;
+                showErrorNotification('Ошибка при сохранении рецептов: ' + error.message);
+            }
+        });
+    }
+});
+        // Функция показа секции рецептов
+        function showRecipesSection() {
+            recipesSection.style.display = 'block';
+        }
+
+        // Функция скрытия секции рецептов
+        function hideRecipesSection() {
+            recipesSection.style.display = 'none';
+            recipesResultDiv.innerHTML = '';
+            recipesResultDiv.className = '';
+        }
+
+        // Функция показа загрузки
+        function showLoading(message) {
+            resultDiv.textContent = message;
+            resultDiv.className = 'loading';
+            responsePre.textContent = '';
+        }
+
+        // Функция показа ошибки
+        function showError(message) {
+            resultDiv.textContent = message;
+            resultDiv.className = 'error';
+            responsePre.textContent = '';
+        }
+
+        // Функция показа ошибки рецептов
+        function showRecipesError(message) {
+            recipesResultDiv.textContent = message;
+            recipesResultDiv.className = 'error';
+        }
+
+        // Функция обработки ошибок
+        function handleError(error) {
+            console.error('Error:', error);
+            showError(`Ошибка: ${error.message}`);
+            submitBtn.disabled = false;
+            taskSection.style.display = 'none';
+            hideRecipesSection();
+            progressBar.style.display = 'none';
+        }
+        // Функции для работы с уведомлениями
+function showNotification(type, title, message, duration = 5000) {
+    const container = document.getElementById('notification-container');
+    if (!container) return;
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    const icons = {
+        success: '✅',
+        info: 'ℹ️',
+        warning: '⚠️',
+        error: '❌'
+    };
+    
+    notification.innerHTML = `
+        <div class="notification-icon">${icons[type] || '💡'}</div>
+        <div class="notification-content">
+            <div class="notification-title">${title}</div>
+            <div class="notification-message">${message}</div>
+            ${duration > 0 ? `<div class="notification-progress">
+                <div class="notification-progress-bar" style="width: 100%"></div>
+            </div>` : ''}
+        </div>
+        <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    container.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    // Автоматическое скрытие
+    if (duration > 0) {
+        const progressBar = notification.querySelector('.notification-progress-bar');
+        if (progressBar) {
+            let width = 100;
+            const interval = duration / 100;
+            const timer = setInterval(() => {
+                width -= 1;
+                progressBar.style.width = width + '%';
+                if (width <= 0) {
+                    clearInterval(timer);
+                    hideNotification(notification);
+                }
+            }, interval);
+        } else {
+            setTimeout(() => {
+                hideNotification(notification);
+            }, duration);
+        }
+    }
+    
+    return notification;
+}
+
+function hideNotification(notification) {
+    if (!notification) return;
+    
+    notification.classList.remove('show');
+    notification.classList.add('hide');
+    
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.parentElement.removeChild(notification);
+        }
+    }, 300);
+}
+
+// Функция показа уведомления об успешной обработке фото
+function showPhotoProcessedNotification(taskId) {
+    showNotification(
+        'success',
+        '🎉 Фото успешно обработано!',
+        `Идентификатор задачи: ${taskId}<br>Ингредиенты распознаны и готовы к генерации рецептов.`,
+        6000
+    );
+}
+
+// Функция показа уведомления о генерации рецептов
+function showRecipesGeneratedNotification(recipesCount) {
+    showNotification(
+        'success',
+        '🍳 Рецепты сгенерированы!',
+        `Создано ${recipesCount} рецептов.<br>Теперь вы можете отмечать выполненные шаги.`,
+        6000
+    );
+}
+
+// Функция показа уведомления о сохранении в историю
+function showRecipesSavedNotification(savedCount) {
+    showNotification(
+        'success',
+        '📚 Рецепты сохранены!',
+        `${savedCount} рецептов добавлено в вашу историю.<br>Вы можете просмотреть их в личном кабинете.`,
+        5000
+    );
+}
+
+// Функция показа уведомления об ошибке
+function showErrorNotification(message) {
+    showNotification(
+        'error',
+        '❌ Ошибка',
+        message,
+        8000
+    );
+}
+
+// Функция показа уведомления о процессе
+function showProcessingNotification(message, duration = 0) {
+    return showNotification(
+        'info',
+        '⏳ Обработка',
+        message,
+        duration
+    );
+}
+// Функция загрузки предпочтений из базы данных
+async function loadPreferences() {
+    const loadingElement = document.getElementById('preferences-loading');
+    const gridElement = document.getElementById('preferences-grid');
+    const userPreferencesInfo = document.getElementById('user-preferences-info');
+    
+    try {
+        console.log('🔧 Загружаем предпочтения из базы данных...');
+        
+        const response = await fetch('/api/preferences');
+        const preferencesData = await response.json();
+        
+        if (response.ok) {
+            console.log('✅ Предпочтения загружены:', preferencesData);
+            
+            const allPreferences = preferencesData.all_preferences;
+            const userPreferences = preferencesData.user_preferences;
+            const userId = preferencesData.user_id;
+            
+            // Заполняем селекторы данными из БД
+            fillSelectOptions('cooking-time-select', allPreferences.cooking_times, 'нет', 'Любое время');
+            fillSelectOptions('difficulty-select', allPreferences.difficulties, 'нет', 'Любая сложность');
+            fillSelectOptions('calorie-level-select', allPreferences.calorie_contents, 'нет', 'Любой уровень');
+            
+            // Устанавливаем предпочтения пользователя если они есть
+            if (userPreferences && Object.keys(userPreferences).length > 0) {
+                setUserPreferences(userPreferences);
+                userPreferencesInfo.style.display = 'block';
+                
+                // Обновляем текст бейджа с информацией о пользователе
+                const badgeText = userPreferencesInfo.querySelector('.badge-text');
+                if (badgeText && userId) {
+                    badgeText.textContent = `Используются ваши сохраненные предпочтения (ID: ${userId})`;
+                }
+                
+                showNotification('success', '⭐ Ваши предпочтения загружены', 
+                                'Используются ваши сохраненные настройки', 3000);
+            } else {
+                if (userId) {
+                    showNotification('info', '⚙️ Стандартные настройки', 
+                                    'У вас нет сохраненных предпочтений. Используются стандартные настройки.', 3000);
+                } else {
+                    showNotification('info', '⚙️ Гостевой режим', 
+                                    'Вы не авторизованы. Используются стандартные настройки.', 3000);
+                }
+            }
+            
+            // Показываем сетку и скрываем индикатор загрузки
+            loadingElement.style.display = 'none';
+            gridElement.style.display = 'grid';
+            
+        } else {
+            throw new Error('Ошибка при загрузке предпочтений');
+        }
+        
+    } catch (error) {
+        console.error('❌ Ошибка загрузки предпочтений:', error);
+        
+        // Используем начальные предпочтения из шаблона
+        if (window.initialPreferences && window.initialPreferences.hasUserPreferences) {
+            setUserPreferences(window.initialPreferences.userPreferences);
+            userPreferencesInfo.style.display = 'block';
+        }
+        
+        // Показываем fallback варианты
+        fillSelectOptions('cooking-time-select', [
+            {id: 1, title: 'быстро (<15 мин)'},
+            {id: 2, title: 'средне (15-30 мин)'},
+            {id: 3, title: 'долго (>30 мин)'}
+        ], 'нет', 'Любое время');
+        
+        fillSelectOptions('difficulty-select', [
+            {id: 1, title: 'легко'},
+            {id: 2, title: 'средне'},
+            {id: 3, title: 'сложно'}
+        ], 'нет', 'Любая сложность');
+        
+        fillSelectOptions('calorie-level-select', [
+            {id: 1, title: 'низкокалорийное'},
+            {id: 2, title: 'среднекалорийное'},
+            {id: 3, title: 'высококалорийное'}
+        ], 'нет', 'Любой уровень');
+        
+        loadingElement.style.display = 'none';
+        gridElement.style.display = 'grid';
+        
+        showNotification('warning', '⚠️ Используем стандартные настройки', 
+                        'Не удалось загрузить настройки из базы данных. Используются стандартные значения.', 5000);
+    }
+}
+
+// Функция установки предпочтений пользователя
+function setUserPreferences(userPreferences) {
+    console.log('🔧 Устанавливаем предпочтения пользователя:', userPreferences);
+    
+    // Устанавливаем значения в селекторы на основе title из связанных таблиц
+    if (userPreferences.preferred_cooking_time) {
+        setSelectValue('cooking-time-select', userPreferences.preferred_cooking_time);
+    }
+    
+    if (userPreferences.preferred_difficulty) {
+        setSelectValue('difficulty-select', userPreferences.preferred_difficulty);
+    }
+    
+    if (userPreferences.preferred_calorie_level) {
+        setSelectValue('calorie-level-select', userPreferences.preferred_calorie_level);
+    }
+    
+    // Диетические предпочтения пока оставляем по умолчанию, 
+    // так как их нет в вашей структуре User таблицы
+}
+
+// Функция установки значения в селектор
+function setSelectValue(selectId, value) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    
+    // Приводим значение к нижнему регистру для сравнения
+    const valueLower = value.toLowerCase().trim();
+    
+    // Ищем точное совпадение
+    for (let i = 0; i < select.options.length; i++) {
+        const optionValue = select.options[i].value.toLowerCase().trim();
+        if (optionValue === valueLower) {
+            select.selectedIndex = i;
+            console.log(`✅ Установлено точное значение для ${selectId}: "${value}"`);
+            
+            // Добавляем визуальное выделение
+            select.style.borderColor = '#28a745';
+            select.style.boxShadow = '0 0 0 0.2rem rgba(40, 167, 69, 0.25)';
+            return;
+        }
+    }
+    
+    // Если точного совпадения нет, ищем частичное
+    for (let i = 0; i < select.options.length; i++) {
+        const optionValue = select.options[i].value.toLowerCase().trim();
+        if (optionValue.includes(valueLower) || valueLower.includes(optionValue)) {
+            select.selectedIndex = i;
+            console.log(`✅ Установлено приблизительное значение для ${selectId}: "${select.options[i].value}" вместо "${value}"`);
+            
+            // Добавляем визуальное выделение
+            select.style.borderColor = '#ffc107';
+            select.style.boxShadow = '0 0 0 0.2rem rgba(255, 193, 7, 0.25)';
+            return;
+        }
+    }
+    
+    console.log(`⚠️ Не удалось установить значение для ${selectId}: "${value}"`);
+}
+
+// Функция заполнения селектора опциями
+function fillSelectOptions(selectId, options, defaultValue, defaultText) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    
+    // Очищаем все опции
+    select.innerHTML = '';
+    
+    // Добавляем опцию по умолчанию
+    const defaultOption = document.createElement('option');
+    defaultOption.value = defaultValue;
+    defaultOption.textContent = defaultText;
+    select.appendChild(defaultOption);
+    
+    // Добавляем опции из базы данных
+    options.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option.title; // Используем title как значение
+        optionElement.textContent = option.title;
+        optionElement.setAttribute('data-id', option.id); // Сохраняем ID для возможного использования
+        select.appendChild(optionElement);
+    });
+    
+    console.log(`✅ Селектор ${selectId} заполнен: ${options.length} опций`);
+}
+
+// Функция показа секции рецептов (обновленная)
+function showRecipesSection() {
+    recipesSection.style.display = 'block';
+    
+    // Загружаем предпочтения при первом показе секции
+    if (!window.preferencesLoaded) {
+        loadPreferences();
+        window.preferencesLoaded = true;
+    }
+}
+    </script>
+    <!-- Контейнер для уведомлений -->
+<div class="notification-container" id="notification-container"></div>
+</body>
+</html>
