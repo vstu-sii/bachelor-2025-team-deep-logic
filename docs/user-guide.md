@@ -20,7 +20,7 @@
 2. Нажмите `Войти в систему`.
 3. После входа откроется личный кабинет.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/entry.png)
+![Вход](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/entry.png)
 
 ---
 
@@ -54,7 +54,7 @@
 2. Система отправит изображение в Ollama.
 3. Распознанные ингредиенты отобразятся на экране.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/loading.png)
+![Загрузка](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/loading.png)
 
 ---
 
@@ -73,9 +73,9 @@
 2. Нажмите `Сгенерировать рецепт`.
 3. Получите рецепт с шагами, ингредиентами и пищевой ценностью.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation.png)
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation1.png)
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation2.png)
+![Генерация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation.png)
+![Генерация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation1.png)
+![Генерация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation2.png)
 ---
 
 ## ⭐ Избранное
@@ -90,8 +90,8 @@
 2. Перейдите в раздел `Избранное`.
 3. Просматривайте, удаляйте, переходите к шагам.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites.png)
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites1.png)
+![Избранное](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites.png)
+![Избранное](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites1.png)
 ---
 
 ## 📝 Отзывы
@@ -107,7 +107,7 @@
 2. Нажмите `Добавить комментарий`.
 3. Введите текст и сохраните.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/reviews.png)
+![Отзывы](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/reviews.png)
 
 ---
 
@@ -125,7 +125,7 @@
 2. Добавьте запрещённые продукты.
 3. Нажмите `Сохранить`.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/profile.png)
+![Профиль](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/profile.png)
 
 ---
 
@@ -142,7 +142,7 @@
 1. Откройте раздел `История`.
 2. Просматривайте рецепты, комментируйте, добавляйте в избранное.
    
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/history.png)
+![История](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/history.png)
 
 ---
 
