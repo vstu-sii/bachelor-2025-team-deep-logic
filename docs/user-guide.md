@@ -76,6 +76,7 @@
 ![Генерация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation.png)
 ![Генерация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation1.png)
 ![Генерация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation2.png)
+
 ---
 
 ## ⭐ Избранное
@@ -92,6 +93,8 @@
 
 ![Избранное](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites.png)
 ![Избранное](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites1.png)
+![Избранное](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites2.png)
+
 ---
 
 ## 📝 Отзывы
