@@ -1,10 +1,10 @@
 # Актуальная архитектура (C4)
 
 ## Context
-![Context](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab3-sa-prototype/generated/C4_context.png)
+![Context](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/C4_context.png)
 
 ## Containers
-![Containers](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab3-sa-prototype/generated/C4_container.png)
+![Containers](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/C4_container.png)
 
 
 
