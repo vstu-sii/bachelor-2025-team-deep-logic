@@ -74,7 +74,8 @@
 3. Получите рецепт с шагами, ингредиентами и пищевой ценностью.
 
 (https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation.png)
-
+(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation1.png)
+(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/generation2.png)
 ---
 
 ## ⭐ Избранное
@@ -90,7 +91,7 @@
 3. Просматривайте, удаляйте, переходите к шагам.
 
 (https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites.png)
-
+(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites1.png)
 ---
 
 ## 📝 Отзывы
