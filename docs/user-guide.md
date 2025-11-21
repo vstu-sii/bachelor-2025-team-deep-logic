@@ -111,6 +111,7 @@
 3. Введите текст и сохраните.
 
 ![Отзывы](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/reviews.png)
+![Отзывы](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/favourites2.png)
 
 ---
 
