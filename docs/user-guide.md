@@ -36,7 +36,7 @@
 2. Нажмите `Зарегистрироваться`.
 3. Перейдите к авторизации.
 
-(https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/registration.png)
+![Регистрация](https://raw.githubusercontent.com/vstu-sii/bachelor-2025-team-deep-logic/lab4-sa-infrastructure/generated/registration.png)
 
 ---
 
