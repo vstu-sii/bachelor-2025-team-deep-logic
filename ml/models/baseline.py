@@ -5,8 +5,9 @@ import base64
 import time
 import requests
 from dotenv import load_dotenv
-from ml.service.prompts_v2 import UC_VLM_PROMPT, UC_LLM_PROMPT
+from ml.prompt_templates import UC_VLM_PROMPT, UC_LLM_PROMPT
 from deep_translator import GoogleTranslator
+import asyncio
 import httpx
 
 # Загружаем переменные окружения
@@ -22,7 +23,6 @@ VLM_MODEL = os.getenv("VLM_MODEL", "qwen2.5vl:3b")
 MAX_RETRIES = 3
 RETRY_DELAY = 2  # секунды
 
-
 def _sanitize_json_string(s: str) -> str:
     """Удаляем управляющие символы, которые ломают JSON."""
     return re.sub(r'[\x00-\x1f\x7f]', ' ', s)
@@ -35,27 +35,26 @@ class LLaVAVision:
             input="Определи продукты на фото"
         )
         return "\n".join([m.content for m in prompt_text])
-
-    def infer(self, image_path: str, queued_at: float = None) -> dict:
-        start_time = time.perf_counter()
-
+    
+    def infer(self, image_path: str) -> dict:
         if not os.path.exists(image_path):
             return {"error": f"File not found: {image_path}"}
 
         with open(image_path, "rb") as f:
             image_b64 = base64.b64encode(f.read()).decode("utf-8")
 
-        prompt_text = "\n".join([m.content for m in UC_VLM_PROMPT.format_messages(
+        prompt_text = UC_VLM_PROMPT.format_messages(
             input="Определи продукты на фото"
-        )])
+        )
+        prompt_text = "\n".join([m.content for m in prompt_text])
 
         payload = {
-            "model": VLM_MODEL,
+            "model": "qwen2.5vl:3b",
             "prompt": prompt_text,
             "images": [image_b64],
             "options": {
-                "temperature": 0.3,
-                "top_p": 0.9,
+                "temperature": 0.3,   # низкая креативность, больше точности
+                "top_p": 0.9,         # nucleus sampling: ограничивает выбор вероятных токенов
                 "top_k": 50,
                 "num_predict": 512
             }
@@ -63,7 +62,13 @@ class LLaVAVision:
 
         for attempt in range(1, MAX_RETRIES + 1):
             try:
-                resp = requests.post(OLLAMA_URL, json=payload, stream=True, timeout=300)
+                resp = requests.post(
+                    OLLAMA_URL,
+                    json=payload,
+                    stream=True,
+                    timeout=300
+                )
+
                 text = ""
                 for line in resp.iter_lines():
                     if line:
@@ -76,7 +81,9 @@ class LLaVAVision:
                 json_start = text.find('{')
                 json_end = text.rfind('}') + 1
                 if json_start != -1 and json_end > json_start:
-                    clean = _sanitize_json_string(text[json_start:json_end])
+                    clean = text[json_start:json_end]
+                    clean = _sanitize_json_string(clean)
+
                     if not clean.strip():
                         return {"error": "Empty JSON from model", "raw_output": text}
 
@@ -98,27 +105,24 @@ class LLaVAVision:
                             ingredients_ru.append({"name": name_ru})
 
                     parsed["ingredients"] = ingredients_ru
-                    parsed["queued_at"] = queued_at
-                    parsed["completed_at"] = time.time()
-                    parsed["duration_sec"] = round(time.perf_counter() - start_time, 3)
                     return parsed
 
                 return {"error": "No JSON object found in model output", "raw_output": text}
 
             except requests.Timeout:
                 if attempt == MAX_RETRIES:
-                    return {"error": "Timeout from VLM", "duration_sec": round(time.perf_counter() - start_time, 3)}
+                    return {"error": "Timeout from VLM"}
                 time.sleep(RETRY_DELAY)
             except requests.RequestException as e:
                 if attempt == MAX_RETRIES:
-                    return {"error": f"Network error: {str(e)}", "duration_sec": round(time.perf_counter() - start_time, 3)}
+                    return {"error": f"Network error: {str(e)}"}
                 time.sleep(RETRY_DELAY)
             except Exception as e:
                 if attempt == MAX_RETRIES:
-                    return {"error": f"Unexpected error: {str(e)}", "duration_sec": round(time.perf_counter() - start_time, 3)}
+                    return {"error": f"Unexpected error: {str(e)}"}
                 time.sleep(RETRY_DELAY)
 
-        return {"error": "Failed after retries", "duration_sec": round(time.perf_counter() - start_time, 3)}
+        return {"error": "Failed after retries"}
 
 
 class MistralText:
@@ -160,7 +164,6 @@ class MistralText:
     async def generate_recipe(self, ingredients, dietary: str = None, existing=None, feedback: str = None,
                               preferred_calorie_level: str = None, preferred_cooking_time: str = None,
                               preferred_difficulty: str = None) -> dict:
-        start_time = time.perf_counter()
         if self.client is None:
             await self.init_client()
 
@@ -210,19 +213,13 @@ class MistralText:
 
             try:
                 parsed = json.loads(clean)
-                parsed["completed_at"] = time.time()
-                parsed["duration_sec"] = round(time.perf_counter() - start_time, 3)
                 return parsed.get("recipes", parsed)
             except Exception as e:
-                return {
-                    "error": f"Invalid JSON from Mistral: {e}",
-                    "raw_output": output,
-                    "duration_sec": round(time.perf_counter() - start_time, 3)
-                }
+                return {"error": f"Invalid JSON from Mistral: {e}", "raw_output": output}
 
         except httpx.TimeoutException:
-            return {"error": "Mistral API timeout", "duration_sec": round(time.perf_counter() - start_time, 3)}
+            return {"error": "Mistral API timeout"}
         except httpx.RequestError as e:
-            return {"error": f"Network error: {str(e)}", "duration_sec": round(time.perf_counter() - start_time, 3)}
+            return {"error": f"Network error: {str(e)}"}
         except Exception as e:
-            return {"error": f"Unexpected error: {str(e)}", "duration_sec": round(time.perf_counter() - start_time, 3)}
+            return {"error": f"Unexpected error: {str(e)}"}
