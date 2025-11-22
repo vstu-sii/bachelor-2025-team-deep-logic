@@ -127,12 +127,22 @@ class LLaVAVision:
 
 class MistralText:
     def __init__(self):
-        self.vlm = LLaVAVision()
+        self.client: httpx.AsyncClient | None = None
+
+    async def init_client(self):
+        """Создаём асинхронный клиент один раз при старте приложения"""
+        if self.client is None:
+            self.client = httpx.AsyncClient(timeout=60.0)
+
+    async def close_client(self):
+        """Закрываем клиент при завершении приложения"""
+        if self.client:
+            await self.client.aclose()
+            self.client = None
 
     def build_prompt(self, ingredients, dietary=None, existing=None, feedback=None,
                      preferred_calorie_level=None, preferred_cooking_time=None,
                      preferred_difficulty=None) -> str:
-        """Формирует текст промпта для LLM"""
         ingredients_str = ", ".join([i["name"] for i in ingredients if "name" in i])
         prompt = UC_LLM_PROMPT.format_messages(
             ingredients_list=ingredients_str,
@@ -154,10 +164,9 @@ class MistralText:
     async def generate_recipe(self, ingredients, dietary: str = None, existing=None, feedback: str = None,
                               preferred_calorie_level: str = None, preferred_cooking_time: str = None,
                               preferred_difficulty: str = None) -> dict:
-        """
-        Асинхронный вызов Mistral через httpx.
-        Возвращает список рецептов или словарь с ключом "error".
-        """
+        if self.client is None:
+            await self.init_client()
+
         filtered_ingredients = self._filter_ingredients(ingredients, dietary)
         prompt_text = self.build_prompt(
             filtered_ingredients,
@@ -183,57 +192,34 @@ class MistralText:
             "temperature": 0.4
         }
 
-        for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = await self.client.post(MISTRAL_URL, headers=headers, json=payload)
+            if response.status_code != 200:
+                return {"error": f"Mistral API error: {response.status_code}", "details": response.text}
+
+            resp_json = response.json()
+            choices = resp_json.get("choices") or []
+            if not choices or "message" not in choices[0] or "content" not in choices[0]["message"]:
+                return {"error": "Invalid response structure from Mistral", "raw": resp_json}
+
+            output = choices[0]["message"]["content"].strip()
+            clean = re.sub(r"^```(?:json)?", "", output.strip(), flags=re.IGNORECASE | re.MULTILINE)
+            clean = re.sub(r"```$", "", clean.strip(), flags=re.MULTILINE)
+
+            json_start = clean.find('{')
+            json_end = clean.rfind('}') + 1
+            if json_start != -1 and json_end > json_start:
+                clean = clean[json_start:json_end]
+
             try:
-                async with httpx.AsyncClient(timeout=60.0) as client:
-                    response = await client.post(MISTRAL_URL, headers=headers, json=payload)
-
-                if response.status_code != 200:
-                    if attempt == MAX_RETRIES:
-                        return {"error": f"Mistral API error: {response.status_code}", "details": response.text}
-                    await asyncio.sleep(RETRY_DELAY)
-                    continue
-
-                resp_json = response.json()
-                # безопасный доступ к содержимому ответа
-                choices = resp_json.get("choices") or []
-                if not choices or "message" not in choices[0] or "content" not in choices[0]["message"]:
-                    if attempt == MAX_RETRIES:
-                        return {"error": "Invalid response structure from Mistral", "raw": resp_json}
-                    await asyncio.sleep(RETRY_DELAY)
-                    continue
-
-                output = choices[0]["message"]["content"].strip()
-
-                # Чистим Markdown
-                clean = re.sub(r"^```(?:json)?", "", output.strip(), flags=re.IGNORECASE | re.MULTILINE)
-                clean = re.sub(r"```$", "", clean.strip(), flags=re.MULTILINE)
-
-                json_start = clean.find('{')
-                json_end = clean.rfind('}') + 1
-                if json_start != -1 and json_end > json_start:
-                    clean = clean[json_start:json_end]
-
-                try:
-                    parsed = json.loads(clean)
-                    return parsed.get("recipes", parsed)
-                except Exception as e:
-                    if attempt == MAX_RETRIES:
-                        return {"error": f"Invalid JSON from Mistral: {e}", "raw_output": output}
-                    await asyncio.sleep(RETRY_DELAY)
-                    continue
-
-            except httpx.TimeoutException:
-                if attempt == MAX_RETRIES:
-                    return {"error": "Mistral API timeout"}
-                await asyncio.sleep(RETRY_DELAY)
-            except httpx.RequestError as e:
-                if attempt == MAX_RETRIES:
-                    return {"error": f"Network error: {str(e)}"}
-                await asyncio.sleep(RETRY_DELAY)
+                parsed = json.loads(clean)
+                return parsed.get("recipes", parsed)
             except Exception as e:
-                if attempt == MAX_RETRIES:
-                    return {"error": f"Unexpected error: {str(e)}"}
-                await asyncio.sleep(RETRY_DELAY)
+                return {"error": f"Invalid JSON from Mistral: {e}", "raw_output": output}
 
-        return {"error": "Failed after retries"}
+        except httpx.TimeoutException:
+            return {"error": "Mistral API timeout"}
+        except httpx.RequestError as e:
+            return {"error": f"Network error: {str(e)}"}
+        except Exception as e:
+            return {"error": f"Unexpected error: {str(e)}"}
