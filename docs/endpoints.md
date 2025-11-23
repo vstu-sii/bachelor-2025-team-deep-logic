@@ -660,6 +660,7 @@ Content-Type: application/x-www-form-urlencoded
 Content-Length: 85
 
 preferred_cooking_time=быстро&preferred_difficulty=легко&existing_recipes=true
+
 Успешный ответ:
 
 ```http
@@ -718,6 +719,7 @@ Host: 127.0.0.1:8000
 ```
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 0
+
 Успешный ответ:
 
 ```http
