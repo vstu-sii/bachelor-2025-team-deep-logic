@@ -27,18 +27,18 @@ UC_LLM_PROMPT = ChatPromptTemplate.from_messages([
 - Каждый рецепт обязан содержать:
     - Поле "cooking_time" указывай в минутах (целое число).
     - Поле "difficulty" вычисляй строго по cooking_time:
-    * "легко" — если ≤ 20 минут
-    * "средне" — если 21–40 минут
-    * "сложно" — если > 40 минут
+      * "легко" — если ≤ 20 минут
+      * "средне" — если 21–40 минут
+      * "сложно" — если > 40 минут
     - Поле "cooking_speed" вычисляй строго по cooking_time:
-    * "быстро" — если ≤ 20 минут
-    * "средне" — если 21–40 минут
-    * "долго" — если > 40 минут
+      * "быстро" — если ≤ 20 минут
+      * "средне" — если 21–40 минут
+      * "долго" — если > 40 минут
     - Поле "calorie_content" обязательно содержит kcal, protein_g, fat_g, carb_g (числа).
     - Поле "calorie_level" вычисляй строго по calorie_content.kcal:
-    * "низкокалорийное" — если < 300
-    * "среднекалорийное" — если 300–600
-    * "высококалорийное" — если > 600
+      * "низкокалорийное" — если < 300
+      * "среднекалорийное" — если 300–600
+      * "высококалорийное" — если > 600
 
 Правила:
 - Сгенерируй ровно 3 рецепта.
@@ -54,17 +54,33 @@ UC_LLM_PROMPT = ChatPromptTemplate.from_messages([
   "recipes": [
     {{
       "name": "название рецепта",
-      "ingredients": [{{ "name": "ингредиент", "amount": "количество" }}],
-      "steps": [{{ "order": 1, "instruction": "описание шага" }}],
+      "ingredients": [{{"name": "ингредиент", "amount": "количество"}}],
+      "steps": [{{"order": 1, "instruction": "описание шага"}}],
       "cooking_time": 50,
       "difficulty": "сложно",
       "cooking_speed": "долго",
-      "calorie_content": {{ "kcal": 210, "protein_g": 18, "fat_g": 10, "carb_g": 12 }},
+      "calorie_content": {{"kcal": 210, "protein_g": 18, "fat_g": 10, "carb_g": 12}},
       "calorie_level": "низкокалорийное",
       "notes": "опционально"
     }}
   ]
 }}
+
+---
+
+Примеры для ориентира (few-shot, граничные случаи):
+
+{{"name": "Салат из огурцов", "cooking_time": 20, "difficulty": "легко", "cooking_speed": "быстро",
+ "calorie_content": {{"kcal": 299, "protein_g": 5, "fat_g": 10, "carb_g": 30}}, "calorie_level": "низкокалорийное"}}
+
+{{"name": "Курица с овощами", "cooking_time": 21, "difficulty": "средне", "cooking_speed": "средне",
+ "calorie_content": {{"kcal": 300, "protein_g": 25, "fat_g": 15, "carb_g": 40}}, "calorie_level": "среднекалорийное"}}
+
+{{"name": "Запеканка из картофеля", "cooking_time": 40, "difficulty": "средне", "cooking_speed": "средне",
+ "calorie_content": {{"kcal": 600, "protein_g": 20, "fat_g": 25, "carb_g": 70}}, "calorie_level": "среднекалорийное"}}
+
+{{"name": "Тушеная говядина", "cooking_time": 41, "difficulty": "сложно", "cooking_speed": "долго",
+ "calorie_content": {{"kcal": 601, "protein_g": 50, "fat_g": 35, "carb_g": 60}}, "calorie_level": "высококалорийное"}}
 """),
     ("human", """Продукты: {ingredients_list}.
 Ограничения: {dietary_restrictions}.
