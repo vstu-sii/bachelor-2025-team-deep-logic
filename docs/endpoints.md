@@ -780,8 +780,9 @@ Content-Type: application/json
 
 ## 👤 Профиль пользователя
 ### 👤 Получить страницу профиля
-http
+```http
 GET /profile
+```
 Описание: Возвращает HTML страницу профиля пользователя с настройками и запрещенными продуктами
 
 Параметры: Нет
@@ -792,13 +793,15 @@ Content-Type: text/html
 
 Пример запроса:
 
-http
+```http
 GET /profile HTTP/1.1
 Host: 127.0.0.1:8000
+```
 Cookie: session=eyJpZF91c2VyIjoxMjN9
+
 Успешный ответ:
 
-html
+```html
 HTTP/1.1 200 OK
 Content-Type: text/html
 
@@ -828,6 +831,7 @@ Content-Type: text/html
     </ul>
 </body>
 </html>
+```
 Коды ответов:
 
 200 - Успешно возвращена страница профиля
@@ -835,8 +839,9 @@ Content-Type: text/html
 401 - Пользователь не авторизован
 
 ### 🚫 Добавить запрещенный продукт
-http
+```http
 POST /profile/forbidden
+```
 Content-Type: application/x-www-form-urlencoded
 Описание: Добавляет продукт в список запрещенных для пользователя
 
@@ -850,22 +855,25 @@ Content-Type: application/x-www-form-urlencoded
 
 Пример запроса:
 
-http
+```http
 POST /profile/forbidden HTTP/1.1
 Host: 127.0.0.1:8000
+```
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 20
 Cookie: session=eyJpZF91c2VyIjoxMjN9
 
 product_title=орехи
+
 Успешный ответ:
 
-http
+```http
 HTTP/1.1 303 See Other
 Location: /profile
+```
 Ошибка - продукт уже в списке:
 
-html
+```html
 HTTP/1.1 200 OK
 Content-Type: text/html
 
@@ -876,6 +884,7 @@ Content-Type: text/html
     <!-- страница профиля -->
 </body>
 </html>
+```
 Коды ответов:
 
 303 - Продукт успешно добавлен, redirect на /profile
@@ -885,8 +894,9 @@ Content-Type: text/html
 401 - Пользователь не авторизован
 
 ### 🗑️ Удалить запрещенный продукт
-http
+```http
 POST /profile/forbidden/remove
+```
 Content-Type: application/x-www-form-urlencoded
 Описание: Удаляет продукт из списка запрещенных
 
@@ -900,19 +910,23 @@ Content-Type: application/x-www-form-urlencoded
 
 Пример запроса:
 
-http
+```http
 POST /profile/forbidden/remove HTTP/1.1
 Host: 127.0.0.1:8000
+```
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 20
 Cookie: session=eyJpZF91c2VyIjoxMjN9
 
 product_title=орехи
+
 Успешный ответ:
 
-http
+```http
 HTTP/1.1 303 See Other
 Location: /profile
+```
+
 Коды ответов:
 
 303 - Продукт успешно удален, redirect на /profile
@@ -920,8 +934,9 @@ Location: /profile
 401 - Пользователь не авторизован
 
 ### ⚙️ Сохранить предпочтения пользователя
-http
+```http
 POST /profile/preferences
+```
 Content-Type: application/x-www-form-urlencoded
 Описание: Сохраняет кулинарные предпочтения пользователя
 
@@ -939,19 +954,22 @@ Content-Type: application/x-www-form-urlencoded
 
 Пример запроса:
 
-http
+```http
 POST /profile/preferences HTTP/1.1
 Host: 127.0.0.1:8000
+```
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 55
 Cookie: session=eyJpZF91c2VyIjoxMjN9
 
 preferences_time=1&preferences_difficulty=2&preferences_calorie=3
+
 Успешный ответ:
 
-http
+```http
 HTTP/1.1 303 See Other
 Location: /profile
+```
 Коды ответов:
 
 303 - Предпочтения успешно сохранены, redirect на /profile
