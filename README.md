@@ -44,12 +44,6 @@
 
 ---
 
-## 📅 Статус
-- ✅ Requirements  
-- ✅ C4 Diagrams  
-- ✅ Roadmap  
-- ✅ Definitions  
-- ⏳ Реализация MVP (в процессе)
 =======
 # D1 — PRD (Product Requirements Document)
 
