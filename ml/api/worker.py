@@ -1,9 +1,8 @@
 import asyncio
 import json
 import logging
-import time
 from pathlib import Path
-from ml.service.baseline import LLaVAVision
+from ml.models.baseline import LLaVAVision
 import aio_pika
 
 logging.basicConfig(
@@ -12,65 +11,35 @@ logging.basicConfig(
 )
 
 MAX_RETRIES = 3
-RETRY_DELAY = 2
-LOG_LATENCY_FILE = "./reports/vlm_latency.log"
-MAX_CONCURRENT_TASKS = 3
+RETRY_DELAY = 2  # секунды
 
 
-async def process_task(task_id: str, image_path: str, queued_at: float = None) -> dict:
+async def process_task(task_id: str, image_path: str) -> dict:
+    """Асинхронная обработка одного задания с retry логикой."""
     vlm = LLaVAVision()
-    start_time = time.perf_counter()
-
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            result = vlm.infer(image_path, queued_at=queued_at)
-            duration = time.perf_counter() - start_time
-            completed_at = time.time()
-
+            result = vlm.infer(image_path)
             if result and "error" not in result:
-                parsed = result.get("ingredients", [])
-                logging.info(f"[{task_id}] Обработка завершена за {duration:.2f} сек")
-
-                with open(LOG_LATENCY_FILE, "a", encoding="utf-8") as log_file:
-                    log_file.write(f"{task_id},{duration:.3f}\n")
-
-                return {
-                    "status": "done",
-                    "ingredients": [{"name": i} for i in parsed],
-                    "queued_at": queued_at,
-                    "completed_at": completed_at,
-                    "duration_sec": round(duration, 3)
-                }
-
+                return {"status": "done", "ingredients": result}
             logging.warning(f"[{task_id}] Попытка {attempt}: ошибка или пустой результат {result}")
         except Exception as e:
             logging.error(f"[{task_id}] Попытка {attempt}: исключение {e}")
         await asyncio.sleep(RETRY_DELAY)
-
-    duration = time.perf_counter() - start_time
-    logging.warning(f"[{task_id}] Не удалось обработать за {duration:.2f} сек")
-    with open(LOG_LATENCY_FILE, "a", encoding="utf-8") as log_file:
-        log_file.write(f"{task_id},ERROR,{duration:.3f}\n")
-    return {
-        "status": "error",
-        "error": f"Не удалось обработать {image_path} после {MAX_RETRIES} попыток",
-        "queued_at": queued_at,
-        "completed_at": time.time(),
-        "duration_sec": round(duration, 3)
-    }
+    return {"status": "error", "error": f"Не удалось обработать {image_path} после {MAX_RETRIES} попыток"}
 
 
 async def on_message(message: aio_pika.IncomingMessage):
-    async with message.process():
+    async with message.process():  # auto-ack при выходе из блока
         try:
             body = json.loads(message.body.decode())
             task_id = body["task_id"]
             image_path = body["image_path"]
-            queued_at = body.get("queued_at", time.time())
             logging.info(f"[{task_id}] Получено задание, файл: {image_path}")
 
-            result = await process_task(task_id, image_path, queued_at)
+            result = await process_task(task_id, image_path)
 
+            # сохраняем результат
             result_path = Path(f"./results/{task_id}.json")
             result_path.parent.mkdir(parents=True, exist_ok=True)
             with open(result_path, "w", encoding="utf-8") as f:
@@ -81,39 +50,23 @@ async def on_message(message: aio_pika.IncomingMessage):
             logging.error(f"Ошибка обработки сообщения: {e}")
 
 
-async def connect_and_consume():
-    while True:
-        try:
-            # 🔹 robust‑подключение с heartbeat и autoreconnect
-            connection = await aio_pika.connect_robust(
-                "amqp://guest:guest@localhost/",
-                reconnect_interval=5,
-                heartbeat=60
-            )
-            channel = await connection.channel()
-            await channel.set_qos(prefetch_count=MAX_CONCURRENT_TASKS)
-            queue = await channel.declare_queue("ingredient_queue", durable=True)
+async def main():
+    # robust = авто‑переподключение при сбоях
+    connection = await aio_pika.connect_robust("amqp://guest:guest@localhost/")
+    channel = await connection.channel()
 
-            semaphore = asyncio.Semaphore(MAX_CONCURRENT_TASKS)
-            logging.info(f" [*] Async worker запущен. Параллельность: {MAX_CONCURRENT_TASKS}")
+    # ВАЖНО: очередь должна быть объявлена с теми же параметрами, что и в FastAPI
+    queue = await channel.declare_queue("ingredient_queue", durable=True)
 
-            async def limited_handler(message: aio_pika.IncomingMessage):
-                async with semaphore:
-                    await on_message(message)
+    logging.info(" [*] Async worker запущен. Ожидание сообщений...")
+    await queue.consume(on_message)
 
-            await queue.consume(limited_handler)
-
-            # 🔹 ждём пока соединение живое
-            await connection.ready()
-            await asyncio.Future()
-
-        except Exception as e:
-            logging.error(f"Соединение потеряно: {e}. Повтор через 5 секунд...")
-            await asyncio.sleep(5)
+    # держим воркер живым
+    await asyncio.Future()
 
 
 if __name__ == "__main__":
     try:
-        asyncio.run(connect_and_consume())
+        asyncio.run(main())
     except KeyboardInterrupt:
         logging.info("Остановка воркера по Ctrl+C")

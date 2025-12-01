@@ -1,0 +1,42 @@
+[
+  {
+    "image_path": "data/processed_images/1.jpg",
+    "reference_ingredients": ["Сыр", "Курица", "Брокколи", "Вода", "Перец", "Яйца"]
+  },
+  {
+    "image_path": "data/processed_images/2.jpg",
+    "reference_ingredients": ["Сыр", "Сметана", "Сливочное масло", "Творог", "Молоко", "Яйца"]
+  },
+  {
+    "image_path": "data/processed_images/3.jpg",
+    "reference_ingredients": ["Грецкие орехи", "Яйца", "Лосось", "Авокадо", "Грибы", "Латук", "Киви", "Яблоки", "Апельсины"]
+  },
+  {
+    "image_path": "data/processed_images/4.jpg",
+    "reference_ingredients": ["Огурцы", "Перец", "Латук", "Сыр", "Яйца", "Молоко"]
+  },
+  {
+    "image_path": "data/processed_images/5.jpg",
+    "reference_ingredients": ["Яблоко"]
+  },
+  {
+    "image_path": "data/processed_images/6.jpg",
+    "reference_ingredients": ["Картофель"]
+  },
+  {
+    "image_path": "data/processed_images/7.jpg",
+    "reference_ingredients": ["Яйца", "Помидоры", "Сардельки", "Сыр", "Молоко"]
+  },
+  {
+    "image_path": "data/processed_images/8.jpg",
+    "reference_ingredients": ["Яйца", "Курица"]
+  },
+  {
+    "image_path": "data/processed_images/9.jpg",
+    "reference_ingredients": ["Говядина", "Морковь", "Брокколи", "Латук", "Цветная капуста"]
+  },
+  {
+    "image_path": "data/processed_images/10.jpg",
+    "reference_ingredients": ["Колбаса", "Сыр", "Курица", "Яйца"]
+  }
+]
