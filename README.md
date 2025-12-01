@@ -44,7 +44,6 @@
 
 ---
 
-=======
 # D1 — PRD (Product Requirements Document)
 
 ## 1. Какую проблему мы решаем?
