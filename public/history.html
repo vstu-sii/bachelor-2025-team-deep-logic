@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История рецептов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .recipe-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .recipe-title {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin: 0;
+            flex: 1;
+        }
+
+        .recipe-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .favorite-status {
+            background: #fff3cd;
+            color: #856404;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #ffeaa7;
+        }
+
+        .favorite-status.favorited {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .recipe-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn, .favorite-btn, .comment-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .toggle-btn:hover, .favorite-btn:hover, .comment-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .toggle-btn.active, .comment-btn.active {
+            background: #495057;
+        }
+
+        .favorite-btn.favorited {
+            background: #28a745;
+        }
+
+        .favorite-btn.favorited:hover {
+            background: #218838;
+        }
+
+        .comment-btn {
+            background: #17a2b8;
+        }
+
+        .comment-btn:hover {
+            background: #138496;
+        }
+
+        .steps-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .steps-header h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .steps-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .step-item {
+            counter-increment: step-counter;
+            padding: 12px 0 12px 40px;
+            border-bottom: 1px solid #f1f3f4;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Стили для комментариев */
+        .comment-status {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid #bee5eb;
+        }
+
+        .comment-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .comment-header {
+            margin-bottom: 15px;
+        }
+
+        .comment-header h4 {
+            color: #0c5460;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .comment-text {
+            color: #495057;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+        }
+
+        .comment-form-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px dashed #dee2e6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .comment-input:focus {
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+            outline: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .save-comment-btn {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-comment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .save-comment-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .cancel-comment-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cancel-comment-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .delete-comment-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .delete-comment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .navigation-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #764ba2;
+            transform: translateX(-5px);
+        }
+
+        .btn-icon {
+            font-size: 1.1em;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recipe-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .recipes-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .recipe-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .recipe-meta {
+                align-items: flex-start;
+                margin-top: 10px;
+            }
+
+            .recipe-actions {
+                flex-direction: column;
+            }
+
+            .recipe-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .toggle-btn, .favorite-btn, .comment-btn {
+                padding: 12px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .recipe-card {
+                padding: 20px;
+            }
+
+            .steps-container {
+                padding: 15px;
+            }
+
+            .comment-form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>📚 История рецептов</h1>
+            <p>Все выполненные вами рецепты</p>
+        </div>
+
+        <div class="content-section">
+            {% if history %}
+            <div class="recipes-grid">
+                {% for item in history %}
+                {% set idx = loop.index0 %}
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <h3 class="recipe-title">{{ item.title }}</h3>
+                        <div class="recipe-meta">
+                            <span class="favorite-status {% if item.favorite %}favorited{% endif %}">
+                                {% if item.favorite %}⭐ В избранном{% else %}☆ Не в избранном{% endif %}
+                            </span>
+                            {% if item.comment %}
+                            <span class="comment-status">💬 Есть комментарий</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="recipe-actions">
+                        <button type="button" class="toggle-btn" onclick="toggleSteps({{ idx }})">
+                            <span class="btn-icon">📖</span>
+                            <span class="btn-text">Шаги приготовления</span>
+                        </button>
+                        
+                        <form method="post" action="/history/favorite/{{ item.id_history }}" class="favorite-form">
+                            <button type="submit" class="favorite-btn {% if item.favorite %}favorited{% endif %}">
+                                <span class="btn-icon">
+                                    {% if item.favorite %}⭐{% else %}☆{% endif %}
+                                </span>
+                                <span class="btn-text">
+                                    {% if item.favorite %}Убрать из избранного{% else %}Добавить в избранное{% endif %}
+                                </span>
+                            </button>
+                        </form>
+
+                        <button type="button" class="comment-btn" onclick="toggleCommentForm({{ idx }})">
+                            <span class="btn-icon">💬</span>
+                            <span class="btn-text">
+                                {% if item.comment %}Изменить комментарий{% else %}Добавить комментарий{% endif %}
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Блок комментария -->
+                    {% if item.comment %}
+                    <div class="comment-section" id="comment-{{ idx }}">
+                        <div class="comment-header">
+                            <h4>📝 Ваш комментарий:</h4>
+                        </div>
+                        <div class="comment-text">
+                            {{ item.comment }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Форма добавления/редактирования комментария -->
+                    <div class="comment-form-container" id="comment-form-{{ idx }}" style="display: none;">
+                        <form method="post" action="/history/comment/{{ item.id_history }}" class="comment-form">
+                            <div class="form-group">
+                                <label for="comment-{{ idx }}-input">Ваш комментарий к рецепту:</label>
+                                <textarea 
+                                    id="comment-{{ idx }}-input"
+                                    name="comment" 
+                                    class="comment-input" 
+                                    placeholder="Поделитесь впечатлениями: что понравилось, что можно улучшить, советы по приготовлению..."
+                                    rows="4"
+                                >{{ item.comment if item.comment else '' }}</textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-comment-btn">
+                                    <span class="btn-icon">💾</span>
+                                    Сохранить комментарий
+                                </button>
+                                <button type="button" class="cancel-comment-btn" onclick="toggleCommentForm({{ idx }})">
+                                    <span class="btn-icon">❌</span>
+                                    Отмена
+                                </button>
+                                {% if item.comment %}
+                                <button type="button" class="delete-comment-btn" onclick="deleteComment({{ item.id_history }}, {{ idx }})">
+                                    <span class="btn-icon">🗑️</span>
+                                    Удалить комментарий
+                                </button>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="steps-container" id="steps-{{ idx }}">
+                        <div class="steps-header">
+                            <h4>Пошаговый рецепт:</h4>
+                        </div>
+                        <ol class="steps-list">
+                            {% for step in item.description.split('\n') %}
+                            {% if step.strip() %}
+                            <li class="step-item">{{ step.strip() }}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">🍳</div>
+                <h3>История рецептов пуста</h3>
+                <p>Здесь появятся рецепты, которые вы приготовите</p>
+                <a href="/" class="back-btn">Найти рецепты</a>
+            </div>
+            {% endif %}
+
+            <div class="navigation-footer">
+                <a href="/upload" class="nav-link">
+                    <span class="nav-icon">⬅️</span>
+                    На главную
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // JavaScript код остается таким же как в предыдущем ответе
+    function toggleSteps(index) {
+        const el = document.getElementById("steps-" + index);
+        const btn = el.previousElementSibling.querySelector('.toggle-btn');
+        
+        if (el.style.display === "none" || !el.style.display) {
+            el.style.display = "block";
+            btn.innerHTML = '<span class="btn-icon">📖</span><span class="btn-text">Скрыть шаги</span>';
+            btn.classList.add('active');
+        } else {
+            el.style.display = "none";
+            btn.innerHTML = '<span class="btn-icon">📖</span><span class="btn-text">Шаги приготовления</span>';
+            btn.classList.remove('active');
+        }
+    }
+
+    function toggleCommentForm(index) {
+        const formContainer = document.getElementById("comment-form-" + index);
+        const commentSection = document.getElementById("comment-" + index);
+        const btn = document.querySelector(`[onclick="toggleCommentForm(${index})"]`);
+        
+        if (formContainer.style.display === "none" || !formContainer.style.display) {
+            formContainer.style.display = "block";
+            if (commentSection) {
+                commentSection.style.display = "none";
+            }
+            btn.innerHTML = '<span class="btn-icon">💬</span><span class="btn-text">Скрыть форму</span>';
+            btn.classList.add('active');
+        } else {
+            formContainer.style.display = "none";
+            if (commentSection) {
+                commentSection.style.display = "block";
+            }
+            updateCommentButton(index);
+            btn.classList.remove('active');
+        }
+    }
+
+    function updateCommentButton(index) {
+        const btn = document.querySelector(`[onclick="toggleCommentForm(${index})"]`);
+        const commentText = document.getElementById(`comment-${index}-input`).value;
+        
+        if (commentText.trim()) {
+            btn.innerHTML = '<span class="btn-icon">💬</span><span class="btn-text">Изменить комментарий</span>';
+        } else {
+            btn.innerHTML = '<span class="btn-icon">💬</span><span class="btn-text">Добавить комментарий</span>';
+        }
+    }
+
+    async function deleteComment(historyId, index) {
+        if (!confirm('Вы уверены, что хотите удалить комментарий?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/history/comment/${historyId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Ошибка при удалении комментария');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ошибка при удалении комментария');
+        }
+    }
+
+    document.querySelectorAll('.comment-form').forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('.save-comment-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="btn-icon">⏳</span> Сохраняем...';
+
+            try {
+                const formData = new FormData(this);
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const errorData = await response.json();
+                    alert('Ошибка при сохранении комментария: ' + (errorData.detail || 'Неизвестная ошибка'));
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ошибка при сохранении комментария');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const stepsContainers = document.querySelectorAll('.steps-container');
+        stepsContainers.forEach(container => {
+            container.style.display = 'none';
+        });
+
+        const commentForms = document.querySelectorAll('.comment-form-container');
+        commentForms.forEach(form => {
+            form.style.display = 'none';
+        });
+    });
+
+    document.querySelectorAll('.favorite-btn, .comment-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+    </script>
+</body>
+</html>

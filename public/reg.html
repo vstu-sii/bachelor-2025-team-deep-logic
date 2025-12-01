@@ -1,0 +1,248 @@
+!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-header h2 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input:hover {
+            border-color: #c8d0e7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 30px 25px;
+            }
+            
+            .auth-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>   
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>Создайте аккаунт</h2>
+            <p>Заполните данные для регистрации</p>
+        </div>
+        
+        <form method="post" action="/reg">
+            <div class="form-group">
+                <label for="name">ФИО</label>
+                <input 
+                    id="name" 
+                    type="text" 
+                    name="name" 
+                    placeholder="Введите ваше полное имя" 
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input 
+                    id="email" 
+                    type="email" 
+                    name="email" 
+                    placeholder="your@email.com" 
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input 
+                    id="password" 
+                    type="password" 
+                    name="password" 
+                    placeholder="Создайте надежный пароль" 
+                    required
+                >
+                <button type="button" class="password-toggle">👁️</button>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Подтвердите пароль</label>
+                <input 
+                    id="confirm-password" 
+                    type="password" 
+                    name="confirm-password" 
+                    placeholder="Повторите ваш пароль" 
+                    required
+                >
+                <button type="button" class="password-toggle">👁️</button>
+            </div>
+            
+            <button type="submit" class="submit-btn">Зарегистрироваться</button>
+            
+            <div class="register-link">
+                <a href="/">Уже есть аккаунт? Войти</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Функциональность показа/скрытия пароля для всех полей
+        document.querySelectorAll('.password-toggle').forEach((toggle, index) => {
+            toggle.addEventListener('click', function() {
+                const passwordInputs = document.querySelectorAll('input[type="password"]');
+                const input = passwordInputs[index];
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                toggle.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            });
+        });
+
+        // Проверка совпадения паролей
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Пароли не совпадают!');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('Пароль должен содержать минимум 6 символов!');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

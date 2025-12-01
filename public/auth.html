@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-header h2 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input:hover {
+            border-color: #c8d0e7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .error-message.hidden {
+            display: none;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 30px 25px;
+            }
+            
+            .auth-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>Добро пожаловать</h2>
+            <p>Введите данные для авторизации</p>
+        </div>
+
+        <!-- Блок для отображения ошибки -->
+        <div id="errorMessage" class="error-message {% if not error %}hidden{% endif %}">
+            {% if error %}
+                {{ error }}
+            {% endif %}
+        </div>
+        
+        <form method="post" action="/auth">
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input 
+                    id="email" 
+                    type="email" 
+                    name="email" 
+                    placeholder="your@email.com" 
+                    required
+                    value="{{ email if email else '' }}"
+                >
+            </div>
+            
+            <div class="form-group password-container">
+                <label for="password">Пароль</label>
+                <input 
+                    id="password" 
+                    type="password" 
+                    name="password" 
+                    placeholder="Введите ваш пароль" 
+                    required
+                >
+            </div>
+            
+            <button type="submit" class="submit-btn">Войти в систему</button>
+            
+            <div class="register-link">
+                <a href="/registration">Нет аккаунта? Зарегистрироваться</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Добавляем функциональность показа/скрытия пароля
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.createElement('button');
+        passwordToggle.type = 'button';
+        passwordToggle.className = 'password-toggle';
+        passwordToggle.textContent = '👁️';
+        passwordToggle.style.background = 'none';
+        passwordToggle.style.border = 'none';
+        passwordToggle.style.cursor = 'pointer';
+        passwordToggle.style.fontSize = '16px';
+        
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            passwordToggle.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+        });
+
+        // Вставляем кнопку переключения видимости пароля
+        passwordInput.parentNode.style.position = 'relative';
+        passwordInput.parentNode.appendChild(passwordToggle);
+
+        // Автоматически скрываем ошибку через 5 секунд
+        const errorMessage = document.getElementById('errorMessage');
+        if (errorMessage && !errorMessage.classList.contains('hidden')) {
+            setTimeout(() => {
+                errorMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Очищаем ошибку при начале ввода
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (errorMessage && !errorMessage.classList.contains('hidden')) {
+                    errorMessage.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

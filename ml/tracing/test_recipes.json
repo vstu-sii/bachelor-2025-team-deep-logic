@@ -1,0 +1,52 @@
+[
+  {
+    "ingredients": [{"name": "картофель"}, {"name": "молоко"}, {"name": "курица"}],
+    "dietary": "лактоза",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "куриная грудка"}, {"name": "рис"}, {"name": "брокколи"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "макароны"}, {"name": "фарш"}, {"name": "чеснок"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "лосось"}, {"name": "огурцы"}, {"name": "помидоры"}],
+    "dietary": "рыба",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "фасоль"}, {"name": "нут"}, {"name": "курица"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "говядина"}, {"name": "картофель"}, {"name": "морковь"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "яйца"}, {"name": "сыр"}, {"name": "помидоры"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "макароны"}, {"name": "сыр пармезан"}, {"name": "говядина"}],
+    "dietary": "глютен",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "огурцы"}, {"name": "морковь"}, {"name": "брокколи"}, {"name": "курица"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  },
+  {
+    "ingredients": [{"name": "сметана"}, {"name": "грибы"}, {"name": "картофель"}],
+    "dietary": "нет",
+    "user_feedback": "нет"
+  }
+]
