@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Стили для страницы рецептов */
+        .products-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .products-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .product-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .product-icon {
+            font-size: 16px;
+        }
+
+        /* Секция рецептов */
+        .recipes-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .recipe-card {
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipe-main {
+            padding: 25px;
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .recipe-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+            flex: 1;
+        }
+
+        .toggle-recipe-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            background: white;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .toggle-recipe-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .toggle-recipe-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Шаги рецепта */
+        .recipe-steps {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .steps-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .steps-header h4 {
+            color: #333;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .steps-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .progress-text {
+            color: #666;
+        }
+
+        .progress-value {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        /* Список шагов */
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .step-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            margin: 0;
+            width: 100%;
+        }
+
+        .step-checkbox input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-top: 2px;
+            position: relative;
+        }
+
+        .step-checkbox input[type="checkbox"]:checked + .checkmark {
+            background: #28a745;
+            border-color: #28a745;
+        }
+
+        .step-checkbox input[type="checkbox"]:checked + .checkmark::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .step-text {
+            color: #333;
+            line-height: 1.5;
+            flex: 1;
+            margin: 0;
+        }
+
+        .step-checkbox input[type="checkbox"]:checked ~ .step-text {
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        /* Действия формы */
+        .form-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e1e5e9;
+            text-align: center;
+        }
+
+        .complete-btn {
+            padding: 16px 32px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .complete-btn:hover {
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Навигация */
+        .navigation-footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        /* Анимации */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .recipe-card {
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .step-item {
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .recipe-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .toggle-recipe-btn {
+                align-self: flex-start;
+            }
+            
+            .steps-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .products-grid {
+                justify-content: center;
+            }
+            
+            .recipe-main {
+                padding: 20px;
+            }
+            
+            .recipes-section {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-tag {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .step-item {
+                padding: 12px;
+            }
+            
+            .step-checkbox {
+                gap: 10px;
+            }
+            
+            .recipe-main {
+                padding: 15px;
+            }
+            
+            .recipes-section {
+                padding: 15px;
+            }
+        }
+
+        /* Эффекты для завершенных шагов */
+        .step-checkbox input[type="checkbox"]:checked ~ .step-text {
+            opacity: 0.7;
+        }
+
+        .step-checkbox input[type="checkbox"]:checked ~ .checkmark {
+            animation: bounce 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        /* Стили для удаленных запрещенных продуктов */
+        .removed-section {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            border-left: 4px solid #dc3545;
+        }
+
+        .removed-section .section-header h2 {
+            color: #dc3545;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .removed-section .section-header p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .products-grid.removed {
+            margin-top: 15px;
+        }
+
+        .product-tag.removed {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            opacity: 0.9;
+            border: 1px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>🍽️ Результаты распознавания</h1>
+            <p>Анализ фото: {{ filename }}</p>
+        </div>
+
+        <div class="content-section">
+            <!-- Секция распознанных продуктов -->
+            <div class="products-section">
+                <div class="section-header">
+                    <h2>🛒 Распознанные продукты</h2>
+                </div>
+                <div class="products-grid">
+                    {% for product in products %}
+                    <div class="product-tag">
+                        <span class="product-icon">🥬</span>
+                        {{ product }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if has_removed_products %}
+            <div class="removed-section">
+                <div class="section-header">
+                    <h2>🚫 Удаленные запрещенные продукты</h2>
+                    <p>Эти продукты были исключены из подбора рецептов согласно вашим настройкам</p>
+                </div>
+                <div class="products-grid removed">
+                    {% for product in removed_products %}
+                    <div class="product-tag removed">
+                        <span class="product-icon">❌</span>
+                        {{ product }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <!-- Секция рецептов -->
+            <div class="recipes-section">
+                <div class="section-header">
+                    <h2>📋 Подобранные рецепты</h2>
+                    <p>Выберите рецепт и отмечайте выполненные шаги</p>
+                </div>
+
+                <form method="post" action="/complete-recipe/{{ filename }}" class="recipes-form">
+                    <div class="recipes-list">
+                        {% for recipe in recipes %}
+                        {% set recipe_idx = loop.index0 %}
+                        <div class="recipe-card">
+                            <div class="recipe-main">
+                                <div class="recipe-header">
+                                    <h3 class="recipe-title">{{ recipe.title }}</h3>
+                                    <button type="button" class="toggle-recipe-btn" onclick="toggleSteps({{ recipe_idx }})">
+                                        <span class="btn-icon">📖</span>
+                                        <span class="btn-text">Развернуть рецепт</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="recipe-steps" id="steps-{{ recipe_idx }}">
+                                    <div class="steps-header">
+                                        <h4>Шаги приготовления:</h4>
+                                        <div class="steps-progress">
+                                            <span class="progress-text">Прогресс: </span>
+                                            <span class="progress-value" id="progress-{{ recipe_idx }}">0%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="steps-list">
+                                        {% for step in recipe.steps.split('\n') %}
+                                        {% if step.strip() %}
+                                        <div class="step-item">
+                                            <label class="step-checkbox">
+                                                <input type="checkbox" 
+                                                       name="completed_steps_{{ recipe_idx }}" 
+                                                       value="{{ loop.index0 }}"
+                                                       onchange="updateProgress({{ recipe_idx }}, {{ recipe.steps.split('\n')|length }})">
+                                                <span class="checkmark"></span>
+                                                <span class="step-text">{{ loop.index }}. {{ step.strip() }}</span>
+                                            </label>
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn complete-btn">
+                            <span class="btn-icon">✅</span>
+                            Отметить выбранные рецепты как выполненные
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Навигация -->
+            <div class="navigation-footer">
+                <a href="/result" class="nav-link">
+                    <span class="nav-icon">📷</span>
+                    Загрузить другое фото
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function toggleSteps(index) {
+        const el = document.getElementById("steps-" + index);
+        const btn = el.parentElement.querySelector('.toggle-recipe-btn');
+        
+        if (el.style.display === "none" || !el.style.display) {
+            el.style.display = "block";
+            btn.innerHTML = '<span class="btn-icon">📖</span><span class="btn-text">Свернуть рецепт</span>';
+            btn.classList.add('active');
+        } else {
+            el.style.display = "none";
+            btn.innerHTML = '<span class="btn-icon">📖</span><span class="btn-text">Развернуть рецепт</span>';
+            btn.classList.remove('active');
+        }
+    }
+
+    function updateProgress(recipeIndex, totalSteps) {
+        const checkboxes = document.querySelectorAll(`input[name="completed_steps_${recipeIndex}"]`);
+        let completed = 0;
+        
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) completed++;
+        });
+        
+        const progress = Math.round((completed / totalSteps) * 100);
+        document.getElementById(`progress-${recipeIndex}`).textContent = `${progress}%`;
+        
+        // Обновляем цвет прогресса
+        const progressElement = document.getElementById(`progress-${recipeIndex}`);
+        if (progress === 100) {
+            progressElement.style.color = '#28a745';
+            progressElement.style.fontWeight = 'bold';
+        } else if (progress > 50) {
+            progressElement.style.color = '#ffc107';
+        } else {
+            progressElement.style.color = '#dc3545';
+        }
+    }
+
+    // Закрывать все рецепты при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        const stepsContainers = document.querySelectorAll('.recipe-steps');
+        stepsContainers.forEach(container => {
+            container.style.display = 'none';
+        });
+        
+        // Инициализируем прогресс для всех рецептов
+        {% for recipe in recipes %}
+        updateProgress({{ loop.index0 }}, {{ recipe.steps.split('\n')|length }});
+        {% endfor %}
+    });
+
+    // Подтверждение отправки формы
+    document.querySelector('.recipes-form').addEventListener('submit', function(e) {
+        const checkedRecipes = document.querySelectorAll('input[type="checkbox"]:checked');
+        if (checkedRecipes.length === 0) {
+            e.preventDefault();
+            alert('Пожалуйста, отметьте хотя бы один выполненный шаг перед отправкой.');
+            return false;
+        }
+    });
+    </script>
+</body>
+</html>
