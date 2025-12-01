@@ -1,8 +1,9 @@
 import asyncio
 import json
 import logging
+import time
 from pathlib import Path
-from ml.models.baseline import LLaVAVision
+from ml.service.baseline import LLaVAVision
 import aio_pika
 
 logging.basicConfig(
