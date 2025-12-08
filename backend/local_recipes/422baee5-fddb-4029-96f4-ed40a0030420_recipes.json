@@ -1,0 +1,179 @@
+{
+  "ingredients": [
+    {
+      "name": {
+        "name": "яблоко"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Яблочный пирог",
+      "ingredients": [
+        {
+          "name": "яблоко",
+          "amount": "3 штуки"
+        },
+        {
+          "name": "мука",
+          "amount": "200 грамм"
+        },
+        {
+          "name": "сахар",
+          "amount": "150 грамм"
+        },
+        {
+          "name": "масло",
+          "amount": "100 грамм"
+        },
+        {
+          "name": "яйца",
+          "amount": "2 штуки"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте яблоки на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Смешайте муку, сахар и масло до образования крошки."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте яйца и перемешайте до однородной массы."
+        },
+        {
+          "order": 4,
+          "instruction": "Выложите тесто в форму, сверху разложите яблоки."
+        },
+        {
+          "order": 5,
+          "instruction": "Запеките в духовке при 180 градусах 30 минут."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 650,
+        "protein_g": 10,
+        "fat_g": 30,
+        "carb_g": 80
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Яблочный сок",
+      "ingredients": [
+        {
+          "name": "яблоко",
+          "amount": "5 штук"
+        },
+        {
+          "name": "вода",
+          "amount": "1 литр"
+        },
+        {
+          "name": "сахар",
+          "amount": "100 грамм"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте яблоки на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Поместите яблоки в кастрюлю и залейте водой."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте сахар и доведите до кипения."
+        },
+        {
+          "order": 4,
+          "instruction": "Варите 20 минут на медленном огне."
+        },
+        {
+          "order": 5,
+          "instruction": "Процедите сок через сито или марлю."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 700,
+        "protein_g": 2,
+        "fat_g": 0,
+        "carb_g": 180
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Яблочный компот",
+      "ingredients": [
+        {
+          "name": "яблоко",
+          "amount": "4 штуки"
+        },
+        {
+          "name": "вода",
+          "amount": "1 литр"
+        },
+        {
+          "name": "сахар",
+          "amount": "150 грамм"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте яблоки на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Поместите яблоки в кастрюлю и залейте водой."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте сахар и доведите до кипения."
+        },
+        {
+          "order": 4,
+          "instruction": "Варите 15 минут на медленном огне."
+        },
+        {
+          "order": 5,
+          "instruction": "Охладите и процедите через сито или марлю."
+        }
+      ],
+      "cooking_time": 15,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 600,
+        "protein_g": 1,
+        "fat_g": 0,
+        "carb_g": 150
+      },
+      "calorie_level": "высококалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_b",
+  "queued_at": null,
+  "completed_at": null,
+  "vlm_duration_sec": null,
+  "recipe_queued_at": 1765025874.9811249,
+  "recipe_completed_at": 1765025884.3136153,
+  "recipe_duration_sec": 9.337,
+  "saved_to": "recipes\\422baee5-fddb-4029-96f4-ed40a0030420_recipes.json"
+}

@@ -1,0 +1,167 @@
+{
+  "ingredients": [
+    {
+      "name": {
+        "name": "яблоко"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Запеченные яблоки с корицей",
+      "ingredients": [
+        {
+          "name": "яблоко",
+          "amount": "2 штуки"
+        },
+        {
+          "name": "корица",
+          "amount": "1 чайная ложка"
+        },
+        {
+          "name": "мед",
+          "amount": "1 столовая ложка"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте духовку до 180 градусов Цельсия."
+        },
+        {
+          "order": 2,
+          "instruction": "Вырежьте сердцевину из яблок и сделайте небольшие углубления."
+        },
+        {
+          "order": 3,
+          "instruction": "Посыпьте яблоки корицей и полейте медом."
+        },
+        {
+          "order": 4,
+          "instruction": "Запекайте в духовке в течение 20 минут."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 150,
+        "protein_g": 1,
+        "fat_g": 0,
+        "carb_g": 38
+      },
+      "calorie_level": "низкокалорийное"
+    },
+    {
+      "name": "Яблочный салат с грецкими орехами",
+      "ingredients": [
+        {
+          "name": "яблоко",
+          "amount": "2 штуки"
+        },
+        {
+          "name": "грецкие орехи",
+          "amount": "30 грамм"
+        },
+        {
+          "name": "лимонный сок",
+          "amount": "1 столовая ложка"
+        },
+        {
+          "name": "мед",
+          "amount": "1 столовая ложка"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте яблоки на кубики."
+        },
+        {
+          "order": 2,
+          "instruction": "Полейте яблоки лимонным соком, чтобы они не потемнели."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте нарезанные грецкие орехи."
+        },
+        {
+          "order": 4,
+          "instruction": "Полейте салат медом и перемешайте."
+        }
+      ],
+      "cooking_time": 10,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 200,
+        "protein_g": 3,
+        "fat_g": 10,
+        "carb_g": 25
+      },
+      "calorie_level": "низкокалорийное"
+    },
+    {
+      "name": "Яблочный смузи",
+      "ingredients": [
+        {
+          "name": "яблоко",
+          "amount": "2 штуки"
+        },
+        {
+          "name": "вода",
+          "amount": "1 стакан"
+        },
+        {
+          "name": "мед",
+          "amount": "1 столовая ложка"
+        },
+        {
+          "name": "лимонный сок",
+          "amount": "1 столовая ложка"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте яблоки на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Полейте яблоки лимонным соком."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте воду и мед."
+        },
+        {
+          "order": 4,
+          "instruction": "Взбейте все в блендере до однородной массы."
+        }
+      ],
+      "cooking_time": 5,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 120,
+        "protein_g": 1,
+        "fat_g": 0,
+        "carb_g": 30
+      },
+      "calorie_level": "низкокалорийное"
+    }
+  ],
+  "feedback_used": "нет",
+  "preferred_calorie_level": "Низкокалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "легко",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_a",
+  "queued_at": null,
+  "completed_at": null,
+  "vlm_duration_sec": null,
+  "recipe_queued_at": 1765025151.423706,
+  "recipe_completed_at": 1765025158.278461,
+  "recipe_duration_sec": 6.855,
+  "saved_to": "recipes\\bc1a6a9c-1571-429b-b8e4-5fc555340ba3_recipes.json"
+}

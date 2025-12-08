@@ -1,0 +1,206 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "брокколи"
+      },
+      {
+        "name": "курица"
+      },
+      {
+        "name": "сыр"
+      },
+      {
+        "name": "вода"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Жареная курица с картофелем",
+      "ingredients": [
+        {
+          "name": "курица",
+          "amount": "500 г"
+        },
+        {
+          "name": "картофель",
+          "amount": "600 г"
+        },
+        {
+          "name": "масло растительное",
+          "amount": "3 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Курицу нарезать на кусочки, посолить и поперчить."
+        },
+        {
+          "order": 2,
+          "instruction": "Картофель очистить и нарезать на кубики."
+        },
+        {
+          "order": 3,
+          "instruction": "Разогреть масло на сковороде и обжарить курицу до золотистой корочки."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавить картофель и жарить до готовности, периодически перемешивая."
+        }
+      ],
+      "cooking_time": 35,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 700,
+        "protein_g": 45,
+        "fat_g": 35,
+        "carb_g": 50
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Тушеная говядина с овощами",
+      "ingredients": [
+        {
+          "name": "говядина",
+          "amount": "500 г"
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "морковь",
+          "amount": "2 шт."
+        },
+        {
+          "name": "томатная паста",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "масло растительное",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Говядину нарезать на кусочки и обжарить на растительном масле."
+        },
+        {
+          "order": 2,
+          "instruction": "Лук и морковь нарезать и добавить к говядине."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавить томатную пасту, соль и перец."
+        },
+        {
+          "order": 4,
+          "instruction": "Залить водой и тушить на медленном огне до готовности."
+        }
+      ],
+      "cooking_time": 45,
+      "difficulty": "средне",
+      "cooking_speed": "долго",
+      "calorie_content": {
+        "kcal": 650,
+        "protein_g": 50,
+        "fat_g": 30,
+        "carb_g": 40
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Запеченная рыба с картофелем",
+      "ingredients": [
+        {
+          "name": "рыба",
+          "amount": "500 г"
+        },
+        {
+          "name": "картофель",
+          "amount": "600 г"
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "масло растительное",
+          "amount": "3 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Рыбу почистить и нарезать на порции."
+        },
+        {
+          "order": 2,
+          "instruction": "Картофель очистить и нарезать на кубики."
+        },
+        {
+          "order": 3,
+          "instruction": "Лук нарезать и смешать с картофелем."
+        },
+        {
+          "order": 4,
+          "instruction": "Разогреть духовку до 180 градусов."
+        },
+        {
+          "order": 5,
+          "instruction": "Смазать противень маслом, выложить рыбу и картофель, посолить и поперчить."
+        },
+        {
+          "order": 6,
+          "instruction": "Запекать в духовке около 30 минут."
+        }
+      ],
+      "cooking_time": 40,
+      "difficulty": "средне",
+      "cooking_speed": "долго",
+      "calorie_content": {
+        "kcal": 600,
+        "protein_g": 40,
+        "fat_g": 25,
+        "carb_g": 50
+      },
+      "calorie_level": "высококалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\1cee62db-278d-4afe-bf5d-3d264998f83f_recipes.json",
+  "prompt_version": "llm_b"
+}

@@ -1,0 +1,204 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "яйца"
+      },
+      {
+        "name": "курица"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Овощное рагу",
+      "ingredients": [
+        {
+          "name": "лук",
+          "amount": "1 шт"
+        },
+        {
+          "name": "морковь",
+          "amount": "2 шт"
+        },
+        {
+          "name": "кабачки",
+          "amount": "2 шт"
+        },
+        {
+          "name": "помидоры",
+          "amount": "3 шт"
+        },
+        {
+          "name": "растительное масло",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте лук и морковь кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте кабачки и помидоры кубиками."
+        },
+        {
+          "order": 3,
+          "instruction": "Разогрейте масло на сковороде и обжарьте лук и морковь до мягкости."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте кабачки и помидоры, тушите 20 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Посолите и поперчите по вкусу."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 150,
+        "protein_g": 3,
+        "fat_g": 8,
+        "carb_g": 18
+      },
+      "calorie_level": "низкокалорийное"
+    },
+    {
+      "name": "Запеченный картофель с зеленью",
+      "ingredients": [
+        {
+          "name": "картофель",
+          "amount": "4 шт"
+        },
+        {
+          "name": "зелень",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте духовку до 200 градусов."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте картофель на дольки."
+        },
+        {
+          "order": 3,
+          "instruction": "Смешайте картофель с оливковым маслом, солью и перцем."
+        },
+        {
+          "order": 4,
+          "instruction": "Выложите картофель на противень и запекайте 30 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Перед подачей посыпьте зеленью."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 200,
+        "protein_g": 4,
+        "fat_g": 6,
+        "carb_g": 35
+      },
+      "calorie_level": "среднекалорийное"
+    },
+    {
+      "name": "Тушеная капуста с морковью",
+      "ingredients": [
+        {
+          "name": "капуста",
+          "amount": "500 г"
+        },
+        {
+          "name": "морковь",
+          "amount": "2 шт"
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт"
+        },
+        {
+          "name": "растительное масло",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте капусту тонкими полосками."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте лук и морковь кубиками."
+        },
+        {
+          "order": 3,
+          "instruction": "Разогрейте масло на сковороде и обжарьте лук и морковь до мягкости."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте капусту и тушите 30 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Посолите и поперчите по вкусу."
+        }
+      ],
+      "cooking_time": 40,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 120,
+        "protein_g": 5,
+        "fat_g": 4,
+        "carb_g": 18
+      },
+      "calorie_level": "низкокалорийное"
+    }
+  ],
+  "feedback_used": "нет",
+  "preferred_calorie_level": "нет",
+  "preferred_cooking_time": "нет",
+  "preferred_difficulty": null,
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\ba70d476-d581-4b44-a3bb-81965575e621_recipes.json",
+  "prompt_version": "llm_b"
+}

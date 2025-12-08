@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-header h2 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input:hover {
+            border-color: #c8d0e7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 30px 25px;
+            }
+            
+            .auth-header h2 {
+                font-size: 24px;
+            }
+        }
+        /* Стили для главной страницы */
+    .main-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 30px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .header h1 {
+        color: #333;
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        color: #666;
+        font-size: 18px;
+    }
+
+    /* Навигация */
+    .navigation {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 15px 25px;
+        background: white;
+        border: 2px solid #e1e5e9;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        min-width: 140px;
+        justify-content: center;
+    }
+
+    .nav-link:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-icon {
+        font-size: 20px;
+    }
+
+    /* Секция загрузки */
+    .upload-section {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* Загрузка файла */
+    .file-upload {
+        position: relative;
+    }
+
+    .file-upload input[type="file"] {
+        position: absolute;
+        left: -9999px;
+    }
+
+    .file-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        border: 3px dashed #e1e5e9;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        text-align: center;
+    }
+
+    .file-label:hover {
+        border-color: #667eea;
+        background: #f0f4ff;
+    }
+
+    .file-label.drag-over {
+        border-color: #667eea;
+        background: #e8f0fe;
+    }
+
+    .upload-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: #667eea;
+    }
+
+    .upload-text {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .file-info {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Предпросмотр */
+    .preview-container {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #f8f9fa;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #image-preview {
+        max-width: 100%;
+        max-height: 400px;
+        display: none;
+        border-radius: 10px;
+    }
+
+    .preview-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 16px;
+        padding: 40px;
+    }
+
+    /* Кнопка загрузки */
+    .upload-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 18px;
+        font-size: 18px;
+    }
+
+    .btn-icon {
+        font-size: 20px;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .main-container {
+            padding: 20px;
+        }
+        
+        .navigation {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .nav-link {
+            width: 100%;
+            max-width: 250px;
+        }
+        
+        .upload-section {
+            padding: 25px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+        }
+        
+        .header p {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-container {
+            padding: 15px;
+        }
+        
+        .upload-section {
+            padding: 20px;
+        }
+        
+        .file-label {
+            padding: 30px 20px;
+        }
+        
+        .upload-icon {
+            font-size: 36px;
+        }
+        
+        .upload-text {
+            font-size: 16px;
+        }
+    }
+    /* Стили для страницы избранного */
+    .content-section {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .recipes-grid {
+        display: grid;
+        gap: 25px;
+    }
+
+    .recipe-card {
+        border: 2px solid #e1e5e9;
+        border-radius: 15px;
+        padding: 25px;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+
+    .recipe-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .recipe-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+
+    .recipe-title {
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        flex: 1;
+    }
+
+    .recipe-actions {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .toggle-btn, .remove-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        background: white;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .toggle-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-1px);
+    }
+
+    .toggle-btn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+    }
+
+    .remove-btn {
+        border-color: #ff6b6b;
+        color: #dc3545;
+    }
+
+    .remove-btn:hover {
+        background: #dc3545;
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .btn-icon {
+        font-size: 16px;
+    }
+
+    /* Контейнер шагов */
+    .steps-container {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 15px;
+        border-left: 4px solid #667eea;
+    }
+
+    .steps-header h4 {
+        color: #333;
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .steps-list {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .step-item {
+        color: #555;
+        margin-bottom: 12px;
+        line-height: 1.5;
+        padding-left: 5px;
+    }
+
+    .step-item:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Состояние пустого списка */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+
+    .empty-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+        margin-bottom: 30px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Навигация в футере */
+    .navigation-footer {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        color: white;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .recipe-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 15px;
+        }
+        
+        .recipe-actions {
+            justify-content: flex-start;
+        }
+        
+        .content-section {
+            padding: 20px;
+        }
+        
+        .recipe-card {
+            padding: 20px;
+        }
+        
+        .empty-state {
+            padding: 40px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .recipe-actions {
+            flex-direction: column;
+        }
+        
+        .toggle-btn, .remove-btn {
+            justify-content: center;
+        }
+        
+        .content-section {
+            padding: 15px;
+        }
+        
+        .recipe-card {
+            padding: 15px;
+        }
+        
+        .steps-container {
+            padding: 15px;
+        }
+    }
+
+    /* Анимации */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .recipe-card {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .steps-container {
+        animation: fadeIn 0.3s ease-out;
+    }
+    /* Стили для страницы истории */
+    .recipe-meta {
+        margin-top: 10px;
+    }
+
+    .favorite-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        font-size: 14px;
+        color: #666;
+        border: 1px solid #e1e5e9;
+    }
+
+    .favorite-status.favorited {
+        background: #fff3cd;
+        color: #856404;
+        border-color: #ffeaa7;
+    }
+
+    /* Кнопка избранного */
+    .favorite-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        background: white;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .favorite-btn:hover {
+        border-color: #ffd700;
+        color: #b8860b;
+        transform: translateY(-1px);
+    }
+
+    .favorite-btn.favorited {
+        background: #fff3cd;
+        border-color: #ffd700;
+        color: #856404;
+    }
+
+    .favorite-btn.favorited:hover {
+        background: #ffeaa7;
+        border-color: #ffc400;
+    }
+
+    /* Анимация для карточек */
+    .recipe-card {
+        animation: slideInUp 0.5s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Улучшенные стили для сетки рецептов */
+    .recipes-grid {
+        display: grid;
+        gap: 25px;
+    }
+
+    .recipe-card {
+        border: 2px solid #e1e5e9;
+        border-radius: 15px;
+        padding: 25px;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .recipe-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .recipe-header {
+        margin-bottom: 20px;
+    }
+
+    .recipe-title {
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 10px 0;
+    }
+
+    .recipe-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        background: white;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .toggle-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-1px);
+    }
+
+    .toggle-btn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+    }
+
+    /* Контейнер шагов */
+    .steps-container {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 20px;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .steps-header h4 {
+        color: #333;
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+    }
+
+    .steps-list {
+        margin: 0;
+        padding-left: 25px;
+    }
+
+    .step-item {
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        padding-left: 8px;
+        font-size: 15px;
+    }
+
+    .step-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .step-item::marker {
+        color: #667eea;
+        font-weight: bold;
+    }
+
+    /* Состояние пустого списка */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        font-size: 72px;
+        margin-bottom: 25px;
+        opacity: 0.7;
+    }
+
+    .empty-state h3 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        font-size: 17px;
+        margin-bottom: 30px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.5;
+    }
+
+    /* Навигация в футере */
+    .navigation-footer {
+        margin-top: 40px;
+        text-align: center;
+        padding-top: 30px;
+        border-top: 1px solid #e1e5e9;
+    }
+
+    .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        color: white;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .recipe-actions {
+            flex-direction: column;
+        }
+        
+        .toggle-btn, .favorite-btn {
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .recipe-header {
+            text-align: center;
+        }
+        
+        .content-section {
+            padding: 20px;
+        }
+        
+        .recipe-card {
+            padding: 20px;
+        }
+        
+        .empty-state {
+            padding: 40px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 56px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .content-section {
+            padding: 15px;
+        }
+        
+        .recipe-card {
+            padding: 15px;
+        }
+        
+        .steps-container {
+            padding: 20px;
+        }
+        
+        .steps-list {
+            padding-left: 20px;
+        }
+        
+        .step-item {
+            font-size: 14px;
+        }
+        
+        .empty-state h3 {
+            font-size: 22px;
+        }
+        
+        .empty-state p {
+            font-size: 15px;
+        }
+    }
+
+    /* Индикатор загрузки для форм */
+    .favorite-form {
+        position: relative;
+    }
+
+    .favorite-form.loading button {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .favorite-form.loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    /* Стили для страницы профиля */
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .profile-section {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+        margin-bottom: 25px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+    }
+
+    .section-header h2 {
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+    }
+
+    .section-header p {
+        color: #666;
+        margin: 0;
+        font-size: 15px;
+    }
+
+    /* Информация о пользователе */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .info-value {
+        color: #333;
+        font-size: 16px;
+        margin: 0;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+    }
+
+    /* Форма запрещенных продуктов */
+    .forbidden-form {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .form-input, .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .form-input:focus, .form-select:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-input:hover, .form-select:hover {
+        border-color: #c8d0e7;
+    }
+
+    /* Сетка запрещенных продуктов */
+    .forbidden-list h3 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e1e5e9;
+        transition: all 0.3s ease;
+    }
+
+    .product-item:hover {
+        border-color: #ff6b6b;
+        background: #fff5f5;
+    }
+
+    .product-name {
+        color: #333;
+        font-weight: 500;
+        flex: 1;
+    }
+
+    .remove-btn-small {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border: none;
+        background: #ff6b6b;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 30px;
+        height: 30px;
+    }
+
+    .remove-btn-small:hover {
+        background: #dc3545;
+        transform: scale(1.1);
+    }
+
+    /* Пустое состояние для запрещенных продуктов */
+    .empty-state-small {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        color: #666;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .empty-state-small .empty-icon {
+        font-size: 20px;
+    }
+
+    .empty-state-small p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* Сетка предпочтений */
+    .preferences-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .preferences-form .form-group {
+        margin-bottom: 0;
+    }
+
+    /* Кнопки */
+    .submit-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        justify-content: center;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Навигация */
+    .navigation-footer {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Анимации */
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .profile-section {
+        animation: fadeInScale 0.5s ease-out;
+    }
+
+    .product-item {
+        animation: fadeInScale 0.3s ease-out;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .profile-section {
+            padding: 20px;
+        }
+        
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .preferences-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .products-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-header h2 {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-section {
+            padding: 15px;
+        }
+        
+        .product-item {
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+        }
+        
+        .remove-btn-small {
+            align-self: center;
+        }
+        
+        .empty-state-small {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    /* Иконки для селектов */
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        padding-right: 40px;
+        appearance: none;
+    }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>👤 Профиль пользователя</h1>
+            <p>Управление вашими настройками и предпочтениями</p>
+        </div>
+
+        <div class="profile-content">
+            <!-- Секция информации о пользователе -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>📋 Основная информация</h2>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label class="info-label">Логин:</label>
+                        <p class="info-value">{{ login }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label class="info-label">Email:</label>
+                        <p class="info-value">{{ email }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Секция запрещенных продуктов -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>🚫 Запрещенные продукты</h2>
+                    <p>Добавьте продукты, которые не должны присутствовать в ваших рецептах</p>
+                </div>
+                
+                <form method="post" action="/profile/forbidden" class="forbidden-form">
+                    <div class="form-group">
+                        <label for="product_title" class="form-label">Название продукта:</label>
+                        <input type="text" name="product_title" id="product_title" 
+                               placeholder="Введите название продукта" required
+                               class="form-input">
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-icon">➕</span>
+                        Добавить запрещённый продукт
+                    </button>
+                </form>
+
+                {% if forbidden_products %}
+                <div class="forbidden-list">
+                    <h3>Ваши запрещённые продукты:</h3>
+                    <div class="products-grid">
+                        {% for product in forbidden_products %}
+                        <div class="product-item">
+                            <span class="product-name">{{ product }}</span>
+                            <form method="post" action="/profile/forbidden/remove" class="remove-form">
+                                <input type="hidden" name="product_title" value="{{ product }}">
+                                <button type="submit" class="remove-btn-small">
+                                    <span class="btn-icon">🗑️</span>
+                                </button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="empty-state-small">
+                    <span class="empty-icon">🍽️</span>
+                    <p>Нет запрещенных продуктов</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Секция предпочтений -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>⚙️ Предпочтения рецептов</h2>
+                    <p>Настройте параметры для подбора идеальных рецептов</p>
+                </div>
+                
+                <form method="post" action="/profile/preferences" class="preferences-form">
+                    <div class="preferences-grid">
+                        <div class="form-group">
+                            <label for="preferences_time" class="form-label">⏱️ Время приготовления:</label>
+                            <select name="preferences_time" id="preferences_time" required class="form-select">
+                                {% for ct in cooking_times %}
+                                <option value="{{ ct[0] }}" {% if ct[0] == current_preferences.preferences_time %}selected{% endif %}>
+                                    {{ ct[1] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="preferences_difficulty" class="form-label">🎯 Сложность:</label>
+                            <select name="preferences_difficulty" id="preferences_difficulty" required class="form-select">
+                                {% for diff in difficulties %}
+                                <option value="{{ diff[0] }}" {% if diff[0] == current_preferences.preferences_difficulty %}selected{% endif %}>
+                                    {{ diff[1] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="preferences_calorie" class="form-label">🔥 Калорийность:</label>
+                            <select name="preferences_calorie" id="preferences_calorie" required class="form-select">
+                                {% for cal in calorie_contents %}
+                                <option value="{{ cal[0] }}" {% if cal[0] == current_preferences.preferences_calorie %}selected{% endif %}>
+                                    {{ cal[1] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-icon">💾</span>
+                        Сохранить предпочтения
+                    </button>
+                </form>
+            </div>
+
+            <!-- Навигация -->
+            <div class="navigation-footer">
+                <a href="/upload" class="nav-link">
+                    <span class="nav-icon">⬅️</span>
+                    На главную
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Анимация для кнопок удаления
+        document.querySelectorAll('.remove-btn-small').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (!confirm('Удалить этот продукт из запрещенных?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Подтверждение сохранения предпочтений
+        document.querySelector('.preferences-form').addEventListener('submit', function(e) {
+            const form = this;
+            const submitBtn = form.querySelector('.submit-btn');
+            
+            submitBtn.innerHTML = '<span class="btn-icon">⏳</span> Сохранение...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<span class="btn-icon">✅</span> Сохранено!';
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<span class="btn-icon">💾</span> Сохранить предпочтения';
+                    submitBtn.disabled = false;
+                }, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

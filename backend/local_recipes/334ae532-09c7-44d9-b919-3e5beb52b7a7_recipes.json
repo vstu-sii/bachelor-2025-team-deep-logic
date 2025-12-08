@@ -1,0 +1,186 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "брокколи"
+      },
+      {
+        "name": "курица"
+      },
+      {
+        "name": "сыр"
+      },
+      {
+        "name": "вода"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Овощное рагу",
+      "ingredients": [
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "морковь",
+          "amount": "2 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "томатный сок",
+          "amount": "200 мл"
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "2 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте кабачки, морковь и лук кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте оливковое масло на сковороде и обжарьте лук до прозрачности."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте морковь и кабачки, обжарьте 5 минут."
+        },
+        {
+          "order": 4,
+          "instruction": "Влейте томатный сок, накройте крышкой и тушите 20 минут на среднем огне."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 250,
+        "protein_g": 6,
+        "fat_g": 12,
+        "carb_g": 25
+      },
+      "calorie_level": "среднекалорийное"
+    },
+    {
+      "name": "Запеченные кабачки с сыром",
+      "ingredients": [
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "сыр",
+          "amount": "100 г"
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "1 ст. л."
+        },
+        {
+          "name": "чеснок",
+          "amount": "2 зубчика"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте духовку до 180°C."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте кабачки кружками и выложите на противень."
+        },
+        {
+          "order": 3,
+          "instruction": "Полите кабачки оливковым маслом и посыпьте нарезанным чесноком."
+        },
+        {
+          "order": 4,
+          "instruction": "Запекайте 20 минут, затем посыпьте сыром и запекайте еще 10 минут."
+        }
+      ],
+      "cooking_time": 40,
+      "difficulty": "сложно",
+      "cooking_speed": "долго",
+      "calorie_content": {
+        "kcal": 300,
+        "protein_g": 15,
+        "fat_g": 18,
+        "carb_g": 15
+      },
+      "calorie_level": "среднекалорийное"
+    },
+    {
+      "name": "Овощной суп",
+      "ingredients": [
+        {
+          "name": "кабачки",
+          "amount": "1 шт."
+        },
+        {
+          "name": "морковь",
+          "amount": "1 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "томатный сок",
+          "amount": "200 мл"
+        },
+        {
+          "name": "вода",
+          "amount": "500 мл"
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "1 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте кабачки, морковь и лук кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте оливковое масло в кастрюле и обжарьте лук до прозрачности."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте морковь и кабачки, обжарьте 5 минут."
+        },
+        {
+          "order": 4,
+          "instruction": "Влейте томатный сок и воду, доведите до кипения и варите 20 минут на среднем огне."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 150,
+        "protein_g": 4,
+        "fat_g": 6,
+        "carb_g": 18
+      },
+      "calorie_level": "низкокалорийное"
+    }
+  ],
+  "feedback_used": "нет",
+  "preferred_calorie_level": "нет",
+  "preferred_cooking_time": "нет",
+  "preferred_difficulty": null,
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\334ae532-09c7-44d9-b919-3e5beb52b7a7_recipes.json",
+  "prompt_version": "llm_b"
+}

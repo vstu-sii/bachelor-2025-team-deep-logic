@@ -1,0 +1,228 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "брокколи"
+      },
+      {
+        "name": "курица"
+      },
+      {
+        "name": "сыр"
+      },
+      {
+        "name": "вода"
+      },
+      {
+        "name": "коробка для яиц"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Овощное рагу с курицей",
+      "ingredients": [
+        {
+          "name": "куриная грудка",
+          "amount": "300 г"
+        },
+        {
+          "name": "морковь",
+          "amount": "1 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "помидоры",
+          "amount": "2 шт."
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "2 ст. л."
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте куриную грудку на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте морковь, лук, кабачки и помидоры на кусочки."
+        },
+        {
+          "order": 3,
+          "instruction": "Разогрейте оливковое масло на сковороде и обжарьте курицу до золотистой корочки."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте овощи и тушите на среднем огне 20 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Посолите и поперчите по вкусу."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 350,
+        "protein_g": 30,
+        "fat_g": 15,
+        "carb_g": 20
+      },
+      "calorie_level": "среднекалорийное",
+      "notes": ""
+    },
+    {
+      "name": "Запеченные кабачки с сыром",
+      "ingredients": [
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "сыр",
+          "amount": "100 г"
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "2 ст. л."
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте кабачки на кружки."
+        },
+        {
+          "order": 2,
+          "instruction": "Смажьте противень оливковым маслом и выложите на него кабачки."
+        },
+        {
+          "order": 3,
+          "instruction": "Посолите и поперчите кабачки."
+        },
+        {
+          "order": 4,
+          "instruction": "Натрите сыр и посыпьте им кабачки."
+        },
+        {
+          "order": 5,
+          "instruction": "Запекайте в духовке при 180°C 25 минут."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 250,
+        "protein_g": 10,
+        "fat_g": 15,
+        "carb_g": 10
+      },
+      "calorie_level": "низкокалорийное",
+      "notes": ""
+    },
+    {
+      "name": "Куриный суп с овощами",
+      "ingredients": [
+        {
+          "name": "куриная грудка",
+          "amount": "300 г"
+        },
+        {
+          "name": "морковь",
+          "amount": "1 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "кабачки",
+          "amount": "1 шт."
+        },
+        {
+          "name": "помидоры",
+          "amount": "1 шт."
+        },
+        {
+          "name": "вода",
+          "amount": "1 л"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте куриную грудку на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте морковь, лук, кабачки и помидоры на кусочки."
+        },
+        {
+          "order": 3,
+          "instruction": "В кастрюлю налейте воду и доведите до кипения."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте курицу и овощи, варите 20 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Посолите и поперчите по вкусу."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 200,
+        "protein_g": 25,
+        "fat_g": 5,
+        "carb_g": 10
+      },
+      "calorie_level": "низкокалорийное",
+      "notes": ""
+    }
+  ],
+  "feedback_used": "нет",
+  "preferred_calorie_level": "нет",
+  "preferred_cooking_time": "нет",
+  "preferred_difficulty": null,
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\030043e5-4687-4977-8109-726b225718f2_recipes.json",
+  "prompt_version": "llm_b"
+}
