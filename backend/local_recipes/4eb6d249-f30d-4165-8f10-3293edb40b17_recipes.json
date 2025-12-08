@@ -1,0 +1,175 @@
+{
+  "ingredients": [
+    {
+      "name": {
+        "name": "брокколи"
+      }
+    },
+    {
+      "name": {
+        "name": "курица"
+      }
+    },
+    {
+      "name": {
+        "name": "сыр"
+      }
+    },
+    {
+      "name": {
+        "name": "вода"
+      }
+    },
+    {
+      "name": {
+        "name": "коробка для яиц"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Жареная курица с яйцами",
+      "ingredients": [
+        {
+          "name": "курица",
+          "amount": "500 г"
+        },
+        {
+          "name": "яйцо",
+          "amount": "4 шт"
+        },
+        {
+          "name": "вода",
+          "amount": "100 мл"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте курицу на небольшие кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Обжарьте курицу на сковороде до золотистой корочки."
+        },
+        {
+          "order": 3,
+          "instruction": "В отдельной миске взбейте яйца с водой."
+        },
+        {
+          "order": 4,
+          "instruction": "Вылейте яичную смесь на сковороду с курицей и жарьте до готовности."
+        }
+      ],
+      "cooking_time": 25,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 650,
+        "protein_g": 50,
+        "fat_g": 40,
+        "carb_g": 10
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Куриные котлеты",
+      "ingredients": [
+        {
+          "name": "курица",
+          "amount": "500 г"
+        },
+        {
+          "name": "яйцо",
+          "amount": "2 шт"
+        },
+        {
+          "name": "вода",
+          "amount": "50 мл"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Измельчите курицу в мясорубке."
+        },
+        {
+          "order": 2,
+          "instruction": "Добавьте яйца и воду, тщательно перемешайте."
+        },
+        {
+          "order": 3,
+          "instruction": "Сформируйте котлеты и обжарьте их на сковороде до готовности."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 700,
+        "protein_g": 55,
+        "fat_g": 45,
+        "carb_g": 15
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Куриный суп с яйцом",
+      "ingredients": [
+        {
+          "name": "курица",
+          "amount": "500 г"
+        },
+        {
+          "name": "яйцо",
+          "amount": "4 шт"
+        },
+        {
+          "name": "вода",
+          "amount": "1 л"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте курицу на кусочки и положите в кастрюлю с водой."
+        },
+        {
+          "order": 2,
+          "instruction": "Доведите до кипения и варите 20 минут."
+        },
+        {
+          "order": 3,
+          "instruction": "Взбейте яйца и добавьте их в суп, постоянно помешивая."
+        },
+        {
+          "order": 4,
+          "instruction": "Проварите суп еще 5 минут."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 600,
+        "protein_g": 45,
+        "fat_g": 35,
+        "carb_g": 10
+      },
+      "calorie_level": "высококалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи, яблоко",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_a",
+  "queued_at": null,
+  "completed_at": null,
+  "vlm_duration_sec": null,
+  "recipe_queued_at": 1765176903.4566782,
+  "recipe_completed_at": 1765176909.8000627,
+  "recipe_duration_sec": 6.344,
+  "saved_to": "recipes\\4eb6d249-f30d-4165-8f10-3293edb40b17_recipes.json"
+}

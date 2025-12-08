@@ -1,0 +1,178 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "брокколи"
+      },
+      {
+        "name": "курица"
+      },
+      {
+        "name": "сыр"
+      },
+      {
+        "name": "вода"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Жареная курица с картофелем",
+      "ingredients": [
+        {
+          "name": "куриная грудка",
+          "amount": "200 г"
+        },
+        {
+          "name": "картофель",
+          "amount": "300 г"
+        },
+        {
+          "name": "масло растительное",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец черный",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте картофель кубиками и обжарьте на растительном масле до золотистой корочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте куриную грудку на кусочки и обжарьте на том же масле до готовности."
+        },
+        {
+          "order": 3,
+          "instruction": "Посолите и поперчите по вкусу."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 650,
+        "protein_g": 45,
+        "fat_g": 30,
+        "carb_g": 50
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Тушеная говядина с овощами",
+      "ingredients": [
+        {
+          "name": "говядина",
+          "amount": "300 г"
+        },
+        {
+          "name": "лук",
+          "amount": "1 штука"
+        },
+        {
+          "name": "морковь",
+          "amount": "1 штука"
+        },
+        {
+          "name": "масло растительное",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец черный",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте говядину на кусочки и обжарьте на растительном масле."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте лук и морковь, добавьте к говядине и тушите 20 минут."
+        },
+        {
+          "order": 3,
+          "instruction": "Посолите и поперчите по вкусу."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 700,
+        "protein_g": 50,
+        "fat_g": 35,
+        "carb_g": 40
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Запеченная рыба с картофелем",
+      "ingredients": [
+        {
+          "name": "филе рыбы",
+          "amount": "300 г"
+        },
+        {
+          "name": "картофель",
+          "amount": "300 г"
+        },
+        {
+          "name": "масло растительное",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец черный",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте картофель кубиками и обжарьте на растительном масле до золотистой корочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте духовку до 180 градусов."
+        },
+        {
+          "order": 3,
+          "instruction": "Выложите рыбу на противень, посолите и поперчите, запекайте 20 минут."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 600,
+        "protein_g": 40,
+        "fat_g": 30,
+        "carb_g": 45
+      },
+      "calorie_level": "высококалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\80f9d5a9-3def-4f45-9b14-2d2f1faa1a41_recipes.json",
+  "prompt_version": "llm_b"
+}
