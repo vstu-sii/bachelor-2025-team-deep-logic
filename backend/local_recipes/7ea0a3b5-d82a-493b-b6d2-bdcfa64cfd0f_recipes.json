@@ -1,0 +1,184 @@
+{
+  "ingredients": [
+    {
+      "name": {
+        "name": "молоко"
+      }
+    },
+    {
+      "name": {
+        "name": "сыр"
+      }
+    },
+    {
+      "name": {
+        "name": "яйца"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Омлет с молоком",
+      "ingredients": [
+        {
+          "name": "яйца",
+          "amount": "4 штуки"
+        },
+        {
+          "name": "молоко",
+          "amount": "100 мл"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Взбейте яйца с молоком, солью и перцем."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте сковороду на среднем огне."
+        },
+        {
+          "order": 3,
+          "instruction": "Вылейте смесь на сковороду и жарьте до готовности, периодически помешивая."
+        },
+        {
+          "order": 4,
+          "instruction": "Готовый омлет подавайте горячим."
+        }
+      ],
+      "cooking_time": 15,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 720,
+        "protein_g": 48,
+        "fat_g": 50,
+        "carb_g": 12
+      },
+      "calorie_level": "высококалорийное",
+      "notes": "Омлет можно подавать с зеленью или сыром, если он не исключен."
+    },
+    {
+      "name": "Яичница-глазунья",
+      "ingredients": [
+        {
+          "name": "яйца",
+          "amount": "4 штуки"
+        },
+        {
+          "name": "молоко",
+          "amount": "50 мл"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте сковороду на среднем огне."
+        },
+        {
+          "order": 2,
+          "instruction": "Взбейте яйца с молоком, солью и перцем."
+        },
+        {
+          "order": 3,
+          "instruction": "Вылейте смесь на сковороду и жарьте до готовности, не перемешивая."
+        },
+        {
+          "order": 4,
+          "instruction": "Готовую яичницу подавайте горячей."
+        }
+      ],
+      "cooking_time": 10,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 700,
+        "protein_g": 48,
+        "fat_g": 50,
+        "carb_g": 10
+      },
+      "calorie_level": "высококалорийное",
+      "notes": "Яичницу можно подавать с зеленью или сыром, если он не исключен."
+    },
+    {
+      "name": "Яичный крем",
+      "ingredients": [
+        {
+          "name": "яйца",
+          "amount": "4 штуки"
+        },
+        {
+          "name": "молоко",
+          "amount": "200 мл"
+        },
+        {
+          "name": "сахар",
+          "amount": "100 г"
+        },
+        {
+          "name": "ваниль",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Взбейте яйца с сахаром и ванилью."
+        },
+        {
+          "order": 2,
+          "instruction": "Добавьте молоко и перемешайте."
+        },
+        {
+          "order": 3,
+          "instruction": "Поместите смесь на водяную баню и варите, постоянно помешивая, до загустения."
+        },
+        {
+          "order": 4,
+          "instruction": "Готовый крем охладите и подавайте с фруктами или десертами."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 800,
+        "protein_g": 32,
+        "fat_g": 30,
+        "carb_g": 90
+      },
+      "calorie_level": "высококалорийное",
+      "notes": "Крем можно подавать с фруктами или использовать в качестве начинки для пирогов."
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи, яблоко",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_b",
+  "queued_at": null,
+  "completed_at": null,
+  "vlm_duration_sec": null,
+  "recipe_queued_at": 1765176834.644149,
+  "recipe_completed_at": 1765176840.5179827,
+  "recipe_duration_sec": 5.874,
+  "saved_to": "recipes\\7ea0a3b5-d82a-493b-b6d2-bdcfa64cfd0f_recipes.json"
+}

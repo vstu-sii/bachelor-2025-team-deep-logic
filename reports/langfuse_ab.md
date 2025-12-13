@@ -1,0 +1,61 @@
+# 🧪 Не обработанные результаты A/B тестирования 
+
+## Таблица всех запусков
+
+| llm_variant | prompt_variant | vlm_duration_sec | duration_sec | tokens | cost | vlm_f1 | vlm_excess_ratio | dietary_ok | difficulty_ok | time_ok | calories_ok |
+|-------------|----------------|------------------|--------------|--------|------|--------|-------------------|------------|---------------|---------|-------------|
+| llm_prompt_a | vlm_prompt_a | 58.96 | 5.06 | 572 | 0.000143 | 0.8 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_a | 54.0 | 5.36 | 533 | 0.00013325 | 0.8 | 0.0 | true | true | true | false |
+| llm_prompt_a | vlm_prompt_a | 56.29 | 4.61 | 453 | 0.00011325 | 0.8 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_a | 43.35 | 5.83 | 631 | 0.00015775 | 0.8571 | 0.0 | true | false | true | true |
+| llm_prompt_a | vlm_prompt_b | 53.33 | 6.89 | 652 | 0.000163 | 0.8571 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_a | 57.77 | 5.94 | 587 | 0.00014675 | 0.75 | 0.25 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_b | 55.25 | 5.93 | 582 | 0.0001455 | 0.8571 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_a | 55.15 | 3.88 | 493 | 0.00012325 | 0.8571 | 0.0 | true | true | true | false |
+| llm_prompt_a | vlm_prompt_b | 53.94 | 5.08 | 388 | 0.00009699999999999999 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_b | 57.55 | 0.62 | 80 | 0.00002 | 0.6667 | 0.0 | false | false | false | true |
+| llm_prompt_a | vlm_prompt_b | 53.8 | 2.69 | 256 | 0.000064 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_b | 52.93 | 0.66 | 80 | 0.00002 | 0.6667 | 0.0 | false | false | false | true |
+| llm_prompt_a | vlm_prompt_a | 55.51 | 0.57 | 80 | 0.00002 | 0.6667 | 0.0 | false | false | false | false |
+| llm_prompt_a | vlm_prompt_a | 54.47 | 5.54 | 411 | 0.00010275 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_a | 54.92 | 6.19 | 467 | 0.00011675 | 0.6667 | 0.0 | true | true | false | true |
+| llm_prompt_a | vlm_prompt_b | 54.59 | 3.78 | 458 | 0.0001145 | 0.6667 | 0.0 | true | true | true | false |
+| llm_prompt_a | vlm_prompt_a | 45.28 | 0.66 | 80 | 0.00002 | 0.6667 | 0.0 | false | false | false | true |
+| llm_prompt_a | vlm_prompt_b | 51.6 | 5.47 | 458 | 0.0001145 | 0.8889 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_b | 56.91 | 4.71 | 513 | 0.00012825 | 0.8889 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_a | 55.11 | 4.28 | 481 | 0.00012025 | 0.8889 | 0.0 | true | true | true | false |
+| llm_prompt_a | vlm_prompt_a | 54.97 | 5.05 | 542 | 0.0001355 | 0.8889 | 0.0 | true | true | true | false |
+| llm_prompt_a | vlm_prompt_b | 50.33 | 0.88 | 80 | 0.00002 | 0.8889 | 0.0 | false | false | false | true |
+| llm_prompt_a | vlm_prompt_a | 53.72 | 3.85 | 398 | 0.0000995 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_a | vlm_prompt_b | 54.74 | 3.37 | 394 | 0.0000985 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 56.84 | 8.15 | 631 | 0.00015775 | 0.9091 | 0.0 | true | true | true | false |
+| llm_prompt_b | vlm_prompt_b | 58.12 | 3.91 | 433 | 0.00010825 | 0.8 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 54.69 | 5.53 | 526 | 0.0001315 | 0.9091 | 0.0 | true | true | true | false |
+| llm_prompt_b | vlm_prompt_b | 58.28 | 5.75 | 509 | 0.00012724999999999998 | 0.8 | 0.0 | true | true | false | true |
+| llm_prompt_b | vlm_prompt_b | 55.53 | 8.2 | 616 | 0.000154 | 0.8571 | 0.0 | true | true | true | false |
+| llm_prompt_b | vlm_prompt_b | 54.06 | 6.5 | 697 | 0.00017425 | 0.8571 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 54.56 | 0.64 | 80 | 0.00002 | 0.8571 | 0.0 | false | false | false | true |
+| llm_prompt_b | vlm_prompt_b | 49.81 | 5.19 | 341 | 0.00008525 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 55.68 | 3.63 | 373 | 0.00009325 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 55.71 | 3.86 | 365 | 0.00009125 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 54.98 | 6.38 | 454 | 0.0001135 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 55.51 | 3.54 | 296 | 0.000074 | 0.6667 | 0.0 | true | true | true | false |
+| llm_prompt_b | vlm_prompt_a | 54.04 | 3.74 | 348 | 0.000087 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 54.92 | 8.89 | 291 | 0.00007275 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 55.07 | 2.79 | 291 | 0.00007275 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 55.52 | 4.48 | 417 | 0.00010425 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 56.29 | 2.52 | 247 | 0.00006175 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 55.66 | 2.32 | 285 | 0.00007125 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 54.76 | 1.97 | 239 | 0.00005975 | 1.0 | 0.0 | true | true | true | false |
+| llm_prompt_b | vlm_prompt_b | 47.92 | 0.67 | 80 | 0.00002 | 1.0 | 0.0 | false | false | false | false |
+| llm_prompt_b | vlm_prompt_b | 52.5 | 4.86 | 490 | 0.0001225 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 55.55 | 6.0 | 489 | 0.00012225 | 0.6667 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 58.55 | 0.6 | 80 | 0.00002 | 0.8889 | 0.0 | false | false | false | false |
+| llm_prompt_b | vlm_prompt_a | 57.17 | 0.5 | 80 | 0.00002 | 0.8889 | 0.0 | false | false | false | true |
+| llm_prompt_b | vlm_prompt_a | 54.59 | 5.16 | 497 | 0.00012425 | 0.8889 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 58.68 | 5.18 | 409 | 0.00010225 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 55.07 | 0.71 | 80 | 0.00002 | 1.0 | 0.0 | false | false | false | true |
+| llm_prompt_b | vlm_prompt_b | 55.83 | 6.59 | 456 | 0.000114 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_a | 56.05 | 3.95 | 426 | 0.0001065 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 51.95 | 4.06 | 389 | 0.00009725 | 1.0 | 0.0 | true | true | true | true |
+| llm_prompt_b | vlm_prompt_b | 54.32 | 3.43 | 414 | 0.0001035 | 1.0 | 0.0 | true | true | true | false |

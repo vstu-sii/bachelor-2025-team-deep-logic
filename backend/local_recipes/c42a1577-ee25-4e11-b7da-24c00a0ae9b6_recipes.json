@@ -1,0 +1,203 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "курица"
+      },
+      {
+        "name": "яйца"
+      },
+      {
+        "name": "сыр"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Овощное рагу",
+      "ingredients": [
+        {
+          "name": "морковь",
+          "amount": "2 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "томатный сок",
+          "amount": "200 мл"
+        },
+        {
+          "name": "растительное масло",
+          "amount": "2 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте морковь, лук и кабачки кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте растительное масло на сковороде и обжарьте лук до прозрачности."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте морковь и кабачки, обжарьте 5 минут."
+        },
+        {
+          "order": 4,
+          "instruction": "Влейте томатный сок, накройте крышкой и тушите 20 минут на слабом огне."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 250,
+        "protein_g": 5,
+        "fat_g": 10,
+        "carb_g": 30
+      },
+      "calorie_level": "среднекалорийное"
+    },
+    {
+      "name": "Запеченные кабачки с сыром",
+      "ingredients": [
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "сыр",
+          "amount": "100 г"
+        },
+        {
+          "name": "растительное масло",
+          "amount": "1 ст. л."
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте духовку до 180°C."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте кабачки кружками."
+        },
+        {
+          "order": 3,
+          "instruction": "Смажьте противень растительным маслом и выложите кабачки."
+        },
+        {
+          "order": 4,
+          "instruction": "Посолите, поперчите и посыпьте тертым сыром."
+        },
+        {
+          "order": 5,
+          "instruction": "Запекайте 25 минут до золотистой корочки."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 300,
+        "protein_g": 15,
+        "fat_g": 15,
+        "carb_g": 20
+      },
+      "calorie_level": "среднекалорийное"
+    },
+    {
+      "name": "Овощной суп",
+      "ingredients": [
+        {
+          "name": "морковь",
+          "amount": "1 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "кабачки",
+          "amount": "1 шт."
+        },
+        {
+          "name": "томатный сок",
+          "amount": "300 мл"
+        },
+        {
+          "name": "вода",
+          "amount": "500 мл"
+        },
+        {
+          "name": "растительное масло",
+          "amount": "1 ст. л."
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте морковь, лук и кабачки кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте растительное масло в кастрюле и обжарьте лук до прозрачности."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте морковь и кабачки, обжарьте 5 минут."
+        },
+        {
+          "order": 4,
+          "instruction": "Влейте томатный сок и воду, доведите до кипения."
+        },
+        {
+          "order": 5,
+          "instruction": "Посолите, поперчите и варите 15 минут на слабом огне."
+        }
+      ],
+      "cooking_time": 25,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 150,
+        "protein_g": 3,
+        "fat_g": 5,
+        "carb_g": 20
+      },
+      "calorie_level": "низкокалорийное"
+    }
+  ],
+  "feedback_used": "нет",
+  "preferred_calorie_level": "нет",
+  "preferred_cooking_time": "нет",
+  "preferred_difficulty": null,
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\c42a1577-ee25-4e11-b7da-24c00a0ae9b6_recipes.json",
+  "prompt_version": "llm_b"
+}

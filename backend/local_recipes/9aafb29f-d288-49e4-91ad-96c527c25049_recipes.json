@@ -1,0 +1,195 @@
+{
+  "ingredients": [
+    {
+      "name": {
+        "name": "яблоко"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Жареные бананы с медом",
+      "ingredients": [
+        {
+          "name": "банан",
+          "amount": "2 шт"
+        },
+        {
+          "name": "мед",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "масло",
+          "amount": "1 ст. ложка"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте бананы на кружки."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте масло на сковороде."
+        },
+        {
+          "order": 3,
+          "instruction": "Жарьте бананы на среднем огне до золотистого цвета."
+        },
+        {
+          "order": 4,
+          "instruction": "Полейте бананы медом и перемешайте."
+        },
+        {
+          "order": 5,
+          "instruction": "Готовьте еще 2 минуты."
+        }
+      ],
+      "cooking_time": 15,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 350,
+        "protein_g": 2,
+        "fat_g": 10,
+        "carb_g": 60
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Тыквенный суп-пюре",
+      "ingredients": [
+        {
+          "name": "тыква",
+          "amount": "500 г"
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт"
+        },
+        {
+          "name": "чеснок",
+          "amount": "2 зубчика"
+        },
+        {
+          "name": "бульон",
+          "amount": "500 мл"
+        },
+        {
+          "name": "сливки",
+          "amount": "100 мл"
+        },
+        {
+          "name": "масло",
+          "amount": "1 ст. ложка"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте тыкву, лук и чеснок."
+        },
+        {
+          "order": 2,
+          "instruction": "Обжарьте лук и чеснок на масле до мягкости."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте тыкву и бульон."
+        },
+        {
+          "order": 4,
+          "instruction": "Варите до мягкости тыквы."
+        },
+        {
+          "order": 5,
+          "instruction": "Измельчите суп в блендере."
+        },
+        {
+          "order": 6,
+          "instruction": "Добавьте сливки и перемешайте."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 400,
+        "protein_g": 5,
+        "fat_g": 20,
+        "carb_g": 45
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Запеченные груши с овсяными хлопьями",
+      "ingredients": [
+        {
+          "name": "груша",
+          "amount": "2 шт"
+        },
+        {
+          "name": "овсяные хлопья",
+          "amount": "100 г"
+        },
+        {
+          "name": "мед",
+          "amount": "2 ст. ложки"
+        },
+        {
+          "name": "масло",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "корица",
+          "amount": "1 ч. ложка"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте духовку до 180°C."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте груши пополам и удалите сердцевину."
+        },
+        {
+          "order": 3,
+          "instruction": "Смешайте овсяные хлопья, мед, масло и корицу."
+        },
+        {
+          "order": 4,
+          "instruction": "Наполните груши смесью."
+        },
+        {
+          "order": 5,
+          "instruction": "Запекайте в духовке 20 минут."
+        }
+      ],
+      "cooking_time": 25,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 380,
+        "protein_g": 6,
+        "fat_g": 12,
+        "carb_g": 60
+      },
+      "calorie_level": "высококалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи, яблоко",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_a",
+  "queued_at": null,
+  "completed_at": null,
+  "vlm_duration_sec": null,
+  "recipe_queued_at": 1765134501.5074582,
+  "recipe_completed_at": 1765134512.1994624,
+  "recipe_duration_sec": 10.691,
+  "saved_to": "recipes\\9aafb29f-d288-49e4-91ad-96c527c25049_recipes.json"
+}

@@ -1,0 +1,196 @@
+{
+  "ingredients": [
+    "картофель"
+  ],
+  "recipes": [
+    {
+      "name": "Овощной суп-пюре",
+      "ingredients": [
+        {
+          "name": "кабачок",
+          "amount": "2 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "морковь",
+          "amount": "1 шт."
+        },
+        {
+          "name": "картофель",
+          "amount": "2 шт."
+        },
+        {
+          "name": "вода",
+          "amount": "1 л"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Очистите и нарежьте овощи."
+        },
+        {
+          "order": 2,
+          "instruction": "В кастрюлю налейте воду и доведите до кипения."
+        },
+        {
+          "order": 3,
+          "instruction": "Добавьте нарезанные овощи и варите 15 минут."
+        },
+        {
+          "order": 4,
+          "instruction": "Снимите с огня, добавьте соль и перец, затем взбейте блендером до однородной массы."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 200,
+        "protein_g": 5,
+        "fat_g": 2,
+        "carb_g": 40
+      },
+      "calorie_level": "низкокалорийное"
+    },
+    {
+      "name": "Омлет с зеленью",
+      "ingredients": [
+        {
+          "name": "яйца",
+          "amount": "3 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "зелень",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "масло",
+          "amount": "1 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте лук и зелень."
+        },
+        {
+          "order": 2,
+          "instruction": "Взбейте яйца с солью и перцем."
+        },
+        {
+          "order": 3,
+          "instruction": "Разогрейте сковороду с маслом и обжарьте лук до прозрачности."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте яйца и зелень, готовьте до готовности."
+        }
+      ],
+      "cooking_time": 15,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 250,
+        "protein_g": 18,
+        "fat_g": 15,
+        "carb_g": 5
+      },
+      "calorie_level": "низкокалорийное"
+    },
+    {
+      "name": "Тушеная курица с овощами",
+      "ingredients": [
+        {
+          "name": "курица",
+          "amount": "500 г"
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "морковь",
+          "amount": "1 шт."
+        },
+        {
+          "name": "помидоры",
+          "amount": "2 шт."
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "масло",
+          "amount": "1 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте курицу на кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте лук, морковь и помидоры."
+        },
+        {
+          "order": 3,
+          "instruction": "Разогрейте сковороду с маслом и обжарьте курицу до золотистой корочки."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте овощи и тушите 15 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Добавьте соль и перец, тушите еще 5 минут."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "легко",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 280,
+        "protein_g": 30,
+        "fat_g": 12,
+        "carb_g": 10
+      },
+      "calorie_level": "низкокалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи",
+  "preferred_calorie_level": "Низкокалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "легко",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_b"
+}

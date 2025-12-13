@@ -1,0 +1,275 @@
+{
+  "ingredients": [
+    {
+      "name": {
+        "name": "авокадо"
+      }
+    },
+    {
+      "name": {
+        "name": "грибы"
+      }
+    },
+    {
+      "name": {
+        "name": "лосось"
+      }
+    },
+    {
+      "name": {
+        "name": "яйца"
+      }
+    },
+    {
+      "name": {
+        "name": "яблоки"
+      }
+    },
+    {
+      "name": {
+        "name": "апельсины"
+      }
+    },
+    {
+      "name": {
+        "name": "киви"
+      }
+    },
+    {
+      "name": {
+        "name": "орехи"
+      }
+    },
+    {
+      "name": {
+        "name": "салат"
+      }
+    },
+    {
+      "name": {
+        "name": "брокколи"
+      }
+    },
+    {
+      "name": {
+        "name": "морковь"
+      }
+    },
+    {
+      "name": {
+        "name": "латук"
+      }
+    },
+    {
+      "name": {
+        "name": "петрушка"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Жареный лосось с авокадо",
+      "ingredients": [
+        {
+          "name": "лосось",
+          "amount": "200 г"
+        },
+        {
+          "name": "авокадо",
+          "amount": "1 шт"
+        },
+        {
+          "name": "оливковое масло",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "лимонный сок",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте сковороду на среднем огне и добавьте оливковое масло."
+        },
+        {
+          "order": 2,
+          "instruction": "Посолите и поперчите лосось, затем положите его на сковороду кожей вниз. Жарьте 4-5 минут."
+        },
+        {
+          "order": 3,
+          "instruction": "Переверните лосось и жарьте еще 4-5 минут."
+        },
+        {
+          "order": 4,
+          "instruction": "Пока лосось жарится, нарежьте авокадо на кусочки и полейте лимонным соком."
+        },
+        {
+          "order": 5,
+          "instruction": "Подавайте лосось с авокадо."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 650,
+        "protein_g": 45,
+        "fat_g": 40,
+        "carb_g": 20
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Омлет с грибами и салатом",
+      "ingredients": [
+        {
+          "name": "яйца",
+          "amount": "3 шт"
+        },
+        {
+          "name": "грибы",
+          "amount": "100 г"
+        },
+        {
+          "name": "салат",
+          "amount": "50 г"
+        },
+        {
+          "name": "сливочное масло",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте грибы на мелкие кусочки."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте сковороду и растопите сливочное масло."
+        },
+        {
+          "order": 3,
+          "instruction": "Обжарьте грибы до золотистой корочки."
+        },
+        {
+          "order": 4,
+          "instruction": "Взбейте яйца, посолите и поперчите их."
+        },
+        {
+          "order": 5,
+          "instruction": "Вылейте яичную смесь на сковороду с грибами и готовьте до готовности."
+        },
+        {
+          "order": 6,
+          "instruction": "Подавайте омлет с салатом."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 600,
+        "protein_g": 30,
+        "fat_g": 45,
+        "carb_g": 10
+      },
+      "calorie_level": "высококалорийное"
+    },
+    {
+      "name": "Запеченный лосось с яблоками",
+      "ingredients": [
+        {
+          "name": "лосось",
+          "amount": "200 г"
+        },
+        {
+          "name": "яблоки",
+          "amount": "2 шт"
+        },
+        {
+          "name": "сливочное масло",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "мед",
+          "amount": "1 ст. ложка"
+        },
+        {
+          "name": "соль",
+          "amount": "по вкусу"
+        },
+        {
+          "name": "перец",
+          "amount": "по вкусу"
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Разогрейте духовку до 180 градусов."
+        },
+        {
+          "order": 2,
+          "instruction": "Нарежьте яблоки на кусочки."
+        },
+        {
+          "order": 3,
+          "instruction": "Посолите и поперчите лосось, затем положите его на противень."
+        },
+        {
+          "order": 4,
+          "instruction": "Положите яблоки вокруг лосося и полейте их медом."
+        },
+        {
+          "order": 5,
+          "instruction": "Запекайте в духовке 15-20 минут."
+        },
+        {
+          "order": 6,
+          "instruction": "Подавайте лосось с яблоками."
+        }
+      ],
+      "cooking_time": 20,
+      "difficulty": "средне",
+      "cooking_speed": "быстро",
+      "calorie_content": {
+        "kcal": 600,
+        "protein_g": 40,
+        "fat_g": 35,
+        "carb_g": 30
+      },
+      "calorie_level": "высококалорийное"
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "prompt_version": "llm_b",
+  "queued_at": null,
+  "completed_at": null,
+  "vlm_duration_sec": null,
+  "recipe_queued_at": 1765025970.6904726,
+  "recipe_completed_at": 1765025979.6586785,
+  "recipe_duration_sec": 8.966,
+  "saved_to": "recipes\\b440d7a6-c979-418c-935e-85283e10df5b_recipes.json"
+}

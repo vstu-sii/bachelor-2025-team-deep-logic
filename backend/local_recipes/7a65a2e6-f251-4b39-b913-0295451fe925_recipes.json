@@ -1,0 +1,195 @@
+{
+  "ingredients": {
+    "ingredients": [
+      {
+        "name": "мясо"
+      },
+      {
+        "name": "брокколи"
+      },
+      {
+        "name": "морковь"
+      },
+      {
+        "name": "кукуруза"
+      },
+      {
+        "name": "кукурузный крахмал"
+      },
+      {
+        "name": "кукурузный крахмал"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "name": "Овощное рагу",
+      "ingredients": [
+        {
+          "name": "морковь",
+          "amount": "2 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "помидоры",
+          "amount": "3 шт."
+        },
+        {
+          "name": "растительное масло",
+          "amount": "2 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте все овощи кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте сковороду и добавьте растительное масло."
+        },
+        {
+          "order": 3,
+          "instruction": "Обжарьте лук до прозрачности."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте морковь и кабачки, тушите 10 минут."
+        },
+        {
+          "order": 5,
+          "instruction": "Добавьте помидоры и тушите еще 15 минут."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 250,
+        "protein_g": 5,
+        "fat_g": 12,
+        "carb_g": 30
+      },
+      "calorie_level": "среднекалорийное",
+      "notes": ""
+    },
+    {
+      "name": "Запеченные кабачки с сыром",
+      "ingredients": [
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "сыр",
+          "amount": "100 г"
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "растительное масло",
+          "amount": "1 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте кабачки и лук кружками."
+        },
+        {
+          "order": 2,
+          "instruction": "Смажьте противень растительным маслом."
+        },
+        {
+          "order": 3,
+          "instruction": "Выложите кабачки и лук на противень."
+        },
+        {
+          "order": 4,
+          "instruction": "Посыпьте сыром и запекайте в духовке при 180°C 25 минут."
+        }
+      ],
+      "cooking_time": 35,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 300,
+        "protein_g": 12,
+        "fat_g": 15,
+        "carb_g": 20
+      },
+      "calorie_level": "среднекалорийное",
+      "notes": ""
+    },
+    {
+      "name": "Тушеные овощи с чесноком",
+      "ingredients": [
+        {
+          "name": "морковь",
+          "amount": "2 шт."
+        },
+        {
+          "name": "лук",
+          "amount": "1 шт."
+        },
+        {
+          "name": "кабачки",
+          "amount": "2 шт."
+        },
+        {
+          "name": "чеснок",
+          "amount": "3 зубчика"
+        },
+        {
+          "name": "растительное масло",
+          "amount": "2 ст. л."
+        }
+      ],
+      "steps": [
+        {
+          "order": 1,
+          "instruction": "Нарежьте все овощи кубиками."
+        },
+        {
+          "order": 2,
+          "instruction": "Разогрейте сковороду и добавьте растительное масло."
+        },
+        {
+          "order": 3,
+          "instruction": "Обжарьте лук до прозрачности."
+        },
+        {
+          "order": 4,
+          "instruction": "Добавьте морковь, кабачки и чеснок, тушите 20 минут."
+        }
+      ],
+      "cooking_time": 30,
+      "difficulty": "средне",
+      "cooking_speed": "средне",
+      "calorie_content": {
+        "kcal": 200,
+        "protein_g": 4,
+        "fat_g": 10,
+        "carb_g": 25
+      },
+      "calorie_level": "среднекалорийное",
+      "notes": ""
+    }
+  ],
+  "feedback_used": "Исключить: cucumber, сыр, carrot, брокколи, орехи",
+  "preferred_calorie_level": "Высококалорийное",
+  "preferred_cooking_time": "Быстро",
+  "preferred_difficulty": "средне",
+  "excluded_recipes": "нет",
+  "saved_to": "recipes\\7a65a2e6-f251-4b39-b913-0295451fe925_recipes.json",
+  "prompt_version": "llm_b"
+}
